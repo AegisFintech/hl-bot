@@ -1,0 +1,12 @@
+.env
+__pycache__/
+*.pyc
+data/trades.json
+data/performance.json
+graphify-out/
+.graphify-cache/
+venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
