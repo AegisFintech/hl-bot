@@ -21,8 +21,8 @@ def main():
              "testnet" if config.HL_TESTNET else "MAINNET")
 
     client = HyperliquidClient(
-        api_key=config.HL_API_KEY,
-        api_secret=config.HL_API_SECRET,
+        master_account=config.HL_MASTER_ACCOUNT,
+        api_private_key=config.HL_API_PRIVATE_KEY,
         testnet=config.HL_TESTNET,
     )
 
@@ -36,6 +36,7 @@ def main():
         dashboard_port=config.DASHBOARD_PORT,
         trades_file=config.TRADES_FILE,
         performance_file=config.PERFORMANCE_FILE,
+        auto_transfer_spot=config.AUTO_TRANSFER_SPOT,
     )
 
     bot.start()

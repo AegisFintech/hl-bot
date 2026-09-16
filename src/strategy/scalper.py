@@ -136,6 +136,38 @@ class Scalper:
         signals.sort(key=lambda s: s.sr_strength, reverse=True)
         return signals
 
+    def build_order_payload(self, signal: TradeSignal) -> dict | None:
+        if not self.risk.can_trade(signal):
+            return None
+        is_buy = signal.side == "long"
+        size = self.risk.compute_position_size(signal)
+        if size <= 0:
+            return None
+        size = self.client.round_size(signal.coin, size)
+        exit_side = not is_buy
+        return {
+            "coin": signal.coin,
+            "is_buy": is_buy,
+            "size": size,
+            "entry_price": signal.entry_price,
+            "tp_price": signal.tp_price,
+            "sl_price": signal.sl_price,
+            "side": signal.side,
+            "sr_level": signal.sr_level,
+            "sr_kind": signal.sr_kind,
+            "orders": [
+                {"coin": signal.coin, "is_buy": is_buy, "sz": size, "limit_px": signal.entry_price,
+                 "order_type": {"limit": {"tif": "Alo"}}, "reduce_only": False},
+                {"coin": signal.coin, "is_buy": exit_side, "sz": size, "limit_px": signal.tp_price,
+                 "order_type": {"trigger": {"triggerPx": signal.tp_price, "isMarket": True, "tpsl": "tp"}},
+                 "reduce_only": True},
+                {"coin": signal.coin, "is_buy": exit_side, "sz": size, "limit_px": signal.sl_price,
+                 "order_type": {"trigger": {"triggerPx": signal.sl_price, "isMarket": True, "tpsl": "sl"}},
+                 "reduce_only": True},
+            ],
+            "grouping": "normalTpsl",
+        }
+
     def execute_signal(self, signal: TradeSignal) -> dict | None:
         if not self.risk.can_trade(signal):
             log.info("Risk manager blocked trade: %s %s @ %.2f",
