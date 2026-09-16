@@ -1,4 +1,5 @@
 import json
+import logging
 import time
 import threading
 from collections import defaultdict
@@ -8,16 +9,21 @@ from hyperliquid.info import Info
 from hyperliquid.exchange import Exchange
 from hyperliquid.utils import constants
 
+log = logging.getLogger(__name__)
+
 
 class HyperliquidClient:
 
-    def __init__(self, api_key: str, api_secret: str, testnet: bool = True):
+    def __init__(self, master_account: str, api_private_key: str, testnet: bool = True):
         self.testnet = testnet
         self.base_url = constants.TESTNET_API_URL if testnet else constants.MAINNET_API_URL
-        self.wallet = eth_account.Account.from_key(api_secret)
-        self.address = self.wallet.address
-        self.info = Info(self.base_url)
-        self.exchange = Exchange(self.wallet, self.base_url)
+        self.wallet = eth_account.Account.from_key(api_private_key)
+        self.master_account = master_account
+        self.address = self.master_account
+        self.info = Info(self.base_url, skip_ws=True)
+        self.exchange = Exchange(self.wallet, self.base_url, account_address=self.master_account)
+        self._ws_info = None
+        self._ws_subscriptions = []
         self._subscriptions = {}
         self._orderbook = {}
         self._bbo = {}
@@ -26,6 +32,42 @@ class HyperliquidClient:
         self._positions = {}
         self._fills = []
         self._lock = threading.Lock()
+        self._ws_monitor = None
+
+    def audit_urls(self) -> dict:
+        info_url = self.info.base_url
+        exchange_url = self.exchange.base_url
+        ws_url = None
+        if self._ws_info and self._ws_info.ws_manager:
+            ws_url = self._ws_info.ws_manager.ws.url
+        expected_rest = constants.TESTNET_API_URL if self.testnet else constants.MAINNET_API_URL
+        expected_ws = "wss" + expected_rest[len("https"):] + "/ws"
+        return {
+            "info_rest": info_url,
+            "exchange_rest": exchange_url,
+            "ws": ws_url,
+            "expected_rest": expected_rest,
+            "expected_ws": expected_ws,
+            "info_ok": info_url == expected_rest,
+            "exchange_ok": exchange_url == expected_rest,
+            "ws_ok": ws_url is None or ws_url == expected_ws,
+        }
+
+    def preflight_check_agent(self) -> dict:
+        extra_agents = self.info.extra_agents(self.master_account)
+        sub_accounts = self.info.query_sub_accounts(self.master_account)
+        agent_addr = self.wallet.address.lower()
+        agent_found = False
+        for agent in extra_agents:
+            if agent.get("address", "").lower() == agent_addr:
+                agent_found = True
+                break
+        return {
+            "extra_agents_raw": extra_agents,
+            "sub_accounts_raw": sub_accounts,
+            "agent_address": self.wallet.address,
+            "agent_registered": agent_found,
+        }
 
     def get_meta(self) -> dict:
         return self.info.meta()
@@ -56,6 +98,16 @@ class HyperliquidClient:
     def get_user_state(self) -> dict:
         return self.info.user_state(self.address)
 
+    def get_spot_user_state(self) -> dict:
+        return self.info.spot_user_state(self.address)
+
+    def get_spot_usdc_balance(self) -> float:
+        state = self.get_spot_user_state()
+        for b in state.get("balances", []):
+            if b["coin"] == "USDC":
+                return float(b["total"])
+        return 0.0
+
     def get_positions(self) -> list:
         state = self.get_user_state()
         return [p for p in state.get("assetPositions", []) if float(p["position"]["szi"]) != 0]
@@ -66,9 +118,25 @@ class HyperliquidClient:
     def get_fills(self, limit: int = 50) -> list:
         return self.info.user_fills(self.address)[:limit]
 
-    def get_account_value(self) -> float:
+    def get_perps_account_value(self) -> float:
         state = self.get_user_state()
         return float(state.get("marginSummary", {}).get("accountValue", 0))
+
+    def get_available_to_trade(self) -> float:
+        spot_state = self.get_spot_user_state()
+        for token_id, amount in spot_state.get("tokenToAvailableAfterMaintenance", []):
+            if token_id == 0:
+                return float(amount)
+        return 0.0
+
+    def get_account_value(self) -> float:
+        perps = self.get_perps_account_value()
+        if perps > 0:
+            return perps
+        return self.get_available_to_trade()
+
+    def transfer_spot_to_perps(self, amount_usd: float) -> dict:
+        return self.exchange.usd_class_transfer(amount_usd, True)
 
     # -- Trading --
 
@@ -124,13 +192,53 @@ class HyperliquidClient:
 
     # -- WebSocket subscriptions --
 
+    def _get_ws_info(self):
+        if self._ws_info is None:
+            self._ws_info = Info(self.base_url, skip_ws=False)
+            self._start_ws_monitor()
+        return self._ws_info
+
+    def _start_ws_monitor(self):
+        if self._ws_monitor and self._ws_monitor.is_alive():
+            return
+        self._ws_monitor = threading.Thread(target=self._ws_monitor_loop, daemon=True)
+        self._ws_monitor.start()
+
+    def _ws_monitor_loop(self):
+        while True:
+            time.sleep(30)
+            try:
+                if self._ws_info and self._ws_info.ws_manager:
+                    ws = self._ws_info.ws_manager.ws
+                    if not ws.keep_running:
+                        log.warning("WebSocket disconnected — reconnecting...")
+                        self._reconnect_ws()
+            except Exception as e:
+                log.error("WS monitor error: %s", e)
+
+    def _reconnect_ws(self):
+        try:
+            if self._ws_info and self._ws_info.ws_manager:
+                try:
+                    self._ws_info.ws_manager.stop()
+                except Exception:
+                    pass
+            self._ws_info = Info(self.base_url, skip_ws=False)
+            for sub, handler in self._ws_subscriptions:
+                self._ws_info.subscribe(dict(sub), handler)
+            log.info("WebSocket reconnected, %d subscriptions restored", len(self._ws_subscriptions))
+        except Exception as e:
+            log.error("WebSocket reconnect failed: %s", e)
+
     def subscribe_bbo(self, coin: str, callback=None):
         def handler(msg):
             with self._lock:
                 self._bbo[coin] = msg["data"]
             if callback:
                 callback(msg["data"])
-        self.info.subscribe({"type": "bbo", "coin": coin}, handler)
+        sub = {"type": "bbo", "coin": coin}
+        self._ws_subscriptions.append((sub, handler))
+        self._get_ws_info().subscribe(sub, handler)
 
     def subscribe_l2(self, coin: str, callback=None):
         def handler(msg):
@@ -138,7 +246,9 @@ class HyperliquidClient:
                 self._orderbook[coin] = msg["data"]
             if callback:
                 callback(msg["data"])
-        self.info.subscribe({"type": "l2Book", "coin": coin}, handler)
+        sub = {"type": "l2Book", "coin": coin}
+        self._ws_subscriptions.append((sub, handler))
+        self._get_ws_info().subscribe(sub, handler)
 
     def subscribe_trades(self, coin: str, callback=None):
         def handler(msg):
@@ -146,7 +256,9 @@ class HyperliquidClient:
                 self._trades[coin] = msg["data"][-100:]
             if callback:
                 callback(msg["data"])
-        self.info.subscribe({"type": "trades", "coin": coin}, handler)
+        sub = {"type": "trades", "coin": coin}
+        self._ws_subscriptions.append((sub, handler))
+        self._get_ws_info().subscribe(sub, handler)
 
     def subscribe_candles(self, coin: str, interval: str = "1m", callback=None):
         def handler(msg):
@@ -160,7 +272,9 @@ class HyperliquidClient:
                     self._candles[key] = self._candles[key][-500:]
             if callback:
                 callback(candle)
-        self.info.subscribe({"type": "candle", "coin": coin, "interval": interval}, handler)
+        sub = {"type": "candle", "coin": coin, "interval": interval}
+        self._ws_subscriptions.append((sub, handler))
+        self._get_ws_info().subscribe(sub, handler)
 
     def subscribe_fills(self, callback=None):
         def handler(msg):
@@ -169,13 +283,17 @@ class HyperliquidClient:
                 self._fills = self._fills[-500:]
             if callback:
                 callback(msg["data"])
-        self.info.subscribe({"type": "userFills", "user": self.address}, handler)
+        sub = {"type": "userFills", "user": self.address}
+        self._ws_subscriptions.append((sub, handler))
+        self._get_ws_info().subscribe(sub, handler)
 
     def subscribe_order_updates(self, callback=None):
         def handler(msg):
             if callback:
                 callback(msg["data"])
-        self.info.subscribe({"type": "orderUpdates", "user": self.address}, handler)
+        sub = {"type": "orderUpdates", "user": self.address}
+        self._ws_subscriptions.append((sub, handler))
+        self._get_ws_info().subscribe(sub, handler)
 
     # -- Cached data access --
 
