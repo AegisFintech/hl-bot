@@ -33,6 +33,10 @@ class HyperliquidClient:
         self._fills = []
         self._lock = threading.Lock()
         self._ws_monitor = None
+        self._reconnect_callback = None
+        self._meta_cache: dict | None = None
+        self._meta_cache_time: float = 0.0
+        self._mid_cache: dict[str, tuple[float, float]] = {}
 
     def audit_urls(self) -> dict:
         info_url = self.info.base_url
@@ -70,7 +74,10 @@ class HyperliquidClient:
         }
 
     def get_meta(self) -> dict:
-        return self.info.meta()
+        if self._meta_cache is None or time.time() - self._meta_cache_time > 300:
+            self._meta_cache = self.info.meta()
+            self._meta_cache_time = time.time()
+        return self._meta_cache
 
     def get_sz_decimals(self, coin: str) -> int:
         meta = self.get_meta()
@@ -83,9 +90,31 @@ class HyperliquidClient:
         decimals = self.get_sz_decimals(coin)
         return round(size, decimals)
 
+    def round_price(self, coin: str, price: float) -> float:
+        tick = self.get_tick_size(coin)
+        return round(round(price / tick) * tick, 8)
+
+    def get_tick_size(self, coin: str) -> float:
+        mid = self.get_mid_price(coin)
+        if mid >= 10000:
+            return 1.0
+        elif mid >= 1000:
+            return 0.1
+        elif mid >= 100:
+            return 0.01
+        elif mid >= 1:
+            return 0.001
+        else:
+            return 0.0001
+
     def get_mid_price(self, coin: str) -> float:
+        cached = self._mid_cache.get(coin)
+        if cached and time.time() - cached[1] < 2.0:
+            return cached[0]
         mids = self.info.all_mids()
-        return float(mids[coin])
+        mid = float(mids[coin])
+        self._mid_cache[coin] = (mid, time.time())
+        return mid
 
     def get_l2_snapshot(self, coin: str) -> dict:
         return self.info.l2_snapshot(coin)
@@ -130,10 +159,10 @@ class HyperliquidClient:
         return 0.0
 
     def get_account_value(self) -> float:
-        perps = self.get_perps_account_value()
-        if perps > 0:
-            return perps
-        return self.get_available_to_trade()
+        available = self.get_available_to_trade()
+        if available > 0:
+            return available
+        return self.get_perps_account_value()
 
     def transfer_spot_to_perps(self, amount_usd: float) -> dict:
         return self.exchange.usd_class_transfer(amount_usd, True)
@@ -153,13 +182,13 @@ class HyperliquidClient:
         return self.exchange.market_open(coin, is_buy, size, None, slippage)
 
     def place_order_with_tpsl(self, coin: str, is_buy: bool, size: float, entry_price: float,
-                               tp_price: float, sl_price: float) -> dict:
+                               tp_price: float, sl_price: float, tif: str = "Gtc") -> dict:
         size = self.round_size(coin, size)
         exit_side = not is_buy
         orders = [
             {
                 "coin": coin, "is_buy": is_buy, "sz": size, "limit_px": entry_price,
-                "order_type": {"limit": {"tif": "Alo"}}, "reduce_only": False,
+                "order_type": {"limit": {"tif": tif}}, "reduce_only": False,
             },
             {
                 "coin": coin, "is_buy": exit_side, "sz": size, "limit_px": tp_price,
@@ -186,6 +215,23 @@ class HyperliquidClient:
 
     def close_position(self, coin: str) -> dict:
         return self.exchange.market_close(coin)
+
+    def place_trigger_orders(self, coin: str, is_buy: bool, size: float,
+                             tp_price: float, sl_price: float) -> dict:
+        size = self.round_size(coin, size)
+        orders = [
+            {
+                "coin": coin, "is_buy": is_buy, "sz": size, "limit_px": tp_price,
+                "order_type": {"trigger": {"triggerPx": tp_price, "isMarket": True, "tpsl": "tp"}},
+                "reduce_only": True,
+            },
+            {
+                "coin": coin, "is_buy": is_buy, "sz": size, "limit_px": sl_price,
+                "order_type": {"trigger": {"triggerPx": sl_price, "isMarket": True, "tpsl": "sl"}},
+                "reduce_only": True,
+            },
+        ]
+        return self.exchange.bulk_orders(orders, grouping="na")
 
     def set_leverage(self, coin: str, leverage: int, cross: bool = True) -> dict:
         return self.exchange.update_leverage(leverage, coin, is_cross=cross)
@@ -227,15 +273,29 @@ class HyperliquidClient:
             for sub, handler in self._ws_subscriptions:
                 self._ws_info.subscribe(dict(sub), handler)
             log.info("WebSocket reconnected, %d subscriptions restored", len(self._ws_subscriptions))
+            if self._reconnect_callback:
+                try:
+                    self._reconnect_callback()
+                except Exception as e:
+                    log.error("Reconnect callback error: %s", e)
         except Exception as e:
             log.error("WebSocket reconnect failed: %s", e)
 
+    def set_reconnect_callback(self, callback):
+        self._reconnect_callback = callback
+
     def subscribe_bbo(self, coin: str, callback=None):
         def handler(msg):
+            data = msg["data"]
+            bbo_arr = data.get("bbo", [])
+            if len(bbo_arr) >= 2:
+                normalized = {"bid": bbo_arr[0], "ask": bbo_arr[1], "coin": data.get("coin", coin)}
+            else:
+                normalized = data
             with self._lock:
-                self._bbo[coin] = msg["data"]
+                self._bbo[coin] = normalized
             if callback:
-                callback(msg["data"])
+                callback(normalized)
         sub = {"type": "bbo", "coin": coin}
         self._ws_subscriptions.append((sub, handler))
         self._get_ws_info().subscribe(sub, handler)
@@ -269,7 +329,7 @@ class HyperliquidClient:
                     self._candles[key][-1] = candle
                 else:
                     self._candles[key].append(candle)
-                    self._candles[key] = self._candles[key][-500:]
+                    self._candles[key] = self._candles[key][-1000:]
             if callback:
                 callback(candle)
         sub = {"type": "candle", "coin": coin, "interval": interval}
@@ -278,11 +338,16 @@ class HyperliquidClient:
 
     def subscribe_fills(self, callback=None):
         def handler(msg):
+            raw = msg.get("data", {}) if isinstance(msg, dict) else {}
+            is_snapshot = raw.get("isSnapshot", False) if isinstance(raw, dict) else False
+            fills = raw.get("fills", raw) if isinstance(raw, dict) and "fills" in raw else raw
+            if not isinstance(fills, list):
+                return
             with self._lock:
-                self._fills.extend(msg["data"])
+                self._fills.extend(fills)
                 self._fills = self._fills[-500:]
-            if callback:
-                callback(msg["data"])
+            if callback and not is_snapshot:
+                callback(fills)
         sub = {"type": "userFills", "user": self.address}
         self._ws_subscriptions.append((sub, handler))
         self._get_ws_info().subscribe(sub, handler)

@@ -45,14 +45,22 @@ class Evaluator:
         self._load_trades()
 
     def _load_trades(self):
-        if self.trades_file.exists():
+        if not self.trades_file.exists():
+            return
+        try:
             with open(self.trades_file) as f:
                 data = json.load(f)
             self.trades = [TradeRecord(**t) for t in data]
+        except Exception as e:
+            log.warning("Could not load trades file (%s): %s — starting fresh", self.trades_file, e)
+            self.trades = []
 
     def _save_trades(self):
-        with open(self.trades_file, "w") as f:
+        import os
+        tmp = self.trades_file.with_suffix(".tmp")
+        with open(tmp, "w") as f:
             json.dump([t.to_dict() for t in self.trades], f, indent=2)
+        os.replace(tmp, self.trades_file)
 
     def record_trade(self, signal_dict: dict, exit_price: float, size: float,
                      pnl: float, exit_reason: str):
@@ -94,7 +102,8 @@ class Evaluator:
         win_rate = len(wins) / len(self.trades) if self.trades else 0
         avg_win = statistics.mean([t.pnl for t in wins]) if wins else 0
         avg_loss = statistics.mean([t.pnl for t in losses]) if losses else 0
-        profit_factor = abs(sum(t.pnl for t in wins) / sum(t.pnl for t in losses)) if losses and sum(t.pnl for t in losses) != 0 else float("inf")
+        loss_sum = sum(t.pnl for t in losses)
+        profit_factor = abs(sum(t.pnl for t in wins) / loss_sum) if losses and loss_sum != 0 else 9999.0
 
         sharpe = 0.0
         if len(pnls) > 1:
@@ -196,8 +205,11 @@ class Evaluator:
         return adjustments
 
     def _save_performance(self, perf: dict):
-        with open(self.performance_file, "w") as f:
+        import os
+        tmp = self.performance_file.with_suffix(".tmp")
+        with open(tmp, "w") as f:
             json.dump(perf, f, indent=2)
+        os.replace(tmp, self.performance_file)
 
     def get_recent_trades(self, n: int = 20) -> list[dict]:
         return [t.to_dict() for t in self.trades[-n:]]

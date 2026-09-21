@@ -3,238 +3,476 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HL-Bot Dashboard</title>
-<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<title>HL-Bot</title>
+<link rel="icon" href="/static/favicon.ico">
 <style>
-  :root { --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #e6edf3;
-          --dim: #8b949e; --green: #3fb950; --red: #f85149; --blue: #58a6ff; --yellow: #d29922; }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
-         background: var(--bg); color: var(--text); padding: 16px; }
-  h1 { font-size: 20px; margin-bottom: 16px; }
-  h1 span { color: var(--dim); font-weight: 400; font-size: 14px; margin-left: 8px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 16px; }
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
-  .card h2 { font-size: 13px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
-  .stat { font-size: 28px; font-weight: 600; }
-  .stat.green { color: var(--green); } .stat.red { color: var(--red); }
-  .stat-row { display: flex; justify-content: space-between; margin-top: 8px; font-size: 13px; color: var(--dim); }
-  .stat-row span:last-child { color: var(--text); }
-  .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; }
-  .badge.running { background: rgba(63,185,80,0.15); color: var(--green); }
-  .badge.stopped { background: rgba(248,81,73,0.15); color: var(--red); }
-  .chart-container { position: relative; height: 250px; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { text-align: left; color: var(--dim); font-weight: 500; padding: 8px 6px; border-bottom: 1px solid var(--border); }
-  td { padding: 8px 6px; border-bottom: 1px solid var(--border); }
-  .pnl-pos { color: var(--green); } .pnl-neg { color: var(--red); }
-  .sr-bar { height: 4px; border-radius: 2px; margin-top: 4px; }
-  .sr-support { background: var(--green); } .sr-resistance { background: var(--red); }
-  .wide { grid-column: 1 / -1; }
-  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'SF Mono', 'Cascadia Code', Consolas, monospace; background: #0a0e14; color: #c5cdd8; font-size: 13px; }
+a { color: inherit; text-decoration: none; }
+
+.header {
+  display: flex; align-items: center; gap: 20px; padding: 10px 20px;
+  background: #0f1419; border-bottom: 1px solid #1e2632;
+  flex-wrap: wrap;
+}
+.logo { font-weight: 700; font-size: 15px; color: #e8ecf1; }
+.logo span { color: #448aff; }
+.badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 3px; text-transform: uppercase; letter-spacing: 1px; }
+.badge.testnet { background: rgba(255,215,64,.15); color: #ffd740; }
+.badge.mainnet { background: rgba(255,82,82,.15); color: #ff5252; }
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+.dot.on  { background: #00e676; box-shadow: 0 0 6px #00e676; }
+.dot.off { background: #ff5252; }
+.hdr-val { color: #e8ecf1; font-weight: 600; }
+.hdr-lbl { color: #5c6a7a; font-size: 11px; }
+.ml { margin-left: auto; }
+
+.refresh-btn {
+  background: #1e2a38; border: 1px solid #2a3444; color: #c5cdd8;
+  padding: 5px 14px; border-radius: 4px; cursor: pointer; font-family: inherit; font-size: 12px;
+}
+.refresh-btn:hover { background: #263040; color: #e8ecf1; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1px; background: #1e2632; padding: 1px;
+}
+.card { background: #0a0e14; padding: 16px; }
+.card-title { font-size: 11px; color: #5c6a7a; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; font-weight: 600; }
+
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; color: #5c6a7a; font-size: 11px; font-weight: 400; padding: 4px 6px 8px; }
+td { padding: 5px 6px; border-bottom: 1px solid #131920; vertical-align: top; word-break: break-all; }
+tr:last-child td { border-bottom: none; }
+
+.green { color: #00e676; }
+.red   { color: #ff5252; }
+.dim   { color: #5c6a7a; }
+.kv { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #131920; }
+.kv:last-child { border-bottom: none; }
+.kv .k { color: #5c6a7a; }
+.kv .v { color: #e8ecf1; text-align: right; }
+.empty { color: #3d4a5c; font-style: italic; padding: 8px 0; }
+
+.loading { color: #3d4a5c; }
+.error   { color: #ff5252; font-size: 11px; }
 </style>
 </head>
 <body>
 
-<h1>HL-Bot <span id="status-badge" class="badge stopped">OFFLINE</span>
-<span id="uptime"></span></h1>
-
-<div class="grid">
-  <div class="card">
-    <h2>Price</h2>
-    <div class="stat" id="price">--</div>
-    <div class="stat-row"><span>Bid</span><span id="bid">--</span></div>
-    <div class="stat-row"><span>Ask</span><span id="ask">--</span></div>
-  </div>
-
-  <div class="card">
-    <h2>P/L Today</h2>
-    <div class="stat" id="daily-pnl">$0.00</div>
-    <div class="stat-row"><span>Trades</span><span id="daily-trades">0</span></div>
-    <div class="stat-row"><span>Drawdown</span><span id="drawdown">0%</span></div>
-  </div>
-
-  <div class="card">
-    <h2>Account</h2>
-    <div class="stat" id="equity">--</div>
-    <div class="stat-row"><span>Open positions</span><span id="open-pos">0</span></div>
-    <div class="stat-row"><span>Peak equity</span><span id="peak-equity">--</span></div>
-  </div>
-
-  <div class="card">
-    <h2>Performance</h2>
-    <div class="stat" id="win-rate">--</div>
-    <div class="stat-row"><span>Total trades</span><span id="total-trades">0</span></div>
-    <div class="stat-row"><span>Profit factor</span><span id="profit-factor">--</span></div>
-    <div class="stat-row"><span>Sharpe</span><span id="sharpe">--</span></div>
-  </div>
+<div class="header">
+  <div class="logo">HL<span>-Bot</span></div>
+  <span id="status-dot" class="dot off"></span><span id="status-text" class="hdr-lbl">Loading…</span>
+  <span id="network-badge" class="badge">—</span>
+  <span><span class="hdr-lbl">Price </span><span id="price" class="hdr-val">—</span></span>
+  <span><span class="hdr-lbl">Equity </span><span id="equity" class="hdr-val">—</span></span>
+  <span><span class="hdr-lbl">PnL </span><span id="pnl" class="hdr-val">—</span></span>
+  <span><span class="hdr-lbl">Uptime </span><span id="uptime" class="hdr-val">—</span></span>
+  <span class="ml"><button class="refresh-btn" onclick="location.reload()">⟳ Refresh</button></span>
 </div>
 
 <div class="grid">
-  <div class="card wide">
-    <h2>Cumulative P/L</h2>
-    <div class="chart-container"><canvas id="pnl-chart"></canvas></div>
-  </div>
-</div>
 
-<div class="grid">
   <div class="card">
-    <h2>S/R Levels</h2>
-    <div id="sr-levels"><p style="color:var(--dim)">Loading...</p></div>
+    <div class="card-title">Risk</div>
+    <div id="risk-body" class="loading">Loading…</div>
   </div>
 
   <div class="card">
-    <h2>Open Orders</h2>
-    <div id="orders-list"><p style="color:var(--dim)">Loading...</p></div>
+    <div class="card-title">Account</div>
+    <div id="account-body" class="loading">Loading…</div>
   </div>
-</div>
 
-<div class="grid">
-  <div class="card wide">
-    <h2>Recent Trades</h2>
-    <div style="overflow-x:auto">
-      <table>
-        <thead><tr><th>Time</th><th>Side</th><th>Entry</th><th>Exit</th><th>Size</th><th>P/L</th><th>Reason</th><th>S/R</th></tr></thead>
-        <tbody id="trades-body"><tr><td colspan="8" style="color:var(--dim)">No trades yet</td></tr></tbody>
-      </table>
-    </div>
+  <div class="card" style="grid-column: span 2">
+    <div class="card-title">Open Positions</div>
+    <div id="positions-body" class="loading">Loading…</div>
   </div>
+
+  <div class="card" style="grid-column: span 2">
+    <div class="card-title">Open Orders</div>
+    <div id="orders-body" class="loading">Loading…</div>
+  </div>
+
+  <div class="card" style="grid-column: span 2">
+    <div class="card-title">Cumulative PnL</div>
+    <div id="pnl-chart" style="height:200px;position:relative">Loading…</div>
+  </div>
+
+  <div class="card" style="grid-column: span 2">
+    <div class="card-title">Performance</div>
+    <div id="perf-body" class="loading">Loading…</div>
+  </div>
+
+  <div class="card" style="grid-column: span 2">
+    <div class="card-title">Exchange Fill History (entries + exits)</div>
+    <div id="fills-body" class="loading">Loading…</div>
+  </div>
+
+  <div class="card" style="grid-column: span 2">
+    <div class="card-title">Recorded Trades (bot log)</div>
+    <div id="trades-body" class="loading">Loading…</div>
+  </div>
+
+  <div class="card" style="grid-column: span 2">
+    <div class="card-title">S/R Levels</div>
+    <div id="sr-body" class="loading">Loading…</div>
+  </div>
+
 </div>
 
 <script>
-const socket = io();
-let pnlChart;
-
-function initChart() {
-  const ctx = document.getElementById('pnl-chart').getContext('2d');
-  pnlChart = new Chart(ctx, {
-    type: 'line',
-    data: { labels: [], datasets: [{ label: 'Cumulative P/L', data: [],
-      borderColor: '#58a6ff', backgroundColor: 'rgba(88,166,255,0.1)',
-      fill: true, tension: 0.3, pointRadius: 2, borderWidth: 2 }] },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      scales: { x: { display: true, ticks: { color: '#8b949e', maxTicksLimit: 8 }, grid: { color: '#21262d' } },
-                y: { ticks: { color: '#8b949e' }, grid: { color: '#21262d' } } },
-      plugins: { legend: { display: false } }
-    }
-  });
+function fmt(n, dec=2) { return n == null ? '—' : Number(n).toFixed(dec); }
+function fmtUSD(n) { return n == null ? '—' : '$' + Number(n).toFixed(2); }
+function fmtPct(n) { return n == null ? '—' : (Number(n)*100).toFixed(2) + '%'; }
+function colorClass(n) { return Number(n) >= 0 ? 'green' : 'red'; }
+function fmtUptime(s) {
+  s = Math.floor(s);
+  const h = Math.floor(s/3600), m = Math.floor((s%3600)/60), ss = s%60;
+  return `${h}h ${m}m ${ss}s`;
 }
 
-function fmtTime(ts) { return new Date(ts * 1000).toLocaleTimeString(); }
-function fmtDate(ts) { return new Date(ts * 1000).toLocaleString(); }
+function kv(label, value, cls='') {
+  return `<div class="kv"><span class="k">${label}</span><span class="v ${cls}">${value}</span></div>`;
+}
 
-function updateStatus(d) {
-  const badge = document.getElementById('status-badge');
-  if (d.status === 'running') { badge.textContent = 'RUNNING'; badge.className = 'badge running'; }
-  else { badge.textContent = 'STOPPED'; badge.className = 'badge stopped'; }
+async function load(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(r.status);
+  return r.json();
+}
 
-  if (d.risk) {
-    const pnl = d.risk.daily_pnl || 0;
-    const el = document.getElementById('daily-pnl');
-    el.textContent = '$' + pnl.toFixed(4);
-    el.className = 'stat ' + (pnl >= 0 ? 'green' : 'red');
-    document.getElementById('daily-trades').textContent = d.risk.daily_trades || 0;
-    document.getElementById('drawdown').textContent = (d.risk.drawdown_pct || 0).toFixed(2) + '%';
-    document.getElementById('equity').textContent = '$' + (d.risk.current_equity || 0).toFixed(2);
-    document.getElementById('open-pos').textContent = d.risk.open_positions || 0;
-    document.getElementById('peak-equity').textContent = '$' + (d.risk.peak_equity || 0).toFixed(2);
+async function init() {
+  // Status
+  try {
+    const s = await load('/api/status');
+    const running = s.status === 'running';
+    document.getElementById('status-dot').className = 'dot ' + (running ? 'on' : 'off');
+    document.getElementById('status-text').textContent = running ? 'Running' : s.status;
+    document.getElementById('network-badge').textContent = s.network || '—';
+    document.getElementById('network-badge').className = 'badge ' + (s.network === 'MAINNET' ? 'mainnet' : 'testnet');
+    if (s.price) document.getElementById('price').textContent = fmtUSD(s.price);
+    if (s.uptime_s) document.getElementById('uptime').textContent = fmtUptime(s.uptime_s);
+
+    if (s.risk) {
+      const r = s.risk;
+      const pnl = r.daily_pnl;
+      document.getElementById('pnl').textContent = fmtUSD(pnl);
+      document.getElementById('pnl').className = 'hdr-val ' + colorClass(pnl);
+      document.getElementById('equity').textContent = fmtUSD(r.current_equity);
+      document.getElementById('risk-body').innerHTML =
+        kv('Equity', fmtUSD(r.current_equity)) +
+        kv('Peak Equity', fmtUSD(r.peak_equity)) +
+        kv('Drawdown', r.drawdown_pct + '%', r.drawdown_pct > 5 ? 'red' : '') +
+        kv('Daily PnL', fmtUSD(r.daily_pnl), colorClass(r.daily_pnl)) +
+        kv('Daily Trades', r.daily_trades) +
+        kv('Open Positions', r.open_positions);
+    }
+  } catch(e) {
+    document.getElementById('status-text').textContent = 'Error: ' + e.message;
+    document.getElementById('risk-body').innerHTML = `<span class="error">${e}</span>`;
   }
 
-  if (d.price) {
-    const bid = d.price.bid ? parseFloat(d.price.bid.px) : null;
-    const ask = d.price.ask ? parseFloat(d.price.ask.px) : null;
-    if (bid && ask) {
-      document.getElementById('price').textContent = '$' + ((bid + ask) / 2).toFixed(2);
-      document.getElementById('bid').textContent = '$' + bid.toFixed(2);
-      document.getElementById('ask').textContent = '$' + ask.toFixed(2);
+  // Account
+  try {
+    const a = await load('/api/account');
+    document.getElementById('account-body').innerHTML =
+      kv('Available to Trade', fmtUSD(a.available_to_trade)) +
+      kv('Spot USDC', fmtUSD(a.spot_usdc)) +
+      kv('Perps Value', fmtUSD(a.perps_account_value)) +
+      kv('Network', a.network) +
+      kv('Master', `<span class="dim">${(a.master_account||'').slice(0,10)}…</span>`) +
+      kv('Agent', `<span class="dim">${(a.agent_address||'').slice(0,10)}…</span>`);
+  } catch(e) {
+    document.getElementById('account-body').innerHTML = `<span class="error">${e}</span>`;
+  }
+
+  // Positions
+  try {
+    const ps = await load('/api/positions');
+    if (!ps.length) {
+      document.getElementById('positions-body').innerHTML = '<span class="empty">No open positions</span>';
+    } else {
+      let html = '<table><tr><th>Coin</th><th>Size</th><th>Entry</th><th>Mark</th><th>Unrealised PnL</th><th>Margin</th><th>Leverage</th></tr>';
+      for (const p of ps) {
+        const pos = p.position;
+        const pnl = parseFloat(pos.unrealizedPnl || 0);
+        html += `<tr>
+          <td>${pos.coin}</td>
+          <td class="${parseFloat(pos.szi)>0?'green':'red'}">${pos.szi}</td>
+          <td>${fmt(pos.entryPx)}</td>
+          <td>${pos.markPx ? fmt(pos.markPx) : '—'}</td>
+          <td class="${colorClass(pnl)}">${fmtUSD(pnl)}</td>
+          <td>${fmtUSD(pos.marginUsed)}</td>
+          <td>${pos.leverage?.value ?? '—'}x</td>
+        </tr>`;
+      }
+      html += '</table>';
+      document.getElementById('positions-body').innerHTML = html;
     }
+  } catch(e) {
+    document.getElementById('positions-body').innerHTML = `<span class="error">${e}</span>`;
+  }
+
+  // Orders
+  try {
+    const os = await load('/api/orders');
+    if (!os.length) {
+      document.getElementById('orders-body').innerHTML = '<span class="empty">No open orders</span>';
+    } else {
+      let html = '<table><tr><th>Coin</th><th>Side</th><th>Size</th><th>Price</th><th>Type</th><th>OID</th></tr>';
+      for (const o of os) {
+        const side = o.side === 'B' ? 'BUY' : 'SELL';
+        html += `<tr>
+          <td>${o.coin}</td>
+          <td class="${o.side==='B'?'green':'red'}">${side}</td>
+          <td>${o.sz}</td>
+          <td>${fmt(o.limitPx)}</td>
+          <td class="dim">${o.orderType || '—'}</td>
+          <td class="dim">${o.oid}</td>
+        </tr>`;
+      }
+      html += '</table>';
+      document.getElementById('orders-body').innerHTML = html;
+    }
+  } catch(e) {
+    document.getElementById('orders-body').innerHTML = `<span class="error">${e}</span>`;
+  }
+
+  // Performance
+  try {
+    const p = await load('/api/performance');
+    if (!p.total_trades) {
+      document.getElementById('perf-body').innerHTML = '<span class="empty">No trades yet</span>';
+    } else {
+      document.getElementById('perf-body').innerHTML =
+        `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#1e2632">` +
+        stat('Trades', p.total_trades) +
+        stat('Win Rate', fmtPct(p.win_rate)) +
+        stat('Total PnL', fmtUSD(p.total_pnl), colorClass(p.total_pnl)) +
+        stat('Profit Factor', fmt(p.profit_factor)) +
+        stat('Avg Win', fmtUSD(p.avg_win), 'green') +
+        stat('Avg Loss', fmtUSD(p.avg_loss), 'red') +
+        stat('Sharpe', fmt(p.sharpe_ratio)) +
+        stat('Avg Duration', fmtDur(p.avg_duration_s)) +
+        `</div>`;
+    }
+  } catch(e) {
+    document.getElementById('perf-body').innerHTML = `<span class="error">${e}</span>`;
+  }
+
+  // Exchange fills
+  try {
+    const fills = await load('/api/fills');
+    if (!fills.length) {
+      document.getElementById('fills-body').innerHTML = '<span class="empty">No fills on exchange</span>';
+    } else {
+      let totalPnl = 0, totalFee = 0;
+      for (const f of fills) { totalPnl += f.closed_pnl; totalFee += f.fee; }
+      const net = totalPnl - totalFee;
+      let html = `<div style="display:flex;gap:24px;margin-bottom:10px;font-size:12px">
+        <span><span class="dim">Fills: </span><span>${fills.length}</span></span>
+        <span><span class="dim">Closed PnL: </span><span class="${colorClass(totalPnl)}">${fmtUSD(totalPnl)}</span></span>
+        <span><span class="dim">Fees: </span><span class="red">-${fmtUSD(totalFee)}</span></span>
+        <span><span class="dim">Net: </span><span class="${colorClass(net)}">${fmtUSD(net)}</span></span>
+      </div>`;
+      html += '<table><tr><th>Time</th><th>Coin</th><th>Type</th><th>Side</th><th>Size</th><th>Price</th><th>Closed PnL</th><th>Fee</th></tr>';
+      for (const f of fills) {
+        const d = new Date(f.time);
+        const ts = d.toISOString().slice(0,19).replace('T',' ');
+        const typ = f.is_entry ? 'ENTRY' : 'EXIT';
+        const typCls = f.is_entry ? 'dim' : (f.closed_pnl >= 0 ? 'green' : 'red');
+        const sideCls = f.side === 'B' ? 'green' : 'red';
+        const sideLbl = f.side === 'B' ? 'BUY' : 'SELL';
+        html += `<tr>
+          <td class="dim">${ts}</td>
+          <td>${f.coin}</td>
+          <td class="${typCls}">${typ}</td>
+          <td class="${sideCls}">${sideLbl}</td>
+          <td>${f.sz}</td>
+          <td>${fmt(f.px)}</td>
+          <td class="${f.is_entry ? 'dim' : colorClass(f.closed_pnl)}">${f.is_entry ? '—' : fmtUSD(f.closed_pnl)}</td>
+          <td class="red">-${fmtUSD(f.fee)}</td>
+        </tr>`;
+      }
+      html += '</table>';
+      document.getElementById('fills-body').innerHTML = html;
+    }
+  } catch(e) {
+    document.getElementById('fills-body').innerHTML = `<span class="error">${e}</span>`;
+  }
+
+  // Trades (all)
+  try {
+    const ts = await load('/api/trades/all');
+    if (!ts.length) {
+      document.getElementById('trades-body').innerHTML = '<span class="empty">No trades recorded</span>';
+    } else {
+      let html = `<div class="dim" style="margin-bottom:8px;font-size:11px">${ts.length} total trades</div>`;
+      html += '<table><tr><th>Date/Time</th><th>Side</th><th>Entry</th><th>Exit</th><th>Size</th><th>PnL</th><th>PnL %</th><th>Reason</th><th>Duration</th><th>SR Level</th></tr>';
+      for (const t of [...ts].reverse()) {
+        const d = new Date(t.exit_time * 1000);
+        const ts2 = d.toISOString().slice(0,19).replace('T',' ');
+        html += `<tr>
+          <td class="dim">${ts2}</td>
+          <td class="${t.side==='long'?'green':'red'}">${t.side.toUpperCase()}</td>
+          <td>${fmt(t.entry_price)}</td>
+          <td>${fmt(t.exit_price)}</td>
+          <td>${fmt(t.size,4)}</td>
+          <td class="${colorClass(t.pnl)}">${fmtUSD(t.pnl)}</td>
+          <td class="${colorClass(t.pnl_pct)}">${fmtPct(t.pnl_pct)}</td>
+          <td class="dim">${t.exit_reason}</td>
+          <td class="dim">${fmtDur(t.duration_s)}</td>
+          <td class="dim">${fmt(t.sr_level)} (${t.sr_kind})</td>
+        </tr>`;
+      }
+      html += '</table>';
+      document.getElementById('trades-body').innerHTML = html;
+    }
+  } catch(e) {
+    document.getElementById('trades-body').innerHTML = `<span class="error">${e}</span>`;
+  }
+
+  // S/R Levels
+  try {
+    const sr = await load('/api/sr_levels');
+    const all = sr.levels || [];
+    if (!all.length) {
+      document.getElementById('sr-body').innerHTML = '<span class="empty">No S/R levels detected</span>';
+    } else {
+      let html = '<table><tr><th>Price</th><th>Kind</th><th>Strength</th><th>Touches</th><th>Score</th></tr>';
+      for (const l of all.slice(0, 20)) {
+        html += `<tr>
+          <td>${fmt(l.price)}</td>
+          <td class="${l.kind==='support'?'green':'red'}">${l.kind}</td>
+          <td>${fmt(l.strength,3)}</td>
+          <td>${l.touches}</td>
+          <td>${fmt(l.score,3)}</td>
+        </tr>`;
+      }
+      html += '</table>';
+      document.getElementById('sr-body').innerHTML = html;
+    }
+  } catch(e) {
+    document.getElementById('sr-body').innerHTML = `<span class="error">${e}</span>`;
   }
 }
 
-async function fetchPerformance() {
+function stat(label, value, cls='') {
+  return `<div style="background:#0a0e14;padding:10px 14px">
+    <div class="dim" style="font-size:11px;margin-bottom:4px">${label}</div>
+    <div class="${cls}" style="font-size:15px;font-weight:600">${value}</div>
+  </div>`;
+}
+
+function fmtDur(s) {
+  if (!s) return '—';
+  if (s < 60) return Math.round(s) + 's';
+  if (s < 3600) return Math.round(s/60) + 'm';
+  return Math.round(s/3600) + 'h';
+}
+
+// PnL chart
+async function drawPnlChart() {
   try {
-    const r = await fetch('/api/performance');
-    const d = await r.json();
-    if (d.total_trades !== undefined) {
-      document.getElementById('win-rate').textContent = ((d.win_rate || 0) * 100).toFixed(1) + '%';
-      document.getElementById('total-trades').textContent = d.total_trades;
-      document.getElementById('profit-factor').textContent = (d.profit_factor || 0).toFixed(2);
-      document.getElementById('sharpe').textContent = (d.sharpe_ratio || 0).toFixed(2);
+    const pts = await load('/api/pnl_chart');
+    if (pts.length < 2) {
+      document.getElementById('pnl-chart').innerHTML = '<span class="empty">Not enough data</span>';
+      return;
     }
-  } catch(e) {}
-}
+    const container = document.getElementById('pnl-chart');
+    container.innerHTML = '';
+    const canvas = document.createElement('canvas');
+    canvas.width = container.clientWidth * 2;
+    canvas.height = 400;
+    canvas.style.width = '100%';
+    canvas.style.height = '200px';
+    container.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
 
-async function fetchPnl() {
-  try {
-    const r = await fetch('/api/pnl');
-    const d = await r.json();
-    if (d.length && pnlChart) {
-      pnlChart.data.labels = d.map(p => fmtTime(p.time));
-      pnlChart.data.datasets[0].data = d.map(p => p.pnl);
-      const last = d[d.length-1].pnl;
-      pnlChart.data.datasets[0].borderColor = last >= 0 ? '#3fb950' : '#f85149';
-      pnlChart.data.datasets[0].backgroundColor = last >= 0 ? 'rgba(63,185,80,0.1)' : 'rgba(248,81,73,0.1)';
-      pnlChart.update();
+    const pnls = pts.map(p => p.pnl);
+    const minP = Math.min(...pnls, 0);
+    const maxP = Math.max(...pnls, 0);
+    const range = (maxP - minP) || 1;
+    const pad = { t: 20, r: 60, b: 30, l: 10 };
+    const w = canvas.width - pad.l - pad.r;
+    const h = canvas.height - pad.t - pad.b;
+
+    const x = i => pad.l + (i / (pts.length - 1)) * w;
+    const y = v => pad.t + h - ((v - minP) / range) * h;
+
+    // Zero line
+    ctx.strokeStyle = '#2a3444';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    ctx.moveTo(pad.l, y(0));
+    ctx.lineTo(pad.l + w, y(0));
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Grid labels
+    ctx.fillStyle = '#5c6a7a';
+    ctx.font = '20px monospace';
+    ctx.textAlign = 'right';
+    for (let v of [minP, 0, maxP]) {
+      ctx.fillText('$' + v.toFixed(2), pad.l + w + pad.r - 4, y(v) + 5);
     }
-  } catch(e) {}
+    ctx.textAlign = 'center';
+    ctx.fillText('Trade #', pad.l + w / 2, canvas.height - 4);
+    for (let i = 0; i < pts.length; i += Math.max(1, Math.floor(pts.length / 6))) {
+      ctx.fillText(pts[i].trade, x(i), canvas.height - 14);
+    }
+
+    // Fill area
+    ctx.beginPath();
+    ctx.moveTo(x(0), y(0));
+    for (let i = 0; i < pts.length; i++) ctx.lineTo(x(i), y(pnls[i]));
+    ctx.lineTo(x(pts.length - 1), y(0));
+    ctx.closePath();
+    const last = pnls[pnls.length - 1];
+    const grad = ctx.createLinearGradient(0, pad.t, 0, pad.t + h);
+    if (last >= 0) {
+      grad.addColorStop(0, 'rgba(0,230,118,0.25)');
+      grad.addColorStop(1, 'rgba(0,230,118,0.02)');
+    } else {
+      grad.addColorStop(0, 'rgba(255,82,82,0.02)');
+      grad.addColorStop(1, 'rgba(255,82,82,0.25)');
+    }
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Line
+    ctx.beginPath();
+    for (let i = 0; i < pts.length; i++) {
+      if (i === 0) ctx.moveTo(x(i), y(pnls[i]));
+      else ctx.lineTo(x(i), y(pnls[i]));
+    }
+    ctx.strokeStyle = last >= 0 ? '#00e676' : '#ff5252';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Dots for each trade
+    for (let i = 1; i < pts.length; i++) {
+      ctx.beginPath();
+      ctx.arc(x(i), y(pnls[i]), 5, 0, Math.PI * 2);
+      const dp = pnls[i] - pnls[i - 1];
+      ctx.fillStyle = dp >= 0 ? '#00e676' : '#ff5252';
+      ctx.fill();
+    }
+
+    // Current PnL label
+    ctx.font = 'bold 24px monospace';
+    ctx.fillStyle = last >= 0 ? '#00e676' : '#ff5252';
+    ctx.textAlign = 'left';
+    ctx.fillText('$' + last.toFixed(4), pad.l + 8, pad.t + 24);
+  } catch(e) {
+    document.getElementById('pnl-chart').innerHTML = `<span class="error">${e}</span>`;
+  }
 }
 
-async function fetchTrades() {
-  try {
-    const r = await fetch('/api/trades');
-    const d = await r.json();
-    const tbody = document.getElementById('trades-body');
-    if (!d.length) return;
-    tbody.innerHTML = d.reverse().slice(0, 30).map(t => `<tr>
-      <td>${fmtDate(t.exit_time)}</td>
-      <td style="color:${t.side==='long'?'var(--green)':'var(--red)'}">${t.side.toUpperCase()}</td>
-      <td>$${t.entry_price}</td><td>$${t.exit_price}</td>
-      <td>${t.size.toFixed(6)}</td>
-      <td class="${t.pnl>=0?'pnl-pos':'pnl-neg'}">${t.pnl>=0?'+':''}${t.pnl.toFixed(6)}</td>
-      <td>${t.exit_reason}</td><td>${t.sr_kind} @ $${t.sr_level}</td>
-    </tr>`).join('');
-  } catch(e) {}
-}
-
-async function fetchSR() {
-  try {
-    const r = await fetch('/api/sr_levels');
-    const d = await r.json();
-    const el = document.getElementById('sr-levels');
-    const levels = d.levels || [];
-    if (!levels.length) { el.innerHTML = '<p style="color:var(--dim)">No levels detected</p>'; return; }
-    el.innerHTML = levels.slice(0, 8).map(l => `<div style="margin-bottom:8px">
-      <div style="display:flex;justify-content:space-between;font-size:13px">
-        <span style="color:${l.kind==='support'?'var(--green)':'var(--red)'}">${l.kind.toUpperCase()}</span>
-        <span>$${l.price.toFixed(2)}</span>
-        <span style="color:var(--dim)">×${l.touches} (${(l.strength*100).toFixed(0)}%)</span>
-      </div>
-      <div class="sr-bar ${l.kind==='support'?'sr-support':'sr-resistance'}" style="width:${l.score*100}%"></div>
-    </div>`).join('');
-  } catch(e) {}
-}
-
-async function fetchOrders() {
-  try {
-    const r = await fetch('/api/orders');
-    const d = await r.json();
-    const el = document.getElementById('orders-list');
-    if (!d.length) { el.innerHTML = '<p style="color:var(--dim)">No open orders</p>'; return; }
-    el.innerHTML = d.slice(0, 10).map(o => `<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;padding:4px 0;border-bottom:1px solid var(--border)">
-      <span style="color:${o.side==='B'?'var(--green)':'var(--red)'}">${o.side==='B'?'BUY':'SELL'}</span>
-      <span>${o.coin}</span><span>$${o.limitPx}</span><span>${o.sz}</span>
-    </div>`).join('');
-  } catch(e) {}
-}
-
-socket.on('update', updateStatus);
-
-initChart();
-setInterval(() => { fetchPerformance(); fetchPnl(); fetchTrades(); fetchSR(); fetchOrders(); }, 3000);
-fetchPerformance(); fetchPnl(); fetchTrades(); fetchSR(); fetchOrders();
-fetch('/api/status').then(r => r.json()).then(updateStatus).catch(() => {});
+init();
+drawPnlChart();
 </script>
 </body>
 </html>

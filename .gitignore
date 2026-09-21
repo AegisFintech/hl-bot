@@ -3,6 +3,9 @@ __pycache__/
 *.pyc
 data/trades.json
 data/performance.json
+data/agent.log
+data/agent_audit.json
+data/tuning.json
 graphify-out/
 .graphify-cache/
 venv/

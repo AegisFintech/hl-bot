@@ -1,8 +1,4 @@
 import logging
-from pathlib import Path
-
-from dotenv import load_dotenv
-load_dotenv()
 
 import config
 from src.exchange.hyperliquid import HyperliquidClient
@@ -17,7 +13,7 @@ log = logging.getLogger("hl-bot")
 
 
 def main():
-    log.info("HL-Bot starting — %s on %s", config.SYMBOL,
+    log.info("HL-Bot starting — %s on %s", config.SYMBOLS,
              "testnet" if config.HL_TESTNET else "MAINNET")
 
     client = HyperliquidClient(
@@ -28,7 +24,7 @@ def main():
 
     bot = TradingBot(
         client=client,
-        coin=config.SYMBOL,
+        coins=config.SYMBOLS,
         tp_pips=config.TP_PIPS,
         sl_pips=config.SL_PIPS,
         sr_lookback=config.SR_LOOKBACK,
@@ -37,6 +33,7 @@ def main():
         trades_file=config.TRADES_FILE,
         performance_file=config.PERFORMANCE_FILE,
         auto_transfer_spot=config.AUTO_TRANSFER_SPOT,
+        proximity_pct=config.PROXIMITY_PCT,
     )
 
     bot.start()
