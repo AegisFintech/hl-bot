@@ -3,16 +3,17 @@ from pathlib import Path
 PROJECT_ROOT = Path("/root/hl-bot")
 
 TUNING_LIMITS = {
-    "tp_pips":          (50, 500),
-    "sl_pips":          (20, 200),
+    "tp_pips":          (10, 500),
+    "sl_pips":          (5, 200),
     "order_size_usd":   (10, 500),
     "proximity_pct":    (0.001, 0.01),
     "sr_lookback":      (100, 2000),
-    "min_touches":      (1, 5),
-    "signal_cooldown":  (30.0, 600.0),
+    "min_touches":      (1, 10),
+    "signal_cooldown":  (30.0, 1200.0),
+    "min_sr_strength":  (0.1, 1.0),
 }
 
-FORBIDDEN_PATHS = {".env", ".env.example"}
+FORBIDDEN_PATHS = {".env", ".env.example", "config.py"}
 FORBIDDEN_PREFIXES = ("src/agent/", ".git/", "data/agent_audit.json")
 
 MAX_RESTARTS_PER_RUN = 2

@@ -32,12 +32,15 @@ class OrderBlock:
 
 class SRDetector:
 
-    def __init__(self, lookback: int = 100, cluster_pct: float = 0.002,
-                 swing_window: int = 5, min_touches: int = 3):
+    def __init__(self, lookback: int = 500, cluster_pct: float = 0.002,
+                 swing_window: int = 10, min_touches: int = 5,
+                 min_sr_strength: float = 0.6, htf_factor: int = 15):
         self.lookback = lookback
         self.cluster_pct = cluster_pct
         self.swing_window = swing_window
         self.min_touches = min_touches
+        self.min_sr_strength = min_sr_strength
+        self.htf_factor = htf_factor
         self._levels: list[SRLevel] = []
         self._order_blocks: list[OrderBlock] = []
         self._param_adjustments: dict = {}
@@ -52,16 +55,38 @@ class SRDetector:
             self.swing_window = adjustments["swing_window"]
         if "min_touches" in adjustments:
             self.min_touches = adjustments["min_touches"]
+        if "min_sr_strength" in adjustments:
+            self.min_sr_strength = adjustments["min_sr_strength"]
+
+    @staticmethod
+    def _aggregate_candles(candles: list[dict], factor: int) -> list[dict]:
+        if factor <= 1:
+            return candles
+        agg = []
+        for i in range(0, len(candles) - factor + 1, factor):
+            chunk = candles[i:i + factor]
+            agg.append({
+                "o": chunk[0]["o"],
+                "h": str(max(float(c["h"]) for c in chunk)),
+                "l": str(min(float(c["l"]) for c in chunk)),
+                "c": chunk[-1]["c"],
+                "v": str(sum(float(c["v"]) for c in chunk)),
+                "t": chunk[0].get("t", 0),
+            })
+        return agg
 
     def detect(self, candles: list[dict]) -> list[SRLevel]:
         if len(candles) < self.swing_window * 2 + 1:
             return []
 
-        candles = candles[-self.lookback:]
-        highs = np.array([float(c["h"]) for c in candles])
-        lows = np.array([float(c["l"]) for c in candles])
-        closes = np.array([float(c["c"]) for c in candles])
-        volumes = np.array([float(c["v"]) for c in candles])
+        htf_candles = self._aggregate_candles(candles[-self.lookback:], self.htf_factor)
+        if len(htf_candles) < self.swing_window * 2 + 1:
+            htf_candles = candles[-self.lookback:]
+
+        highs = np.array([float(c["h"]) for c in htf_candles])
+        lows = np.array([float(c["l"]) for c in htf_candles])
+        closes = np.array([float(c["c"]) for c in htf_candles])
+        volumes = np.array([float(c["v"]) for c in htf_candles])
 
         swing_highs = self._find_swing_highs(highs)
         swing_lows = self._find_swing_lows(lows)
@@ -73,7 +98,8 @@ class SRDetector:
             raw_levels.append(("support", lows[idx], volumes[idx], idx))
 
         clustered = self._cluster_levels(raw_levels, closes[-1])
-        self._levels = [l for l in clustered if l.touches >= self.min_touches]
+        self._levels = [l for l in clustered
+                        if l.touches >= self.min_touches and l.strength >= self.min_sr_strength]
         self._levels.sort(key=lambda l: l.score, reverse=True)
         return self._levels
 
@@ -197,10 +223,9 @@ class SRDetector:
                 kind_counts[k] += 1
             dominant_kind = max(kind_counts, key=kind_counts.get)
 
-            distance_pct = abs(avg_price - current_price) / current_price
-            proximity_bonus = max(0, 1 - distance_pct * 20)
-
-            strength = min(1.0, (touches / 5) * 0.5 + proximity_bonus * 0.3 + 0.2)
+            recency = max(cluster_indices) / max(len(raw_levels), 1)
+            vol_ratio = total_vol / (np.mean([r[2] for r in raw_levels]) * touches) if raw_levels else 0
+            strength = min(1.0, (touches / 8) * 0.5 + min(vol_ratio, 1.0) * 0.3 + recency * 0.2)
 
             clusters.append(SRLevel(
                 price=round(avg_price, 2),

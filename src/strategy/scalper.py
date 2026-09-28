@@ -20,6 +20,9 @@ class TradeSignal:
     sr_kind: str
     sr_strength: float
     ob_zone: tuple | None = None
+    with_trend: bool = False
+    has_ob: bool = False
+    has_rejection: bool = False
     timestamp: float = 0.0
 
     def __post_init__(self):
@@ -33,8 +36,8 @@ class TradeSignal:
 class Scalper:
 
     def __init__(self, client: HyperliquidClient, sr_detector: SRDetector,
-                 risk_manager: RiskManager, coin: str, tp_pips: int = 5,
-                 sl_pips: int = 10, pip_size: float | None = None,
+                 risk_manager: RiskManager, coin: str, tp_pips: int = 30,
+                 sl_pips: int = 15, pip_size: float | None = None,
                  proximity_pct: float = 0.003):
         self.client = client
         self.sr = sr_detector
@@ -48,12 +51,13 @@ class Scalper:
         self._last_sr_update = 0.0
         self._sr_update_interval = 60.0
         self._last_debug_log = 0.0
+        self._last_signal_meta: dict = {}
         self._recent_entries: dict[float, float] = {}
-        self._signal_cooldown = 120.0
+        self._signal_cooldown = 300.0
         self._pip_cache = 0.0
         self._pip_cache_time = 0.0
         self._blacklisted_levels: dict[float, float] = {}
-        self._blacklist_duration = 1800.0
+        self._blacklist_duration = 3600.0
         self._last_scan_time = 0.0
         self._scan_interval = 5.0
         self._last_mid = 0.0
@@ -124,19 +128,42 @@ class Scalper:
                     return True
         return False
 
+    def _is_pullback(self, candles: list, level_price: float, side: str) -> bool:
+        if len(candles) < 20:
+            return False
+        recent = candles[-20:]
+        closes = [float(c["c"]) for c in recent]
+        if side == "long":
+            peak = max(closes[:-5]) if len(closes) > 5 else max(closes)
+            retrace = peak - level_price
+            return retrace > level_price * 0.001
+        else:
+            trough = min(closes[:-5]) if len(closes) > 5 else min(closes)
+            retrace = level_price - trough
+            return retrace > level_price * 0.001
+
     def _score_signal(self, level: SRLevel, trend: str, side: str,
                       candles: list, obs: list[OrderBlock], ob_kind: str) -> float:
         score = level.score
         with_trend = (side == "long" and trend == "up") or (side == "short" and trend == "down")
         counter_trend = (side == "long" and trend == "down") or (side == "short" and trend == "up")
-        if counter_trend:
+        if counter_trend or trend == "neutral":
+            return -1.0
+        if not self._is_pullback(candles, level.price, side):
             return -1.0
         if with_trend:
-            score *= 1.5
-        if self._has_rejection_candle(candles, level.price, side):
+            score *= 1.8
+        has_rejection = self._has_rejection_candle(candles, level.price, side)
+        has_ob = self._find_confirming_ob(level.price, obs, ob_kind)
+        if has_rejection:
             score *= 1.3
-        if self._find_confirming_ob(level.price, obs, ob_kind):
-            score *= 1.2
+        if has_ob:
+            score *= 1.3
+        self._last_signal_meta = {
+            "with_trend": with_trend,
+            "has_rejection": has_rejection,
+            "has_ob": has_ob is not None,
+        }
         return score
 
     def scan_for_signals(self) -> list[TradeSignal]:
@@ -194,7 +221,7 @@ class Scalper:
 
             score = self._score_signal(support, trend, "long", candles,
                                        obs.get("bullish", []), "bullish")
-            if score < 0.5:
+            if score < 0.8:
                 continue
 
             entry = self.client.round_price(self.coin, support.price + pip)
@@ -203,11 +230,15 @@ class Scalper:
 
             ob_zone = self._find_confirming_ob(support.price, obs.get("bullish", []), "bullish")
 
+            meta = self._last_signal_meta
             signal = TradeSignal(
                 coin=self.coin, side="long", entry_price=entry,
                 tp_price=tp, sl_price=sl,
                 sr_level=support.price, sr_kind="support",
                 sr_strength=score, ob_zone=ob_zone,
+                with_trend=meta.get("with_trend", False),
+                has_ob=meta.get("has_ob", False),
+                has_rejection=meta.get("has_rejection", False),
             )
             signals.append(signal)
 
@@ -219,7 +250,7 @@ class Scalper:
 
             score = self._score_signal(resistance, trend, "short", candles,
                                        obs.get("bearish", []), "bearish")
-            if score < 0.5:
+            if score < 0.8:
                 continue
 
             entry = self.client.round_price(self.coin, resistance.price - pip)
@@ -228,11 +259,15 @@ class Scalper:
 
             ob_zone = self._find_confirming_ob(resistance.price, obs.get("bearish", []), "bearish")
 
+            meta = self._last_signal_meta
             signal = TradeSignal(
                 coin=self.coin, side="short", entry_price=entry,
                 tp_price=tp, sl_price=sl,
                 sr_level=resistance.price, sr_kind="resistance",
                 sr_strength=score, ob_zone=ob_zone,
+                with_trend=meta.get("with_trend", False),
+                has_ob=meta.get("has_ob", False),
+                has_rejection=meta.get("has_rejection", False),
             )
             signals.append(signal)
 
@@ -262,7 +297,7 @@ class Scalper:
                 {"coin": signal.coin, "is_buy": is_buy, "sz": size, "limit_px": signal.entry_price,
                  "order_type": {"limit": {"tif": "Gtc"}}, "reduce_only": False},
                 {"coin": signal.coin, "is_buy": exit_side, "sz": size, "limit_px": signal.tp_price,
-                 "order_type": {"trigger": {"triggerPx": signal.tp_price, "isMarket": True, "tpsl": "tp"}},
+                 "order_type": {"trigger": {"triggerPx": signal.tp_price, "isMarket": False, "tpsl": "tp"}},
                  "reduce_only": True},
                 {"coin": signal.coin, "is_buy": exit_side, "sz": size, "limit_px": signal.sl_price,
                  "order_type": {"trigger": {"triggerPx": signal.sl_price, "isMarket": True, "tpsl": "sl"}},
@@ -271,10 +306,16 @@ class Scalper:
             "grouping": "normalTpsl",
         }
 
-    def execute_signal(self, signal: TradeSignal) -> dict | None:
+    def _is_level_on_cooldown(self, level_price: float) -> bool:
         now = time.time()
-        last_entry = self._recent_entries.get(signal.sr_level, 0)
-        if now - last_entry < self._signal_cooldown:
+        cluster_range = level_price * self.sr.cluster_pct
+        for entry_price, entry_time in self._recent_entries.items():
+            if now - entry_time < self._signal_cooldown and abs(level_price - entry_price) <= cluster_range:
+                return True
+        return False
+
+    def execute_signal(self, signal: TradeSignal) -> dict | None:
+        if self._is_level_on_cooldown(signal.sr_level):
             return None
 
         if not self.risk.can_trade(signal):
@@ -323,18 +364,28 @@ class Scalper:
 
         return results
 
+    @staticmethod
+    def _ema(values: list[float], period: int) -> float:
+        if not values:
+            return 0.0
+        k = 2.0 / (period + 1)
+        ema = values[0]
+        for v in values[1:]:
+            ema = v * k + ema * (1 - k)
+        return ema
+
     def _get_trend(self, candles: list) -> str:
-        if len(candles) < 50:
+        if len(candles) < 30:
             return "neutral"
-        recent = candles[-50:]
-        first_close = float(recent[0]["c"])
-        last_close = float(recent[-1]["c"])
-        if first_close <= 0:
+        closes = [float(c["c"]) for c in candles[-50:]]
+        ema9 = self._ema(closes, 9)
+        ema21 = self._ema(closes, 21)
+        if ema21 == 0:
             return "neutral"
-        change_pct = (last_close - first_close) / first_close
-        if change_pct > 0.003:
+        spread_pct = (ema9 - ema21) / ema21
+        if spread_pct > 0.0005:
             return "up"
-        if change_pct < -0.003:
+        if spread_pct < -0.0005:
             return "down"
         return "neutral"
 

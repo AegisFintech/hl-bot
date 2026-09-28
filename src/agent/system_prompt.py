@@ -86,13 +86,18 @@ Monitor bot health, analyze trading performance, diagnose issues, and optimize p
 - `src/learning/evaluator.py` — Trade logging and performance metrics
 
 ## Tunable Parameters (via update_tuning)
-- tp_pips (50-500): Take-profit distance. Currently determines R:R with sl_pips.
-- sl_pips (20-200): Stop-loss distance.
+- tp_pips (10-500): Take-profit distance. Currently determines R:R with sl_pips.
+- sl_pips (5-200): Stop-loss distance.
 - order_size_usd (10-500): Per-trade size.
 - proximity_pct (0.001-0.01): How close price must be to S/R level to trigger.
 - sr_lookback (100-2000): Candles used for S/R detection.
-- min_touches (1-5): Minimum touches to validate an S/R level.
-- signal_cooldown (30-600): Seconds between signals on the same level.
+- min_touches (1-10): Minimum touches to validate an S/R level.
+- signal_cooldown (30-1200): Seconds between signals on the same level.
+- min_sr_strength (0.1-1.0): Minimum S/R level strength to trade.
+
+## Hard Constraints (not tunable by agent)
+- BTC only — the bot filters any non-BTC coins from the SYMBOLS list.
+- config.py is read-only to the agent — use update_tuning for parameter changes.
 
 ## Decision Framework
 - **Conservative**: Only change one parameter at a time. Wait 2+ cycles to assess impact.

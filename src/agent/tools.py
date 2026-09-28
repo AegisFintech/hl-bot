@@ -100,24 +100,27 @@ def update_tuning(
     sr_lookback: int | None = None,
     min_touches: int | None = None,
     signal_cooldown: float | None = None,
+    min_sr_strength: float | None = None,
 ) -> str:
     """Update bot trading parameters via hot-reload. Only pass parameters you want to change.
     The bot picks up changes within 60 seconds without restart.
 
     Args:
-        tp_pips: Take-profit in pips (range: 50-500).
-        sl_pips: Stop-loss in pips (range: 20-200).
+        tp_pips: Take-profit in pips (range: 10-500).
+        sl_pips: Stop-loss in pips (range: 5-200).
         order_size_usd: Order size in USD (range: 10-500).
         proximity_pct: How close price must be to S/R level (range: 0.001-0.01).
         sr_lookback: Number of candles for S/R detection (range: 100-2000).
-        min_touches: Minimum touches for a valid S/R level (range: 1-5).
-        signal_cooldown: Seconds between signals on same level (range: 30-600).
+        min_touches: Minimum touches for a valid S/R level (range: 1-10).
+        signal_cooldown: Seconds between signals on same level (range: 30-1200).
+        min_sr_strength: Minimum S/R strength to trade (range: 0.1-1.0).
     """
     params = {}
     local_vars = {
         "tp_pips": tp_pips, "sl_pips": sl_pips, "order_size_usd": order_size_usd,
         "proximity_pct": proximity_pct, "sr_lookback": sr_lookback,
         "min_touches": min_touches, "signal_cooldown": signal_cooldown,
+        "min_sr_strength": min_sr_strength,
     }
     for k, v in local_vars.items():
         if v is not None:

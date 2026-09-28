@@ -99,8 +99,18 @@ class RiskManager:
         size_usd = min(self.order_size_usd, self.max_position_size_usd)
 
         if self.state.current_equity > 0:
-            max_from_equity = self.state.current_equity * 0.1
+            max_from_equity = self.state.current_equity * 0.02
             size_usd = min(size_usd, max_from_equity)
+
+        quality = 0.5
+        if getattr(signal, "with_trend", False):
+            quality += 0.2
+        if getattr(signal, "has_ob", False):
+            quality += 0.15
+        if getattr(signal, "has_rejection", False):
+            quality += 0.15
+        quality = min(quality, 1.0)
+        size_usd *= quality
 
         if signal.entry_price <= 0:
             return 0.0

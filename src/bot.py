@@ -18,12 +18,16 @@ log = logging.getLogger(__name__)
 class TradingBot:
 
     def __init__(self, client: HyperliquidClient, coin: str = "BTC", coins: list | None = None,
-                 tp_pips: int = 5, sl_pips: int = 10, sr_lookback: int = 100,
+                 tp_pips: int = 30, sl_pips: int = 15, sr_lookback: int = 100,
                  order_size_usd: float = 100, dashboard_port: int = 8080,
                  trades_file=None, performance_file=None,
                  auto_transfer_spot: bool = False, proximity_pct: float = 0.003):
         self.client = client
-        self.coins = coins or [coin]
+        ALLOWED_COINS = {"BTC"}
+        requested = coins or [coin]
+        self.coins = [c for c in requested if c in ALLOWED_COINS] or ["BTC"]
+        if set(requested) != set(self.coins):
+            log.warning("Filtered coins %s → %s (only %s allowed)", requested, self.coins, ALLOWED_COINS)
         self.coin = self.coins[0]
         self.running = False
         self.start_time = None
@@ -285,7 +289,7 @@ class TradingBot:
                 exit_price = float(fill["px"])
                 matched_signal = self._match_fill_to_signal(fill)
                 if matched_signal:
-                    exit_reason = "tp" if pnl > 0 else "sl"
+                    exit_reason = self._classify_exit(matched_signal, exit_price, pnl)
                     self.evaluator.record_trade(
                         signal_dict=matched_signal, exit_price=exit_price,
                         size=float(fill["sz"]), pnl=pnl, exit_reason=exit_reason,
@@ -348,6 +352,18 @@ class TradingBot:
                     return signal
         return None
 
+    @staticmethod
+    def _classify_exit(signal: dict, exit_price: float, pnl: float) -> str:
+        tp = signal.get("tp_price", 0)
+        sl = signal.get("sl_price", 0)
+        if tp and sl:
+            dist_tp = abs(exit_price - tp)
+            dist_sl = abs(exit_price - sl)
+            if dist_tp <= dist_sl:
+                return "tp"
+            return "sl"
+        return "tp" if pnl > 0 else "sl"
+
     def _check_tuning(self):
         now = time.time()
         if now - self._last_tuning_check < self._tuning_check_interval:
@@ -409,9 +425,10 @@ class TradingBot:
         adjustments = self.evaluator.suggest_adjustments()
         if adjustments:
             log.info("Learning adjustments: %s", adjustments)
-            # Apply to all coins' SR detectors
             for scalper in self._scalpers:
                 scalper.sr.apply_adjustments(adjustments)
+                if "signal_cooldown" in adjustments:
+                    scalper._signal_cooldown = float(adjustments["signal_cooldown"])
 
         perf = self.evaluator.get_performance()
         log.info("Performance — Win rate: %.1f%%, PF: %.2f, Sharpe: %.2f, Trades: %d",

@@ -192,7 +192,7 @@ class HyperliquidClient:
             },
             {
                 "coin": coin, "is_buy": exit_side, "sz": size, "limit_px": tp_price,
-                "order_type": {"trigger": {"triggerPx": tp_price, "isMarket": True, "tpsl": "tp"}},
+                "order_type": {"trigger": {"triggerPx": tp_price, "isMarket": False, "tpsl": "tp"}},
                 "reduce_only": True,
             },
             {
@@ -222,7 +222,7 @@ class HyperliquidClient:
         orders = [
             {
                 "coin": coin, "is_buy": is_buy, "sz": size, "limit_px": tp_price,
-                "order_type": {"trigger": {"triggerPx": tp_price, "isMarket": True, "tpsl": "tp"}},
+                "order_type": {"trigger": {"triggerPx": tp_price, "isMarket": False, "tpsl": "tp"}},
                 "reduce_only": True,
             },
             {

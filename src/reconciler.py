@@ -11,7 +11,7 @@ log = logging.getLogger(__name__)
 class PositionReconciler:
 
     def __init__(self, client: HyperliquidClient, risk_manager: RiskManager,
-                 coin: str, tp_pips: int = 5, sl_pips: int = 10,
+                 coin: str, tp_pips: int = 30, sl_pips: int = 15,
                  pip_size: float = 1.0):
         self.client = client
         self.risk = risk_manager

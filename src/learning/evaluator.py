@@ -176,9 +176,39 @@ class Evaluator:
         pattern = self.analyze_sr_patterns()
         adjustments = {}
 
-        if perf["win_rate"] < 0.5:
-            adjustments["min_touches"] = 3
-            log.info("Low win rate (%.1f%%) — increasing min_touches to 3", perf["win_rate"] * 100)
+        recent = self.trades[-20:]
+        wins = [t for t in recent if t.pnl > 0]
+        losses = [t for t in recent if t.pnl <= 0]
+        recent_wr = len(wins) / len(recent) if recent else 0
+
+        if recent_wr < 0.3:
+            adjustments["min_touches"] = 6
+            log.info("Very low recent win rate (%.1f%%) — raising min_touches to 6", recent_wr * 100)
+        elif perf["win_rate"] < 0.4:
+            adjustments["min_touches"] = 5
+            log.info("Low win rate (%.1f%%) — keeping min_touches at 5", perf["win_rate"] * 100)
+
+        if losses:
+            avg_loss_pips = statistics.mean([abs(t.exit_price - t.entry_price) for t in losses])
+            avg_win_pips = statistics.mean([abs(t.exit_price - t.entry_price) for t in wins]) if wins else 0
+            if avg_win_pips > 0 and avg_loss_pips > 0:
+                actual_rr = avg_win_pips / avg_loss_pips
+                if actual_rr < 1.5:
+                    adjustments["tp_sl_note"] = "actual_rr_below_1.5"
+                    log.info("Actual R:R is %.2f — consider widening TP or tightening SL", actual_rr)
+
+        sl_trades = [t for t in recent if t.exit_reason == "sl"]
+        if len(sl_trades) >= 5:
+            sl_overshoots = []
+            for t in sl_trades:
+                expected_sl_dist = 15.0
+                actual_dist = abs(t.exit_price - t.entry_price)
+                if actual_dist > expected_sl_dist * 1.3:
+                    sl_overshoots.append(actual_dist / expected_sl_dist)
+            if len(sl_overshoots) > len(sl_trades) * 0.5:
+                avg_overshoot = statistics.mean(sl_overshoots)
+                log.info("SL slippage avg %.1fx — %.0f%% of SL exits overshoot",
+                         avg_overshoot, len(sl_overshoots) / len(sl_trades) * 100)
 
         if pattern.get("ob_confirmed_win_rate", 0) > pattern.get("no_ob_win_rate", 0) + 0.1:
             adjustments["require_ob_confirmation"] = True
@@ -201,6 +231,16 @@ class Evaluator:
             min_strength = float(best_bucket[0].split("_")[1])
             adjustments["min_sr_strength"] = min_strength
             log.info("Strength bucket %.1f has best win rate — suggesting minimum", min_strength)
+
+        consecutive_losses = 0
+        for t in reversed(self.trades):
+            if t.pnl <= 0:
+                consecutive_losses += 1
+            else:
+                break
+        if consecutive_losses >= 5:
+            adjustments["signal_cooldown"] = 600.0
+            log.info("Losing streak of %d — increasing cooldown to 600s", consecutive_losses)
 
         return adjustments
 
