@@ -229,6 +229,7 @@ class Evaluator:
         )
         if best_bucket and best_bucket[1] > perf["win_rate"] + 0.05:
             min_strength = float(best_bucket[0].split("_")[1])
+            min_strength = max(0.1, min(min_strength, 1.0))
             adjustments["min_sr_strength"] = min_strength
             log.info("Strength bucket %.1f has best win rate — suggesting minimum", min_strength)
 
