@@ -223,15 +223,17 @@ class Evaluator:
                      better, max(support_wr, resistance_wr) * 100,
                      min(support_wr, resistance_wr) * 100)
 
-        best_bucket = max(
-            [(b, d) for b, d in pattern.items() if b.startswith("strength_") and b.endswith("_win_rate")],
-            key=lambda x: x[1], default=None
-        )
-        if best_bucket and best_bucket[1] > perf["win_rate"] + 0.05:
-            min_strength = float(best_bucket[0].split("_")[1])
-            min_strength = max(0.1, min(min_strength, 1.0))
-            adjustments["min_sr_strength"] = min_strength
-            log.info("Strength bucket %.1f has best win rate — suggesting minimum", min_strength)
+        valid_buckets = [
+            (b, d) for b, d in pattern.items()
+            if b.startswith("strength_") and b.endswith("_win_rate")
+            and 0.1 <= float(b.split("_")[1]) <= 1.0
+        ]
+        if valid_buckets:
+            best_bucket = max(valid_buckets, key=lambda x: x[1])
+            if best_bucket[1] > perf["win_rate"] + 0.05:
+                min_strength = float(best_bucket[0].split("_")[1])
+                adjustments["min_sr_strength"] = min_strength
+                log.info("Strength bucket %.1f has best win rate — suggesting minimum", min_strength)
 
         consecutive_losses = 0
         for t in reversed(self.trades):

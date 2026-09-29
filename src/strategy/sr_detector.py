@@ -32,9 +32,9 @@ class OrderBlock:
 
 class SRDetector:
 
-    def __init__(self, lookback: int = 500, cluster_pct: float = 0.002,
+    def __init__(self, lookback: int = 2000, cluster_pct: float = 0.002,
                  swing_window: int = 10, min_touches: int = 5,
-                 min_sr_strength: float = 0.6, htf_factor: int = 15):
+                 min_sr_strength: float = 0.6, htf_factor: int = 1):
         self.lookback = lookback
         self.cluster_pct = cluster_pct
         self.swing_window = swing_window
