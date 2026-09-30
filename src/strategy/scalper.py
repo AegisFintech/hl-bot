@@ -147,12 +147,14 @@ class Scalper:
         score = level.score
         with_trend = (side == "long" and trend == "up") or (side == "short" and trend == "down")
         counter_trend = (side == "long" and trend == "down") or (side == "short" and trend == "up")
-        if counter_trend or trend == "neutral":
+        if counter_trend:
             return -1.0
         if not self._is_pullback(candles, level.price, side):
             return -1.0
         if with_trend:
             score *= 1.8
+        elif trend == "neutral":
+            score *= 1.0
         has_rejection = self._has_rejection_candle(candles, level.price, side)
         has_ob = self._find_confirming_ob(level.price, obs, ob_kind)
         if has_rejection:
@@ -194,6 +196,11 @@ class Scalper:
         signals = []
 
         candles = self.client.get_cached_candles(self.coin)
+        if len(candles) < 50:
+            if not hasattr(self, '_rest_candles') or now - getattr(self, '_rest_candles_time', 0) > 60:
+                self._rest_candles = self.client.get_candles(self.coin, "1m", 100 * 60 * 1000)
+                self._rest_candles_time = now
+            candles = self._rest_candles
         trend = self._get_trend(candles)
 
         nearest = self.sr.get_nearest_levels(mid, n=3)
@@ -343,7 +350,7 @@ class Scalper:
             log.warning("Order rejected: %s", statuses)
             return None
 
-        self._recent_entries[signal.sr_level] = now
+        self._recent_entries[signal.sr_level] = time.time()
         self.active_signals.append(signal)
         if len(self.active_signals) > 200:
             self.active_signals = self.active_signals[-200:]
@@ -383,9 +390,9 @@ class Scalper:
         if ema21 == 0:
             return "neutral"
         spread_pct = (ema9 - ema21) / ema21
-        if spread_pct > 0.0005:
+        if spread_pct > 0.0002:
             return "up"
-        if spread_pct < -0.0005:
+        if spread_pct < -0.0002:
             return "down"
         return "neutral"
 

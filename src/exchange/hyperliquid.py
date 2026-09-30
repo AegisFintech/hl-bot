@@ -207,11 +207,14 @@ class HyperliquidClient:
         return self.exchange.cancel(coin, oid)
 
     def cancel_all_orders(self, coin: str) -> list:
-        results = []
-        for order in self.get_open_orders():
-            if order["coin"] == coin:
-                results.append(self.cancel_order(coin, order["oid"]))
-        return results
+        orders = [o for o in self.get_open_orders() if o["coin"] == coin]
+        if not orders:
+            return []
+        cancel_requests = [{"coin": coin, "oid": o["oid"]} for o in orders]
+        for i in range(0, len(cancel_requests), 50):
+            batch = cancel_requests[i:i + 50]
+            self.exchange.bulk_cancel(batch)
+        return [{"status": "bulk_cancelled", "count": len(cancel_requests)}]
 
     def close_position(self, coin: str) -> dict:
         return self.exchange.market_close(coin)
