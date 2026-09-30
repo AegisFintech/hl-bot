@@ -20,6 +20,7 @@ class TradeSignal:
     sr_kind: str
     sr_strength: float
     ob_zone: tuple | None = None
+    signal_score: float = 0.0
     with_trend: bool = False
     has_ob: bool = False
     has_rejection: bool = False
@@ -85,8 +86,9 @@ class Scalper:
     def update_sr_levels(self, candles: list[dict] | None = None):
         if candles is None:
             candles = self.client.get_cached_candles(self.coin)
-            if not candles:
-                candles = self.client.get_candles(self.coin, "1m", 100 * 60 * 1000)
+            if len(candles) < self.sr.lookback:
+                lookback_ms = max(self.sr.lookback, 1000) * 60 * 1000
+                candles = self.client.get_candles(self.coin, "1m", lookback_ms)
 
         self.sr.detect(candles)
         self.sr.detect_order_blocks(candles)
@@ -242,7 +244,8 @@ class Scalper:
                 coin=self.coin, side="long", entry_price=entry,
                 tp_price=tp, sl_price=sl,
                 sr_level=support.price, sr_kind="support",
-                sr_strength=score, ob_zone=ob_zone,
+                sr_strength=support.strength, ob_zone=ob_zone,
+                signal_score=score,
                 with_trend=meta.get("with_trend", False),
                 has_ob=meta.get("has_ob", False),
                 has_rejection=meta.get("has_rejection", False),
@@ -271,14 +274,15 @@ class Scalper:
                 coin=self.coin, side="short", entry_price=entry,
                 tp_price=tp, sl_price=sl,
                 sr_level=resistance.price, sr_kind="resistance",
-                sr_strength=score, ob_zone=ob_zone,
+                sr_strength=resistance.strength, ob_zone=ob_zone,
+                signal_score=score,
                 with_trend=meta.get("with_trend", False),
                 has_ob=meta.get("has_ob", False),
                 has_rejection=meta.get("has_rejection", False),
             )
             signals.append(signal)
 
-        signals.sort(key=lambda s: s.sr_strength, reverse=True)
+        signals.sort(key=lambda s: s.signal_score, reverse=True)
         return signals
 
     def build_order_payload(self, signal: TradeSignal) -> dict | None:
@@ -333,9 +337,9 @@ class Scalper:
         if size <= 0:
             return None
 
-        log.info("Placing %s %s %.4f @ %.2f (TP=%.2f SL=%.2f score=%.2f)",
+        log.info("Placing %s %s %.4f @ %.2f (TP=%.2f SL=%.2f score=%.2f str=%.2f)",
                  signal.side, signal.coin, size, signal.entry_price,
-                 signal.tp_price, signal.sl_price, signal.sr_strength)
+                 signal.tp_price, signal.sl_price, signal.signal_score, signal.sr_strength)
 
         result = self.client.place_order_with_tpsl(
             coin=signal.coin, is_buy=is_buy, size=size,

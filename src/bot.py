@@ -345,11 +345,20 @@ class TradingBot:
         self.risk_manager.sync_open_positions(total_positions)
 
     def _match_fill_to_signal(self, fill: dict) -> dict | None:
+        fill_coin = fill.get("coin")
+        fill_px = float(fill.get("px", 0))
         with self._pending_signals_lock:
-            for price, signal in list(self._pending_signals.items()):
-                if signal["coin"] == fill.get("coin"):
-                    self._pending_signals.pop(price, None)
-                    return signal
+            best_key = None
+            best_dist = float("inf")
+            for price, signal in self._pending_signals.items():
+                if signal["coin"] != fill_coin:
+                    continue
+                dist = abs(fill_px - signal["entry_price"])
+                if dist < best_dist:
+                    best_dist = dist
+                    best_key = price
+            if best_key is not None:
+                return self._pending_signals.pop(best_key)
         return None
 
     @staticmethod

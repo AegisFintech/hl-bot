@@ -97,7 +97,7 @@ class SRDetector:
         for idx in swing_lows:
             raw_levels.append(("support", lows[idx], volumes[idx], idx))
 
-        clustered = self._cluster_levels(raw_levels, closes[-1])
+        clustered = self._cluster_levels(raw_levels, closes[-1], len(htf_candles))
         self._levels = [l for l in clustered
                         if l.touches >= self.min_touches and l.strength >= self.min_sr_strength]
         self._levels.sort(key=lambda l: l.score, reverse=True)
@@ -186,7 +186,7 @@ class SRDetector:
                 swings.append(i)
         return swings
 
-    def _cluster_levels(self, raw_levels: list[tuple], current_price: float) -> list[SRLevel]:
+    def _cluster_levels(self, raw_levels: list[tuple], current_price: float, num_candles: int = 1) -> list[SRLevel]:
         if not raw_levels:
             return []
 
@@ -223,7 +223,7 @@ class SRDetector:
                 kind_counts[k] += 1
             dominant_kind = max(kind_counts, key=kind_counts.get)
 
-            recency = max(cluster_indices) / max(len(raw_levels), 1)
+            recency = max(cluster_indices) / max(num_candles - 1, 1)
             vol_ratio = total_vol / (np.mean([r[2] for r in raw_levels]) * touches) if raw_levels else 0
             strength = min(1.0, (touches / 8) * 0.5 + min(vol_ratio, 1.0) * 0.3 + recency * 0.2)
 

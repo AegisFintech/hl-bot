@@ -199,29 +199,17 @@ class Evaluator:
 
         sl_trades = [t for t in recent if t.exit_reason == "sl"]
         if len(sl_trades) >= 5:
-            sl_overshoots = []
-            for t in sl_trades:
-                expected_sl_dist = 15.0
-                actual_dist = abs(t.exit_price - t.entry_price)
-                if actual_dist > expected_sl_dist * 1.3:
-                    sl_overshoots.append(actual_dist / expected_sl_dist)
-            if len(sl_overshoots) > len(sl_trades) * 0.5:
-                avg_overshoot = statistics.mean(sl_overshoots)
-                log.info("SL slippage avg %.1fx — %.0f%% of SL exits overshoot",
-                         avg_overshoot, len(sl_overshoots) / len(sl_trades) * 100)
-
-        if pattern.get("ob_confirmed_win_rate", 0) > pattern.get("no_ob_win_rate", 0) + 0.1:
-            adjustments["require_ob_confirmation"] = True
-            log.info("OB-confirmed trades outperform — suggesting OB requirement")
-
-        support_wr = pattern.get("support_win_rate", 0.5)
-        resistance_wr = pattern.get("resistance_win_rate", 0.5)
-        if abs(support_wr - resistance_wr) > 0.15:
-            better = "support" if support_wr > resistance_wr else "resistance"
-            adjustments["preferred_side"] = better
-            log.info("%s trades performing better (%.1f%% vs %.1f%%)",
-                     better, max(support_wr, resistance_wr) * 100,
-                     min(support_wr, resistance_wr) * 100)
+            median_sl_dist = statistics.median([abs(t.exit_price - t.entry_price) for t in sl_trades])
+            if median_sl_dist > 0:
+                sl_overshoots = []
+                for t in sl_trades:
+                    actual_dist = abs(t.exit_price - t.entry_price)
+                    if actual_dist > median_sl_dist * 1.5:
+                        sl_overshoots.append(actual_dist / median_sl_dist)
+                if len(sl_overshoots) > len(sl_trades) * 0.3:
+                    avg_overshoot = statistics.mean(sl_overshoots)
+                    log.info("SL slippage avg %.1fx — %.0f%% of SL exits overshoot (median SL=$%.1f)",
+                             avg_overshoot, len(sl_overshoots) / len(sl_trades) * 100, median_sl_dist)
 
         valid_buckets = [
             (b, d) for b, d in pattern.items()
