@@ -1,6 +1,7 @@
 import time
 import logging
 from dataclasses import dataclass
+from datetime import datetime, timezone
 
 log = logging.getLogger(__name__)
 
@@ -26,7 +27,7 @@ class RiskManager:
 
     def __init__(self, max_position_size_usd: float = 100, max_daily_loss_pct: float = 0.05,
                  max_drawdown_pct: float = 0.10, max_open_positions: int = 3,
-                 max_daily_trades: int = 20, order_size_usd: float = 100):
+                 max_daily_trades: int = 50, order_size_usd: float = 100):
         self.max_position_size_usd = max_position_size_usd
         self.max_daily_loss_pct = max_daily_loss_pct
         self.max_drawdown_pct = max_drawdown_pct
@@ -57,8 +58,10 @@ class RiskManager:
         self.state.day_start = time.time()
 
     def check_daily_reset(self):
-        if time.time() - self.state.day_start > 86400:
-            log.info("Daily reset — PnL: $%.4f, trades: %d",
+        now_utc = datetime.now(timezone.utc)
+        start_utc = datetime.fromtimestamp(self.state.day_start, tz=timezone.utc) if self.state.day_start else now_utc
+        if now_utc.date() > start_utc.date():
+            log.info("Daily reset (UTC midnight) — PnL: $%.4f, trades: %d",
                      self.state.daily_pnl, self.state.daily_trades)
             self.state.peak_equity = self.state.current_equity
             self.reset_daily()
@@ -99,7 +102,7 @@ class RiskManager:
         size_usd = min(self.order_size_usd, self.max_position_size_usd)
 
         if self.state.current_equity > 0:
-            max_from_equity = self.state.current_equity * 0.02
+            max_from_equity = self.state.current_equity * 0.05
             size_usd = min(size_usd, max_from_equity)
 
         quality = 0.5

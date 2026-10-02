@@ -15,8 +15,8 @@ HL_TESTNET = os.environ.get("HL_TESTNET", "true").lower() == "true"
 SYMBOL = "BTC"
 SYMBOLS = ["BTC"]
 TIMEFRAME = "1m"
-TP_PIPS = 30
-SL_PIPS = 15
+TP_PIPS = 50
+SL_PIPS = 25
 SR_LOOKBACK = 2000
 ORDER_SIZE_USD = 100
 PROXIMITY_PCT = float(os.environ.get("PROXIMITY_PCT", "0.003"))

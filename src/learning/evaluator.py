@@ -182,11 +182,9 @@ class Evaluator:
         recent_wr = len(wins) / len(recent) if recent else 0
 
         if recent_wr < 0.3:
-            adjustments["min_touches"] = 6
-            log.info("Very low recent win rate (%.1f%%) — raising min_touches to 6", recent_wr * 100)
+            log.info("Very low recent win rate (%.1f%%) — logging only (min_touches unchanged)", recent_wr * 100)
         elif perf["win_rate"] < 0.4:
-            adjustments["min_touches"] = 5
-            log.info("Low win rate (%.1f%%) — keeping min_touches at 5", perf["win_rate"] * 100)
+            log.info("Low overall win rate (%.1f%%)", perf["win_rate"] * 100)
 
         if losses:
             avg_loss_pips = statistics.mean([abs(t.exit_price - t.entry_price) for t in losses])
@@ -229,9 +227,11 @@ class Evaluator:
                 consecutive_losses += 1
             else:
                 break
-        if consecutive_losses >= 5:
+        if consecutive_losses >= 10:
             adjustments["signal_cooldown"] = 600.0
             log.info("Losing streak of %d — increasing cooldown to 600s", consecutive_losses)
+        elif consecutive_losses >= 5:
+            log.info("Losing streak of %d — monitoring", consecutive_losses)
 
         return adjustments
 

@@ -368,9 +368,11 @@ class TradingBot:
         if tp and sl:
             dist_tp = abs(exit_price - tp)
             dist_sl = abs(exit_price - sl)
-            if dist_tp <= dist_sl:
+            near_tp = dist_tp <= dist_sl
+            if near_tp and pnl >= 0:
                 return "tp"
-            return "sl"
+            if not near_tp and pnl < 0:
+                return "sl"
         return "tp" if pnl > 0 else "sl"
 
     def _check_tuning(self):

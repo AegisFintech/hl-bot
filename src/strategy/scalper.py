@@ -62,6 +62,8 @@ class Scalper:
         self._last_scan_time = 0.0
         self._scan_interval = 5.0
         self._last_mid = 0.0
+        self._cached_open_orders: list = []
+        self._cached_open_orders_time = 0.0
 
     @property
     def pip_size(self) -> float:
@@ -325,8 +327,28 @@ class Scalper:
                 return True
         return False
 
+    def _has_open_order_near(self, price: float) -> bool:
+        now = time.time()
+        if now - self._cached_open_orders_time > 30:
+            try:
+                self._cached_open_orders = self.client.get_open_orders()
+            except Exception:
+                self._cached_open_orders = []
+            self._cached_open_orders_time = now
+        cluster_range = price * self.sr.cluster_pct
+        for order in self._cached_open_orders:
+            if order.get("coin") != self.coin:
+                continue
+            order_px = float(order.get("limitPx", 0))
+            if abs(order_px - price) <= cluster_range:
+                return True
+        return False
+
     def execute_signal(self, signal: TradeSignal) -> dict | None:
         if self._is_level_on_cooldown(signal.sr_level):
+            return None
+
+        if self._has_open_order_near(signal.entry_price):
             return None
 
         if not self.risk.can_trade(signal):
@@ -355,6 +377,7 @@ class Scalper:
             return None
 
         self._recent_entries[signal.sr_level] = time.time()
+        self._cached_open_orders_time = 0
         self.active_signals.append(signal)
         if len(self.active_signals) > 200:
             self.active_signals = self.active_signals[-200:]
