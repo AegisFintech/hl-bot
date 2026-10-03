@@ -61,6 +61,7 @@ class TradingBot:
         self._dashboard_port = dashboard_port
         self._pending_signals: dict = {}
         self._pending_signals_lock = threading.Lock()
+        self._active_signals: dict[str, dict] = {}
         self._learning_interval = 300
         self._last_learning = 0.0
         self._leverage_set: set[str] = set()
@@ -282,33 +283,42 @@ class TradingBot:
             log.info("Fill: %s %s %s @ %s", fill.get("side"), fill.get("coin"),
                      fill.get("sz"), fill.get("px"))
 
-            if fill.get("closedPnl") and float(fill["closedPnl"]) != 0:
-                pnl = float(fill["closedPnl"])
-                self.risk_manager.record_fill(pnl)
+            fill_coin = fill.get("coin")
+            closed_pnl = float(fill.get("closedPnl", 0) or 0)
 
+            if closed_pnl != 0:
+                self.risk_manager.record_fill(closed_pnl)
                 exit_price = float(fill["px"])
-                matched_signal = self._match_fill_to_signal(fill)
-                if matched_signal:
-                    exit_reason = self._classify_exit(matched_signal, exit_price, pnl)
+
+                with self._pending_signals_lock:
+                    signal = self._active_signals.pop(fill_coin, None)
+                if not signal:
+                    signal = self._match_fill_to_signal(fill)
+
+                if signal:
+                    exit_reason = self._classify_exit(signal, exit_price, closed_pnl)
                     self.evaluator.record_trade(
-                        signal_dict=matched_signal, exit_price=exit_price,
-                        size=float(fill["sz"]), pnl=pnl, exit_reason=exit_reason,
+                        signal_dict=signal, exit_price=exit_price,
+                        size=float(fill["sz"]), pnl=closed_pnl, exit_reason=exit_reason,
                     )
-                    if pnl < 0 and "sr_level" in matched_signal:
-                        fill_coin = fill.get("coin")
+                    if closed_pnl < 0 and "sr_level" in signal:
                         for scalper in self._scalpers:
                             if scalper.coin == fill_coin:
-                                scalper.blacklist_level(matched_signal["sr_level"])
+                                scalper.blacklist_level(signal["sr_level"])
                                 break
+            else:
+                matched = self._match_fill_to_signal(fill)
+                if matched:
+                    with self._pending_signals_lock:
+                        self._active_signals[fill_coin] = matched
 
-                fill_coin = fill.get("coin")
-                for rec in self._reconcilers:
-                    if rec.coin == fill_coin:
-                        try:
-                            rec.periodic_check(force=True)
-                        except Exception as e:
-                            log.warning("Post-fill reconciliation failed [%s]: %s", fill_coin, e)
-                        break
+            for rec in self._reconcilers:
+                if rec.coin == fill_coin:
+                    try:
+                        rec.periodic_check(force=True)
+                    except Exception as e:
+                        log.warning("Post-fill reconciliation failed [%s]: %s", fill_coin, e)
+                    break
 
         total_positions = sum(r.position_count for r in self._reconcilers)
         self.risk_manager.sync_open_positions(total_positions)

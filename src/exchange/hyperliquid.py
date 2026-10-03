@@ -185,6 +185,11 @@ class HyperliquidClient:
                                tp_price: float, sl_price: float, tif: str = "Gtc") -> dict:
         size = self.round_size(coin, size)
         exit_side = not is_buy
+        sl_buffer = sl_price * 0.00015
+        if is_buy:
+            sl_limit_px = self.round_price(coin, sl_price - sl_buffer)
+        else:
+            sl_limit_px = self.round_price(coin, sl_price + sl_buffer)
         orders = [
             {
                 "coin": coin, "is_buy": is_buy, "sz": size, "limit_px": entry_price,
@@ -196,8 +201,8 @@ class HyperliquidClient:
                 "reduce_only": True,
             },
             {
-                "coin": coin, "is_buy": exit_side, "sz": size, "limit_px": sl_price,
-                "order_type": {"trigger": {"triggerPx": sl_price, "isMarket": True, "tpsl": "sl"}},
+                "coin": coin, "is_buy": exit_side, "sz": size, "limit_px": sl_limit_px,
+                "order_type": {"trigger": {"triggerPx": sl_price, "isMarket": False, "tpsl": "sl"}},
                 "reduce_only": True,
             },
         ]
@@ -222,6 +227,11 @@ class HyperliquidClient:
     def place_trigger_orders(self, coin: str, is_buy: bool, size: float,
                              tp_price: float, sl_price: float) -> dict:
         size = self.round_size(coin, size)
+        sl_buffer = sl_price * 0.00015
+        if is_buy:
+            sl_limit_px = self.round_price(coin, sl_price + sl_buffer)
+        else:
+            sl_limit_px = self.round_price(coin, sl_price - sl_buffer)
         orders = [
             {
                 "coin": coin, "is_buy": is_buy, "sz": size, "limit_px": tp_price,
@@ -229,8 +239,8 @@ class HyperliquidClient:
                 "reduce_only": True,
             },
             {
-                "coin": coin, "is_buy": is_buy, "sz": size, "limit_px": sl_price,
-                "order_type": {"trigger": {"triggerPx": sl_price, "isMarket": True, "tpsl": "sl"}},
+                "coin": coin, "is_buy": is_buy, "sz": size, "limit_px": sl_limit_px,
+                "order_type": {"trigger": {"triggerPx": sl_price, "isMarket": False, "tpsl": "sl"}},
                 "reduce_only": True,
             },
         ]
