@@ -152,7 +152,7 @@ class Scalper:
         with_trend = (side == "long" and trend == "up") or (side == "short" and trend == "down")
         counter_trend = (side == "long" and trend == "down") or (side == "short" and trend == "up")
         if counter_trend:
-            return -1.0
+            score *= 0.4
         if not self._is_pullback(candles, level.price, side):
             return -1.0
         if with_trend:

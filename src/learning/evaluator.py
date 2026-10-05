@@ -217,7 +217,7 @@ class Evaluator:
         if valid_buckets:
             best_bucket = max(valid_buckets, key=lambda x: x[1])
             if best_bucket[1] > perf["win_rate"] + 0.05:
-                min_strength = float(best_bucket[0].split("_")[1])
+                min_strength = min(float(best_bucket[0].split("_")[1]), 0.5)
                 adjustments["min_sr_strength"] = min_strength
                 log.info("Strength bucket %.1f has best win rate — suggesting minimum", min_strength)
 
