@@ -185,7 +185,7 @@ class HyperliquidClient:
                                tp_price: float, sl_price: float, tif: str = "Gtc") -> dict:
         size = self.round_size(coin, size)
         exit_side = not is_buy
-        sl_buffer = sl_price * 0.00015
+        sl_buffer = sl_price * 0.00005
         if is_buy:
             sl_limit_px = self.round_price(coin, sl_price - sl_buffer)
         else:
@@ -227,7 +227,7 @@ class HyperliquidClient:
     def place_trigger_orders(self, coin: str, is_buy: bool, size: float,
                              tp_price: float, sl_price: float) -> dict:
         size = self.round_size(coin, size)
-        sl_buffer = sl_price * 0.00015
+        sl_buffer = sl_price * 0.00005
         if is_buy:
             sl_limit_px = self.round_price(coin, sl_price + sl_buffer)
         else:

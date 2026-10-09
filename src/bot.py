@@ -61,7 +61,7 @@ class TradingBot:
         self._dashboard_port = dashboard_port
         self._pending_signals: dict = {}
         self._pending_signals_lock = threading.Lock()
-        self._active_signals: dict[str, dict] = {}
+        self._active_signals: dict[str, list[dict]] = {}
         self._learning_interval = 300
         self._last_learning = 0.0
         self._leverage_set: set[str] = set()
@@ -291,7 +291,7 @@ class TradingBot:
                 exit_price = float(fill["px"])
 
                 with self._pending_signals_lock:
-                    signal = self._active_signals.pop(fill_coin, None)
+                    signal = self._match_active_signal(fill_coin, fill)
                 if not signal:
                     signal = self._match_fill_to_signal(fill)
 
@@ -310,7 +310,7 @@ class TradingBot:
                 matched = self._match_fill_to_signal(fill)
                 if matched:
                     with self._pending_signals_lock:
-                        self._active_signals[fill_coin] = matched
+                        self._active_signals.setdefault(fill_coin, []).append(matched)
 
             for rec in self._reconcilers:
                 if rec.coin == fill_coin:
@@ -353,6 +353,40 @@ class TradingBot:
 
         total_positions = sum(r.position_count for r in self._reconcilers)
         self.risk_manager.sync_open_positions(total_positions)
+
+    def _match_active_signal(self, coin: str, fill: dict) -> dict | None:
+        signals = self._active_signals.get(coin, [])
+        if not signals:
+            return None
+        if len(signals) == 1:
+            return signals.pop(0)
+
+        exit_px = float(fill["px"])
+        pnl = float(fill.get("closedPnl", 0) or 0)
+        size = float(fill.get("sz", 0) or 0)
+        fill_side = fill.get("side")
+
+        if size > 0 and pnl != 0:
+            # Compute implied entry from PnL
+            if fill_side == "A":  # sell = closing long
+                implied_entry = exit_px - pnl / size
+            else:  # buy = closing short
+                implied_entry = exit_px + pnl / size
+
+            best_idx = 0
+            best_dist = float("inf")
+            for i, sig in enumerate(signals):
+                dist = abs(sig["entry_price"] - implied_entry)
+                if dist < best_dist:
+                    best_dist = dist
+                    best_idx = i
+            return signals.pop(best_idx)
+
+        expected_side = "long" if fill_side == "A" else "short"
+        for i, sig in enumerate(signals):
+            if sig["side"] == expected_side:
+                return signals.pop(i)
+        return signals.pop(0)
 
     def _match_fill_to_signal(self, fill: dict) -> dict | None:
         fill_coin = fill.get("coin")

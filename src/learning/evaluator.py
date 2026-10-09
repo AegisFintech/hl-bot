@@ -187,23 +187,28 @@ class Evaluator:
             log.info("Low overall win rate (%.1f%%)", perf["win_rate"] * 100)
 
         if losses:
-            avg_loss_pips = statistics.mean([abs(t.exit_price - t.entry_price) for t in losses])
-            avg_win_pips = statistics.mean([abs(t.exit_price - t.entry_price) for t in wins]) if wins else 0
-            if avg_win_pips > 0 and avg_loss_pips > 0:
-                actual_rr = avg_win_pips / avg_loss_pips
+            loss_dists = [abs(t.pnl) / t.size for t in losses if t.size > 0]
+            win_dists = [abs(t.pnl) / t.size for t in wins if t.size > 0]
+            avg_loss_dist = statistics.mean(loss_dists) if loss_dists else 0
+            avg_win_dist = statistics.mean(win_dists) if win_dists else 0
+            if avg_win_dist > 0 and avg_loss_dist > 0:
+                actual_rr = avg_win_dist / avg_loss_dist
                 if actual_rr < 1.5:
                     adjustments["tp_sl_note"] = "actual_rr_below_1.5"
                     log.info("Actual R:R is %.2f — consider widening TP or tightening SL", actual_rr)
+                else:
+                    log.info("Actual R:R is %.2f (avg win=$%.1f, avg loss=$%.1f)",
+                             actual_rr, avg_win_dist, avg_loss_dist)
 
-        sl_trades = [t for t in recent if t.exit_reason == "sl"]
+        sl_trades = [t for t in recent if t.exit_reason == "sl" and t.size > 0]
         if len(sl_trades) >= 5:
-            median_sl_dist = statistics.median([abs(t.exit_price - t.entry_price) for t in sl_trades])
+            sl_dists = [abs(t.pnl) / t.size for t in sl_trades]
+            median_sl_dist = statistics.median(sl_dists)
             if median_sl_dist > 0:
                 sl_overshoots = []
-                for t in sl_trades:
-                    actual_dist = abs(t.exit_price - t.entry_price)
-                    if actual_dist > median_sl_dist * 1.5:
-                        sl_overshoots.append(actual_dist / median_sl_dist)
+                for d in sl_dists:
+                    if d > median_sl_dist * 1.5:
+                        sl_overshoots.append(d / median_sl_dist)
                 if len(sl_overshoots) > len(sl_trades) * 0.3:
                     avg_overshoot = statistics.mean(sl_overshoots)
                     log.info("SL slippage avg %.1fx — %.0f%% of SL exits overshoot (median SL=$%.1f)",
