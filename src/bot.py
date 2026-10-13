@@ -268,11 +268,18 @@ class TradingBot:
                 self._pending_signals.pop(p, None)
 
         for scalper in self._scalpers:
-            results = scalper.tick()
-            with self._pending_signals_lock:
-                for r in results:
-                    signal = r["signal"]
-                    self._pending_signals[signal["entry_price"]] = signal
+            cutoff = time.time() - scalper._signal_cooldown
+            scalper._recent_entries = {k: v for k, v in scalper._recent_entries.items() if v > cutoff}
+
+            signals = scalper.scan_for_signals()
+            for signal in signals[:1]:
+                signal_dict = signal.to_dict()
+                with self._pending_signals_lock:
+                    self._pending_signals[signal.entry_price] = signal_dict
+                result = scalper.execute_signal(signal)
+                if not result:
+                    with self._pending_signals_lock:
+                        self._pending_signals.pop(signal.entry_price, None)
 
         if now - self._last_learning > self._learning_interval:
             self._run_learning()
@@ -289,23 +296,40 @@ class TradingBot:
             if closed_pnl != 0:
                 self.risk_manager.record_fill(closed_pnl)
                 exit_price = float(fill["px"])
+                fill_size = float(fill["sz"])
 
                 with self._pending_signals_lock:
                     signal = self._match_active_signal(fill_coin, fill)
-                if not signal:
-                    signal = self._match_fill_to_signal(fill)
 
-                if signal:
-                    exit_reason = self._classify_exit(signal, exit_price, closed_pnl)
-                    self.evaluator.record_trade(
-                        signal_dict=signal, exit_price=exit_price,
-                        size=float(fill["sz"]), pnl=closed_pnl, exit_reason=exit_reason,
-                    )
-                    if closed_pnl < 0 and "sr_level" in signal:
-                        for scalper in self._scalpers:
-                            if scalper.coin == fill_coin:
-                                scalper.blacklist_level(signal["sr_level"])
-                                break
+                if not signal:
+                    fill_side = fill.get("side")
+                    if fill_side == "A":
+                        side = "long"
+                        implied_entry = exit_price - closed_pnl / fill_size if fill_size > 0 else exit_price
+                    else:
+                        side = "short"
+                        implied_entry = exit_price + closed_pnl / fill_size if fill_size > 0 else exit_price
+                    signal = {
+                        "coin": fill_coin, "side": side,
+                        "entry_price": implied_entry,
+                        "tp_price": 0, "sl_price": 0,
+                        "sr_level": implied_entry, "sr_kind": "unknown",
+                        "sr_strength": 0, "ob_zone": None,
+                        "timestamp": time.time(),
+                    }
+                    log.warning("No active signal for %s exit — using synthetic (entry=%.2f)",
+                                fill_coin, implied_entry)
+
+                exit_reason = self._classify_exit(signal, exit_price, closed_pnl)
+                self.evaluator.record_trade(
+                    signal_dict=signal, exit_price=exit_price,
+                    size=fill_size, pnl=closed_pnl, exit_reason=exit_reason,
+                )
+                if closed_pnl < 0 and "sr_level" in signal:
+                    for scalper in self._scalpers:
+                        if scalper.coin == fill_coin:
+                            scalper.blacklist_level(signal["sr_level"])
+                            break
             else:
                 matched = self._match_fill_to_signal(fill)
                 if matched:
@@ -315,7 +339,10 @@ class TradingBot:
             for rec in self._reconcilers:
                 if rec.coin == fill_coin:
                     try:
-                        rec.periodic_check(force=True)
+                        if closed_pnl != 0:
+                            rec.periodic_check(force=True)
+                        else:
+                            rec._grace_until = time.time() + 30
                     except Exception as e:
                         log.warning("Post-fill reconciliation failed [%s]: %s", fill_coin, e)
                     break

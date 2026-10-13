@@ -25,6 +25,7 @@ class PositionReconciler:
         self._lock = threading.Lock()
         self._processed_fill_ids: set[str] = set()
         self.position_count: int = 0
+        self._grace_until: float = 0.0
 
     def startup_sync(self) -> dict:
         with self._lock:
@@ -162,9 +163,12 @@ class PositionReconciler:
                     needs_recovery = True
 
             if needs_recovery:
-                for o in [o for o in orders if o["coin"] == self.coin]:
-                    self.client.cancel_order(self.coin, o["oid"])
-                self._place_recovery_tpsl(coin_pos[0])
+                if time.time() < self._grace_until:
+                    log.info("Periodic: skipping recovery — within grace period after entry fill")
+                else:
+                    for o in [o for o in orders if o["coin"] == self.coin]:
+                        self.client.cancel_order(self.coin, o["oid"])
+                    self._place_recovery_tpsl(coin_pos[0])
 
         elif actual == 0 and expected > 0:
             orders = self.client.get_open_orders()

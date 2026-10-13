@@ -64,7 +64,14 @@ class Evaluator:
 
     def record_trade(self, signal_dict: dict, exit_price: float, size: float,
                      pnl: float, exit_reason: str):
-        entry_price = signal_dict["entry_price"]
+        side = signal_dict.get("side", "long")
+        if size > 0 and pnl != 0:
+            if side == "long":
+                entry_price = exit_price - pnl / size
+            else:
+                entry_price = exit_price + pnl / size
+        else:
+            entry_price = signal_dict["entry_price"]
         pnl_pct = pnl / (entry_price * size) if entry_price * size > 0 else 0
 
         record = TradeRecord(
