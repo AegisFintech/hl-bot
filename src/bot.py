@@ -62,6 +62,7 @@ class TradingBot:
         self._pending_signals: dict = {}
         self._pending_signals_lock = threading.Lock()
         self._active_signals: dict[str, list[dict]] = {}
+        self._processed_fill_ids: set[str] = set()
         self._learning_interval = 300
         self._last_learning = 0.0
         self._leverage_set: set[str] = set()
@@ -287,6 +288,13 @@ class TradingBot:
 
     def _on_fill(self, fills: list):
         for fill in fills:
+            fid = fill.get("tid") or fill.get("oid") or str(fill.get("time", ""))
+            if fid in self._processed_fill_ids:
+                continue
+            self._processed_fill_ids.add(fid)
+            if len(self._processed_fill_ids) > 1000:
+                self._processed_fill_ids = set(list(self._processed_fill_ids)[-500:])
+
             log.info("Fill: %s %s %s @ %s", fill.get("side"), fill.get("coin"),
                      fill.get("sz"), fill.get("px"))
 
@@ -338,6 +346,11 @@ class TradingBot:
 
             for rec in self._reconcilers:
                 if rec.coin == fill_coin:
+                    fill_time = int(fill.get("time", 0))
+                    if fill_time > rec._last_fill_time:
+                        rec._last_fill_time = fill_time
+                    if fid:
+                        rec._processed_fill_ids.add(fid)
                     try:
                         if closed_pnl != 0:
                             rec.periodic_check(force=True)
