@@ -267,7 +267,7 @@ class TradingBot:
             self.running = False
             return
 
-        cutoff = now - 600
+        cutoff = now - 3600
         with self._pending_signals_lock:
             stale = [p for p, s in self._pending_signals.items() if s.get("timestamp", now) < cutoff]
             for p in stale:
@@ -281,11 +281,13 @@ class TradingBot:
             for signal in signals[:1]:
                 signal_dict = signal.to_dict()
                 with self._pending_signals_lock:
-                    self._pending_signals[signal.entry_price] = signal_dict
+                    if signal.entry_price in self._pending_signals:
+                        continue
                 result = scalper.execute_signal(signal)
-                if not result:
+                if result:
                     with self._pending_signals_lock:
-                        self._pending_signals.pop(signal.entry_price, None)
+                        self._pending_signals[signal.entry_price] = signal_dict
+                    self._cancel_stale_entries(scalper.coin, signal.entry_price)
 
         if now - self._last_learning > self._learning_interval:
             self._run_learning()
@@ -506,6 +508,39 @@ class TradingBot:
 
             log.info("Aggregated %d partial fills for %s: pnl=%.6f sz=%.5f reason=%s",
                      len(fills), coin, total_pnl, total_size, exit_reason)
+
+    def _cancel_stale_entries(self, coin: str, keep_price: float):
+        """Cancel all previous pending entry order groups for this coin."""
+        has_position = any(r.position_count > 0 for r in self._reconcilers if r.coin == coin)
+        if has_position:
+            return
+        try:
+            orders = self.client.get_open_orders()
+        except Exception:
+            return
+        cluster_range = keep_price * 0.001
+        stale_oids = []
+        for order in orders:
+            if order.get("coin") != coin:
+                continue
+            order_px = float(order.get("limitPx", 0))
+            if abs(order_px - keep_price) <= cluster_range:
+                continue
+            stale_oids.append(order["oid"])
+        for oid in stale_oids:
+            try:
+                self.client.cancel_order(coin, oid)
+            except Exception:
+                pass
+        if stale_oids:
+            log.info("Cancelled %d stale orders for %s (keeping entry near %.2f)",
+                     len(stale_oids), coin, keep_price)
+            with self._pending_signals_lock:
+                stale_prices = [p for p in self._pending_signals
+                                if self._pending_signals[p].get("coin") == coin
+                                and abs(p - keep_price) > cluster_range]
+                for p in stale_prices:
+                    self._pending_signals.pop(p, None)
 
     def _check_tuning(self):
         now = time.time()
