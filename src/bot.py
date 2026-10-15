@@ -63,6 +63,9 @@ class TradingBot:
         self._pending_signals_lock = threading.Lock()
         self._active_signals: dict[str, list[dict]] = {}
         self._processed_fill_ids: set[str] = set()
+        self._exit_fill_buffer: dict[str, list] = {}
+        self._exit_fill_buffer_time: dict[str, float] = {}
+        self._exit_fill_lock = threading.Lock()
         self._learning_interval = 300
         self._last_learning = 0.0
         self._leverage_set: set[str] = set()
@@ -225,6 +228,8 @@ class TradingBot:
             time.sleep(1)
 
     def _tick(self):
+        self._flush_exit_buffers()
+
         for rec in self._reconcilers:
             try:
                 rec.periodic_check()
@@ -329,15 +334,16 @@ class TradingBot:
                                 fill_coin, implied_entry)
 
                 exit_reason = self._classify_exit(signal, exit_price, closed_pnl)
-                self.evaluator.record_trade(
-                    signal_dict=signal, exit_price=exit_price,
-                    size=fill_size, pnl=closed_pnl, exit_reason=exit_reason,
-                )
-                if closed_pnl < 0 and "sr_level" in signal:
-                    for scalper in self._scalpers:
-                        if scalper.coin == fill_coin:
-                            scalper.blacklist_level(signal["sr_level"])
-                            break
+                with self._exit_fill_lock:
+                    self._exit_fill_buffer.setdefault(fill_coin, []).append({
+                        "signal": signal,
+                        "exit_price": exit_price,
+                        "size": fill_size,
+                        "pnl": closed_pnl,
+                        "exit_reason": exit_reason,
+                    })
+                    if fill_coin not in self._exit_fill_buffer_time:
+                        self._exit_fill_buffer_time[fill_coin] = time.time()
             else:
                 matched = self._match_fill_to_signal(fill)
                 if matched:
@@ -353,7 +359,7 @@ class TradingBot:
                         rec._processed_fill_ids.add(fid)
                     try:
                         if closed_pnl != 0:
-                            rec.periodic_check(force=True)
+                            rec._grace_until = time.time() + 60
                         else:
                             rec._grace_until = time.time() + 30
                     except Exception as e:
@@ -395,11 +401,12 @@ class TradingBot:
         self.risk_manager.sync_open_positions(total_positions)
 
     def _match_active_signal(self, coin: str, fill: dict) -> dict | None:
+        """Match fill to active signal without removing it (partial fills reuse the signal)."""
         signals = self._active_signals.get(coin, [])
         if not signals:
             return None
         if len(signals) == 1:
-            return signals.pop(0)
+            return signals[0]
 
         exit_px = float(fill["px"])
         pnl = float(fill.get("closedPnl", 0) or 0)
@@ -407,10 +414,9 @@ class TradingBot:
         fill_side = fill.get("side")
 
         if size > 0 and pnl != 0:
-            # Compute implied entry from PnL
-            if fill_side == "A":  # sell = closing long
+            if fill_side == "A":
                 implied_entry = exit_px - pnl / size
-            else:  # buy = closing short
+            else:
                 implied_entry = exit_px + pnl / size
 
             best_idx = 0
@@ -420,13 +426,13 @@ class TradingBot:
                 if dist < best_dist:
                     best_dist = dist
                     best_idx = i
-            return signals.pop(best_idx)
+            return signals[best_idx]
 
         expected_side = "long" if fill_side == "A" else "short"
         for i, sig in enumerate(signals):
             if sig["side"] == expected_side:
-                return signals.pop(i)
-        return signals.pop(0)
+                return signals[i]
+        return signals[0]
 
     def _match_fill_to_signal(self, fill: dict) -> dict | None:
         fill_coin = fill.get("coin")
@@ -458,6 +464,48 @@ class TradingBot:
             if not near_tp and pnl < 0:
                 return "sl"
         return "tp" if pnl > 0 else "sl"
+
+    def _flush_exit_buffers(self):
+        now = time.time()
+        coins_to_flush = []
+        with self._exit_fill_lock:
+            for coin, start_time in list(self._exit_fill_buffer_time.items()):
+                if now - start_time > 5.0:
+                    coins_to_flush.append(coin)
+
+        for coin in coins_to_flush:
+            with self._exit_fill_lock:
+                fills = self._exit_fill_buffer.pop(coin, [])
+                self._exit_fill_buffer_time.pop(coin, None)
+            if not fills:
+                continue
+
+            total_pnl = sum(f["pnl"] for f in fills)
+            total_size = sum(f["size"] for f in fills)
+            if total_size > 0:
+                avg_exit = sum(f["exit_price"] * f["size"] for f in fills) / total_size
+            else:
+                avg_exit = fills[0]["exit_price"]
+
+            signal = fills[0]["signal"]
+            exit_reason = self._classify_exit(signal, avg_exit, total_pnl)
+
+            self.evaluator.record_trade(
+                signal_dict=signal, exit_price=avg_exit,
+                size=total_size, pnl=total_pnl, exit_reason=exit_reason,
+            )
+
+            if total_pnl < 0 and "sr_level" in signal:
+                for scalper in self._scalpers:
+                    if scalper.coin == coin:
+                        scalper.blacklist_level(signal["sr_level"])
+                        break
+
+            with self._pending_signals_lock:
+                self._active_signals.pop(coin, None)
+
+            log.info("Aggregated %d partial fills for %s: pnl=%.6f sz=%.5f reason=%s",
+                     len(fills), coin, total_pnl, total_size, exit_reason)
 
     def _check_tuning(self):
         now = time.time()
