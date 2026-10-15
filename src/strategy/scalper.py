@@ -147,7 +147,8 @@ class Scalper:
             return retrace > level_price * 0.001
 
     def _score_signal(self, level: SRLevel, trend: str, side: str,
-                      candles: list, obs: list[OrderBlock], ob_kind: str) -> float:
+                      candles: list, obs: list[OrderBlock], ob_kind: str,
+                      mid: float = 0) -> float:
         score = level.score
         with_trend = (side == "long" and trend == "up") or (side == "short" and trend == "down")
         counter_trend = (side == "long" and trend == "down") or (side == "short" and trend == "up")
@@ -165,6 +166,10 @@ class Scalper:
             score *= 1.3
         if has_ob:
             score *= 1.3
+        if mid > 0:
+            dist_pips = abs(level.price - mid) / self.pip_size
+            proximity_factor = max(0.3, 1.0 - dist_pips / 200.0)
+            score *= proximity_factor
         self._last_signal_meta = {
             "with_trend": with_trend,
             "has_rejection": has_rejection,
@@ -231,7 +236,7 @@ class Scalper:
                 continue
 
             score = self._score_signal(support, trend, "long", candles,
-                                       obs.get("bullish", []), "bullish")
+                                       obs.get("bullish", []), "bullish", mid=mid)
             if score < 0.8:
                 continue
 
@@ -261,7 +266,7 @@ class Scalper:
                 continue
 
             score = self._score_signal(resistance, trend, "short", candles,
-                                       obs.get("bearish", []), "bearish")
+                                       obs.get("bearish", []), "bearish", mid=mid)
             if score < 0.8:
                 continue
 

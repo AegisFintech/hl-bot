@@ -472,7 +472,10 @@ class TradingBot:
         coins_to_flush = []
         with self._exit_fill_lock:
             for coin, start_time in list(self._exit_fill_buffer_time.items()):
-                if now - start_time > 5.0:
+                position_open = any(
+                    r.position_count > 0 for r in self._reconcilers if r.coin == coin
+                )
+                if not position_open or now - start_time > 300:
                     coins_to_flush.append(coin)
 
         for coin in coins_to_flush:
@@ -503,11 +506,15 @@ class TradingBot:
                         scalper.blacklist_level(signal["sr_level"])
                         break
 
-            with self._pending_signals_lock:
-                self._active_signals.pop(coin, None)
+            position_closed = not any(
+                r.position_count > 0 for r in self._reconcilers if r.coin == coin
+            )
+            if position_closed:
+                with self._pending_signals_lock:
+                    self._active_signals.pop(coin, None)
 
-            log.info("Aggregated %d partial fills for %s: pnl=%.6f sz=%.5f reason=%s",
-                     len(fills), coin, total_pnl, total_size, exit_reason)
+            log.info("Aggregated %d partial fills for %s: pnl=%.6f sz=%.5f reason=%s closed=%s",
+                     len(fills), coin, total_pnl, total_size, exit_reason, position_closed)
 
     def _cancel_stale_entries(self, coin: str, keep_price: float):
         """Cancel all previous pending entry order groups for this coin."""

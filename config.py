@@ -19,7 +19,7 @@ TP_PIPS = 80
 SL_PIPS = 20
 SR_LOOKBACK = 2000
 ORDER_SIZE_USD = 100
-PROXIMITY_PCT = float(os.environ.get("PROXIMITY_PCT", "0.005"))
+PROXIMITY_PCT = float(os.environ.get("PROXIMITY_PCT", "0.0015"))
 
 AUTO_TRANSFER_SPOT = os.environ.get("AUTO_TRANSFER_SPOT", "false").lower() == "true"
 
