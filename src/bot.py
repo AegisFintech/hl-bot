@@ -228,8 +228,6 @@ class TradingBot:
             time.sleep(1)
 
     def _tick(self):
-        self._flush_exit_buffers()
-
         for rec in self._reconcilers:
             try:
                 rec.periodic_check()
@@ -238,6 +236,8 @@ class TradingBot:
 
         total_positions = sum(r.position_count for r in self._reconcilers)
         self.risk_manager.sync_open_positions(total_positions)
+
+        self._flush_exit_buffers()
 
         self.risk_manager.check_daily_reset()
         self._check_tuning()
