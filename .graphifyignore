@@ -1,0 +1,7 @@
+.env
+.env.*
+data/
+.git/
+graphify-out/
+src/dashboard/static/*min.js
+bot.log

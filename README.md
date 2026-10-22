@@ -76,3 +76,9 @@ The bot defaults to Hyperliquid testnet. Get testnet funds at [https://app.hyper
 ## License
 
 MIT
+
+## Overhaul in progress (2026-10-22)
+
+See [review and implementation plan](docs/OVERHAUL.md) and [operating instructions](AGENTS.md). Existing demo funds only; 5% persistent equity drawdown halt. The requested 10% daily target is unverified. Current performance reports exclude fees and must not be interpreted as net profitability.
+
+Graphify is already installed. Rebuild with `graphify extract . --code-only --no-cluster` and `graphify export html`. Credentials and runtime account data are excluded.

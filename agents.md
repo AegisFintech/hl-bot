@@ -23,3 +23,6 @@
 ## Dashboard Agent
 **Module:** `src/dashboard/app.py`
 **Role:** Flask web UI showing live bot status, open positions, trade history, cumulative P/L chart, and S/R levels on a price chart. Auto-refreshes via WebSocket.
+
+## Overhaul progress — 2026-10-22
+Review and research complete. See `docs/OVERHAUL.md` for findings, source links, milestones and measurable forward-validation gates. User mandates 5% persistent high-water drawdown on demo funds; 10% daily is unverified. Graphify is installed; refresh its deterministic code graph at each milestone. `AGENTS.md` contains operating instructions.
