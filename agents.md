@@ -33,3 +33,5 @@ Milestone 3: Professional Aegis terminal implemented in templates/index.html and
 
 ## Final upgrade status — 2026-10-22
 Risk/execution, terminal, diagnostics, replay and deployment validation implemented. Twenty regression tests and desktop/mobile Chromium checks pass. Signed testnet bracket smoke accepted all three legs and cleanup confirmed flat/no orders. Current demo service is active. Chronological replay remains negative (12 / 4 simulated closed trades in the 70/30 segments); profitability and 10% daily are unproven. Read `docs/OVERHAUL.md` and `docs/replay-results.json` before proposing strategy promotion. Snapshots/monitor now use the net fill ledger; funding exclusion is explicit. Graphify code graph, HTML and report are refreshed for this milestone. Every future major milestone must update these docs and push its commit.
+
+Final race audit: expired entries cancel parent orders individually and force reconciliation before removing children only when confirmed flat. This preserves protection if an entry filled since cached position sync. Twenty-one regression tests now pass, including this case.

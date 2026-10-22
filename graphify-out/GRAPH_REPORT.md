@@ -4,12 +4,12 @@
 - cluster-only mode — file stats not available
 
 ## Summary
-- 378 nodes · 640 edges · 30 communities (12 shown, 11 thin omitted)
-- Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 29 edges (avg confidence: 0.87)
+- 380 nodes · 636 edges · 31 communities (12 shown, 12 thin omitted)
+- Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 26 edges (avg confidence: 0.87)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `3beb9a77`
+- Built from commit: `6ad73353`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -37,13 +37,14 @@
 - Path
 - PositionReconciler
 - RiskManager
+- HyperliquidClient
 
 ## God Nodes (most connected - your core abstractions)
 1. `HyperliquidClient` - 51 edges
-2. `TradingBot` - 25 edges
-3. `Scalper` - 23 edges
-4. `RiskManager` - 22 edges
-5. `PositionReconciler` - 16 edges
+2. `TradingBot` - 24 edges
+3. `RiskManager` - 22 edges
+4. `Scalper` - 21 edges
+5. `PositionReconciler` - 14 edges
 6. `SRDetector` - 13 edges
 7. `FillLedger` - 13 edges
 8. `Evaluator` - 12 edges
@@ -72,7 +73,7 @@
 - **Strategy Components: Detection, Placement, Risk, and Learning** — readme_sr_detection_strategy, readme_order_placement, readme_risk_management_strategy, readme_self_learning_loop [EXTRACTED 1.00]
 - **Trading Pipeline: Data to Detection to Execution to Risk to Learning** — agents_market_data_agent, agents_sr_detection_agent, agents_scalper_agent, agents_risk_manager_agent, agents_learning_agent [EXTRACTED 1.00]
 
-## Communities (30 total, 11 thin omitted)
+## Communities (31 total, 12 thin omitted)
 
 ### Community 0 - "S/R Detection Strategy"
 Cohesion: 0.08
@@ -95,7 +96,7 @@ Cohesion: 0.13
 Nodes (7): OrderBlock, HyperliquidClient, RiskManager, Scalper, TradeSignal, SRDetector, SRLevel
 
 ### Community 7 - "TradingBot"
-Cohesion: 0.13
+Cohesion: 0.12
 Nodes (4): main(), Match fill to active signal without removing it (partial fills reuse the…, TradingBot, EmergencyTests
 
 ### Community 9 - "terminal.js"
@@ -107,8 +108,8 @@ Cohesion: 0.17
 Nodes (4): ndarray, OrderBlock, SRDetector, SRLevel
 
 ### Community 11 - "Evaluator"
-Cohesion: 0.13
-Nodes (5): Path, HyperliquidClient, Evaluator, TradeRecord, RiskState
+Cohesion: 0.15
+Nodes (4): Path, Evaluator, TradeRecord, RiskState
 
 ### Community 13 - "monitor.py"
 Cohesion: 0.24
@@ -125,22 +126,22 @@ Nodes (5): HyperliquidClient, RiskManager, PositionReconciler, Return fills that
 ## Knowledge Gaps
 - **14 isolated node(s):** `levelLines`, `options`, `Flask Web Framework`, `Hyperliquid Python SDK`, `NumPy Numerical Computing Library` (+9 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 120 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **12 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `HyperliquidClient` connect `HyperliquidClient` to `bot.py`, `TradingBot`?**
   _High betweenness centrality (0.164) - this node is a cross-community bridge._
-- **Why does `TradingBot` connect `TradingBot` to `app.py`, `bot.py`, `Scalper`, `Evaluator`, `PositionReconciler`?**
-  _High betweenness centrality (0.116) - this node is a cross-community bridge._
-- **Why does `Scalper` connect `Scalper` to `Evaluator`, `bot.py`, `TradingBot`?**
-  _High betweenness centrality (0.102) - this node is a cross-community bridge._
-- **Are the 3 inferred relationships involving `TradingBot` (e.g. with `PositionReconciler` and `Scalper`) actually correct?**
-  _`TradingBot` has 3 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 2 inferred relationships involving `PositionReconciler` (e.g. with `TradingBot` and `ExchangeTests`) actually correct?**
-  _`PositionReconciler` has 2 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `TradingBot` connect `TradingBot` to `app.py`, `PositionReconciler`, `bot.py`?**
+  _High betweenness centrality (0.108) - this node is a cross-community bridge._
+- **Why does `Scalper` connect `Scalper` to `PositionReconciler`, `bot.py`?**
+  _High betweenness centrality (0.085) - this node is a cross-community bridge._
 - **What connects `levelLines`, `options`, `Flask Web Framework` to the rest of the system?**
   _14 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `S/R Detection Strategy` be split into smaller, more focused modules?**
   _Cohesion score 0.08262108262108261 - nodes in this community are weakly interconnected._
+- **Should `HyperliquidClient` be split into smaller, more focused modules?**
+  _Cohesion score 0.06377551020408163 - nodes in this community are weakly interconnected._
+- **Should `tools.py` be split into smaller, more focused modules?**
+  _Cohesion score 0.10253699788583509 - nodes in this community are weakly interconnected._

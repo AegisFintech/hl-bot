@@ -345,12 +345,8 @@ class TradingBot:
         for scalper in self._scalpers:
             if scalper.coin not in self._leverage_set:
                 continue
-            if maintain_orders and not any(r.position_count for r in self._reconcilers if r.coin == scalper.coin):
-                orders = self.client.get_open_orders()
-                expired = [o for o in orders if o['coin'] == scalper.coin and not o.get('reduceOnly')
-                           and now*1000 - int(o.get('timestamp', now*1000)) > 300000]
-                if expired:
-                    self.client.cancel_all_orders(scalper.coin)
+            if maintain_orders:
+                self._expire_entries(scalper.coin, now)
             cutoff = time.time() - scalper._signal_cooldown
             scalper._recent_entries = {k: v for k, v in scalper._recent_entries.items() if v > cutoff}
 
@@ -370,6 +366,28 @@ class TradingBot:
             # Report only: never fit strategy parameters to the live evaluation window.
             self.evaluator.get_performance()
             self._last_learning = now
+
+    def _expire_entries(self, coin, now):
+        orders = self.client.get_open_orders()
+        expired = [o for o in orders if o['coin'] == coin and not o.get('reduceOnly')
+                   and now*1000 - int(o.get('timestamp', now*1000)) > 300000]
+        if not expired:
+            return
+        # Cancel only parents first: a fill may have arrived since cached position sync.
+        for order in expired:
+            self.client.cancel_order(coin, order['oid'])
+        for rec in self._reconcilers:
+            if rec.coin == coin:
+                rec._grace_until = 0
+                rec.periodic_check(force=True)
+        # With parent cancellation acknowledged, no further entry can fill.
+        # Only confirmed-flat accounts may have their orphaned children removed.
+        if not any(p['position']['coin'] == coin for p in self.client.get_positions()):
+            self.client.cancel_all_orders(coin)
+        with self._pending_signals_lock:
+            for price in list(self._pending_signals):
+                if self._pending_signals[price].get('coin') == coin:
+                    self._pending_signals.pop(price)
 
     def _on_fill(self, fills: list):
         for fill in fills:

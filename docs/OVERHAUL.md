@@ -67,3 +67,5 @@ Collect execution observations under fixed parameters and preserve an untouched 
 Operational baseline: approximately 981.069527 USDC at cutover; persistent peak initialized from observed account equity because the legacy bot did not preserve a valid account-level high-water series. Drawdown threshold triggers recovery but cannot guarantee an exact 5% realized ceiling during gaps/outages. Keep runtime state and fills backed up. Pre-existing CLAUDE.md deletion is preserved uncommitted; private data and credentials are not tracked.
 
 Dashboard serving uses in-process Waitress (eight threads) so the bot reference remains available without a development server or unsafe multi-process state assumptions.
+
+Final race audit: expired entries cancel parent orders individually and force reconciliation before removing children only when confirmed flat. This preserves protection if an entry filled since cached position sync. Twenty-one regression tests now pass, including this case.

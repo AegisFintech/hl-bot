@@ -22,3 +22,17 @@ class EmergencyTests(unittest.TestCase):
         b=TradingBot.__new__(TradingBot);b.risk_manager=Mock();b.risk_manager.should_kill.return_value=True
         b._emergency_flatten=Mock();b._tick()
         b._emergency_flatten.assert_called_once()
+
+    def test_expiry_preserves_protection_when_position_filled_since_sync(self):
+        import threading
+        b=TradingBot.__new__(TradingBot);b.client=Mock()
+        b.client.get_open_orders.return_value=[dict(coin='BTC',oid=1,timestamp=1,reduceOnly=False),
+                                               dict(coin='BTC',oid=2,timestamp=1,reduceOnly=True)]
+        b.client.get_positions.return_value=[dict(position=dict(coin='BTC',szi='1'))]
+        rec=Mock();rec.coin='BTC';b._reconcilers=[rec]
+        b._pending_signals_lock=threading.Lock();b._pending_signals={100:dict(coin='BTC')}
+        b._expire_entries('BTC',1000)
+        b.client.cancel_order.assert_called_once_with('BTC',1)
+        b.client.cancel_all_orders.assert_not_called()
+        rec.periodic_check.assert_called_once_with(force=True)
+        self.assertEqual(b._pending_signals,{})

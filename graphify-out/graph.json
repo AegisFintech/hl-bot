@@ -1075,18 +1075,6 @@
       "source_location": "L16"
     },
     {
-      "id": "src_bot_tradingbot_init",
-      "label": ".__init__()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Evaluator",
-      "file_type": "code",
-      "norm_label": ".__init__()",
-      "source_file": "src/bot.py",
-      "source_location": "L21"
-    },
-    {
       "id": "src_learning_evaluator_evaluator_analyze_sr_patterns",
       "label": ".analyze_sr_patterns()",
       "_callable": true,
@@ -1925,6 +1913,18 @@
       "norm_label": "main()",
       "source_file": "scripts/healthcheck.py",
       "source_location": "L5"
+    },
+    {
+      "id": "src_bot_tradingbot_init",
+      "label": ".__init__()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "PositionReconciler",
+      "file_type": "code",
+      "norm_label": ".__init__()",
+      "source_file": "src/bot.py",
+      "source_location": "L21"
     },
     {
       "id": "src_reconciler_positionreconciler_backfill_missed_fills",
@@ -2992,7 +2992,7 @@
       "file_type": "code",
       "norm_label": "._cancel_stale_entries()",
       "source_file": "src/bot.py",
-      "source_location": "L600"
+      "source_location": "L618"
     },
     {
       "id": "src_bot_tradingbot_check_tuning",
@@ -3004,7 +3004,7 @@
       "file_type": "code",
       "norm_label": "._check_tuning()",
       "source_file": "src/bot.py",
-      "source_location": "L604"
+      "source_location": "L622"
     },
     {
       "id": "src_bot_tradingbot_classify_exit",
@@ -3016,7 +3016,7 @@
       "file_type": "code",
       "norm_label": "._classify_exit()",
       "source_file": "src/bot.py",
-      "source_location": "L538"
+      "source_location": "L556"
     },
     {
       "id": "src_bot_tradingbot_emergency_flatten",
@@ -3031,6 +3031,18 @@
       "source_location": "L257"
     },
     {
+      "id": "src_bot_tradingbot_expire_entries",
+      "label": "._expire_entries()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "TradingBot",
+      "file_type": "code",
+      "norm_label": "._expire_entries()",
+      "source_file": "src/bot.py",
+      "source_location": "L370"
+    },
+    {
       "id": "src_bot_tradingbot_flush_exit_buffers",
       "label": "._flush_exit_buffers()",
       "_callable": true,
@@ -3040,7 +3052,7 @@
       "file_type": "code",
       "norm_label": "._flush_exit_buffers()",
       "source_file": "src/bot.py",
-      "source_location": "L551"
+      "source_location": "L569"
     },
     {
       "id": "src_bot_tradingbot_init_exchange",
@@ -3064,7 +3076,7 @@
       "file_type": "code",
       "norm_label": "._match_active_signal()",
       "source_file": "src/bot.py",
-      "source_location": "L486"
+      "source_location": "L504"
     },
     {
       "id": "src_bot_tradingbot_match_fill_to_signal",
@@ -3076,7 +3088,7 @@
       "file_type": "code",
       "norm_label": "._match_fill_to_signal()",
       "source_file": "src/bot.py",
-      "source_location": "L520"
+      "source_location": "L538"
     },
     {
       "id": "src_bot_tradingbot_on_fill",
@@ -3088,7 +3100,7 @@
       "file_type": "code",
       "norm_label": "._on_fill()",
       "source_file": "src/bot.py",
-      "source_location": "L374"
+      "source_location": "L392"
     },
     {
       "id": "src_bot_tradingbot_on_order_update",
@@ -3100,7 +3112,7 @@
       "file_type": "code",
       "norm_label": "._on_order_update()",
       "source_file": "src/bot.py",
-      "source_location": "L455"
+      "source_location": "L473"
     },
     {
       "id": "src_bot_tradingbot_on_ws_reconnect",
@@ -3112,7 +3124,7 @@
       "file_type": "code",
       "norm_label": "._on_ws_reconnect()",
       "source_file": "src/bot.py",
-      "source_location": "L471"
+      "source_location": "L489"
     },
     {
       "id": "src_bot_tradingbot_run_learning",
@@ -3124,7 +3136,7 @@
       "file_type": "code",
       "norm_label": "._run_learning()",
       "source_file": "src/bot.py",
-      "source_location": "L658"
+      "source_location": "L676"
     },
     {
       "id": "src_bot_tradingbot_run_loop",
@@ -3185,6 +3197,18 @@
       "norm_label": ".test_cancel_failure_still_closes_and_confirms()",
       "source_file": "tests/test_bot.py",
       "source_location": "L7"
+    },
+    {
+      "id": "tests_test_bot_emergencytests_test_expiry_preserves_protection_when_position_filled_since_sync",
+      "label": ".test_expiry_preserves_protection_when_position_filled_since_sync()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "TradingBot",
+      "file_type": "code",
+      "norm_label": ".test_expiry_preserves_protection_when_position_filled_since_sync()",
+      "source_file": "tests/test_bot.py",
+      "source_location": "L26"
     },
     {
       "id": "tests_test_bot_emergencytests_test_halted_tick_never_reconciles_or_scans",
@@ -3385,17 +3409,6 @@
       "community_name": "Evaluator",
       "file_type": "code",
       "norm_label": "path",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "src_bot_py_hyperliquidclient",
-      "label": "HyperliquidClient",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Evaluator",
-      "file_type": "code",
-      "norm_label": "hyperliquidclient",
       "source_file": "",
       "source_location": ""
     },
@@ -3917,6 +3930,17 @@
       "source_location": "L1"
     },
     {
+      "id": "src_bot_py_hyperliquidclient",
+      "label": "HyperliquidClient",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "HyperliquidClient",
+      "file_type": "code",
+      "norm_label": "hyperliquidclient",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "scripts_replay",
       "label": "replay.py",
       "_origin": "ast",
@@ -4170,7 +4194,7 @@
       "source_location": "L1"
     },
     {
-      "id": "src_bot_rationale_487",
+      "id": "src_bot_rationale_505",
       "label": "Match fill to active signal without removing it (partial fills reuse the\u2026",
       "_origin": "ast",
       "community": 7,
@@ -4178,7 +4202,7 @@
       "file_type": "rationale",
       "norm_label": "match fill to active signal without removing it (partial fills reuse the...",
       "source_file": "src/bot.py",
-      "source_location": "L487"
+      "source_location": "L505"
     },
     {
       "id": "src_reconciler_py_hyperliquidclient",
@@ -5147,7 +5171,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L577",
+      "source_location": "L595",
       "weight": 1.0
     },
     {
@@ -5255,7 +5279,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L398",
+      "source_location": "L416",
       "weight": 1.0
     },
     {
@@ -5267,7 +5291,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L419",
+      "source_location": "L437",
       "weight": 1.0
     },
     {
@@ -5279,7 +5303,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L431",
+      "source_location": "L449",
       "weight": 1.0
     },
     {
@@ -5291,7 +5315,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L478",
+      "source_location": "L496",
       "weight": 1.0
     },
     {
@@ -5392,6 +5416,18 @@
     },
     {
       "source": "src_bot_tradingbot_tick",
+      "target": "src_bot_tradingbot_expire_entries",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/bot.py",
+      "source_location": "L349",
+      "weight": 1.0
+    },
+    {
+      "source": "src_bot_tradingbot_tick",
       "target": "src_bot_tradingbot_cancel_stale_entries",
       "relation": "calls",
       "_origin": "ast",
@@ -5399,7 +5435,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L367",
+      "source_location": "L363",
       "weight": 1.0
     },
     {
@@ -7455,54 +7491,6 @@
       "weight": 1.0
     },
     {
-      "source": "src_bot",
-      "target": "src_reconciler_positionreconciler",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "src/bot.py",
-      "source_location": "L13",
-      "weight": 1.0
-    },
-    {
-      "source": "src_bot",
-      "target": "src_dashboard_app_run_dashboard",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "src/bot.py",
-      "source_location": "L14",
-      "weight": 1.0
-    },
-    {
-      "source": "src_bot",
-      "target": "src_dashboard_app_set_bot_reference",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "src/bot.py",
-      "source_location": "L14",
-      "weight": 1.0
-    },
-    {
-      "source": "src_bot",
-      "target": "src_strategy_scalper_scalper",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "src/bot.py",
-      "source_location": "L9",
-      "weight": 1.0
-    },
-    {
       "source": "src_reconciler",
       "target": "src_strategy_economics_bracket_distances",
       "relation": "imports",
@@ -8080,7 +8068,7 @@
     },
     {
       "source": "src_bot_tradingbot_init",
-      "target": "src_bot_py_hyperliquidclient",
+      "target": "hyperliquidclient",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -9456,13 +9444,24 @@
     },
     {
       "source": "src_bot_tradingbot",
+      "target": "src_bot_tradingbot_expire_entries",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/bot.py",
+      "source_location": "L370",
+      "weight": 1.0
+    },
+    {
+      "source": "src_bot_tradingbot",
       "target": "src_bot_tradingbot_on_fill",
       "relation": "method",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L374",
+      "source_location": "L392",
       "weight": 1.0
     },
     {
@@ -9473,7 +9472,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L455",
+      "source_location": "L473",
       "weight": 1.0
     },
     {
@@ -9484,7 +9483,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L471",
+      "source_location": "L489",
       "weight": 1.0
     },
     {
@@ -9495,7 +9494,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L486",
+      "source_location": "L504",
       "weight": 1.0
     },
     {
@@ -9506,7 +9505,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L520",
+      "source_location": "L538",
       "weight": 1.0
     },
     {
@@ -9517,7 +9516,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L538",
+      "source_location": "L556",
       "weight": 1.0
     },
     {
@@ -9528,7 +9527,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L551",
+      "source_location": "L569",
       "weight": 1.0
     },
     {
@@ -9539,7 +9538,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L600",
+      "source_location": "L618",
       "weight": 1.0
     },
     {
@@ -9550,7 +9549,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L604",
+      "source_location": "L622",
       "weight": 1.0
     },
     {
@@ -9561,7 +9560,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L658",
+      "source_location": "L676",
       "weight": 1.0
     },
     {
@@ -10941,6 +10940,17 @@
     },
     {
       "source": "tests_test_bot_emergencytests",
+      "target": "tests_test_bot_emergencytests_test_expiry_preserves_protection_when_position_filled_since_sync",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_bot.py",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_bot_emergencytests",
       "target": "tests_test_bot_emergencytests_test_cancel_failure_still_closes_and_confirms",
       "relation": "method",
       "_origin": "ast",
@@ -11380,14 +11390,14 @@
       "weight": 1.0
     },
     {
-      "source": "src_bot_rationale_487",
+      "source": "src_bot_rationale_505",
       "target": "src_bot_tradingbot_match_active_signal",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L487",
+      "source_location": "L505",
       "weight": 1.0
     },
     {
@@ -11504,18 +11514,6 @@
       "context": "call",
       "source_file": "scripts/monitor.py",
       "source_location": "L65",
-      "weight": 1.0
-    },
-    {
-      "source": "src_bot_tradingbot_init",
-      "target": "path",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "src/bot.py",
-      "source_location": "L41",
       "weight": 1.0
     },
     {
@@ -11637,28 +11635,6 @@
       "source_file": "src/agent/runner.py",
       "source_location": "L44",
       "weight": 1.0
-    },
-    {
-      "source": "src_bot_tradingbot",
-      "target": "src_strategy_scalper_scalper",
-      "relation": "uses",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "source_file": "src/bot.py",
-      "source_location": "L50",
-      "weight": 0.8
-    },
-    {
-      "source": "src_bot_tradingbot",
-      "target": "src_reconciler_positionreconciler",
-      "relation": "uses",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "source_file": "src/bot.py",
-      "source_location": "L51",
-      "weight": 0.8
     },
     {
       "source": "tests_test_bot_emergencytests",
@@ -12079,5 +12055,5 @@
       "source_file": "agents.md"
     }
   ],
-  "built_at_commit": "3beb9a77de39acfa9ab37ce10f14f6d093cc0fba"
+  "built_at_commit": "6ad733534e2e7a11c1468d747e379b55b0d45ccf"
 }

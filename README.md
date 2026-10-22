@@ -44,7 +44,7 @@ python3 scripts/monitor.py
 python3 scripts/snapshot_perf.py
 ```
 
-Twenty regressions cover risk persistence/exact thresholds, stale/invalid equity, cost accounting, sizing, stop payloads, recovery, dashboard responses/CSV and conservative replay behavior. Real Chromium checks cover desktop/mobile, charts, tabs, filters, chart controls, CSV and offline handling. Browser screenshots are private under `artifacts/`.
+Twenty-one regressions cover risk persistence/exact thresholds, stale/invalid equity, cost accounting, sizing, stop payloads, recovery, dashboard responses/CSV and conservative replay behavior. Real Chromium checks cover desktop/mobile, charts, tabs, filters, chart controls, CSV and offline handling. Browser screenshots are private under `artifacts/`.
 
 [Review and overhaul plan](docs/OVERHAUL.md) contains findings and primary research sources. [Replay results](docs/replay-results.json) use 5,000 BTC 1m testnet bars, fixed parameters, actual fee rates, modeled adverse slippage and funding stress. Results do **not** establish profitability. The initial no-trade diagnostic is preserved; after fixing cost geometry this is not a pristine holdout. No real funds are authorized. Proposed promotion requires 30 days and at least 100 forward complete trades across regimes, positive net expectancy including actual funding, profit factor above 1.2 and drawdown below 5%.
 
