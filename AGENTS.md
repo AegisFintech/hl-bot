@@ -13,3 +13,5 @@ This is an actively running Hyperliquid **testnet** bot. User authorizes review,
 Current milestone: review and research complete; risk/execution implementation next.
 
 Milestone 2 complete: risk/execution regressions pass. Runtime state is private under data/. Unsupported account modes and corrupt risk state fail closed. Do not remove an existing halt or risk state to restart trading. Next: dashboard and research replay.
+
+Milestone 3 complete: dashboard Python and Chromium checks pass. Browser verification: install requirements-dev.txt, `python3 -m playwright install --with-deps chromium`, run service, then `python3 scripts/browser_check.py`. Screenshots under artifacts/ are private. Next: research replay and final deployment audit.

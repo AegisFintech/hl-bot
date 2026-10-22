@@ -171,8 +171,76 @@ def run_dashboard(host: str = "0.0.0.0", port: int = 8080):
     app.run(host=host, port=port, threaded=True)
 
 
+# One shared cache prevents every connected browser from multiplying exchange reads.
+import csv
+import io
+import threading
+from flask import Response, request
+
+_terminal_lock = threading.Lock()
+_terminal_cache = {}
+_terminal_at = 0.0
+
+@app.route('/api/terminal')
+def api_terminal():
+    global _terminal_cache, _terminal_at
+    if not _bot_ref:
+        return jsonify({'status': _status(), 'errors': ['Bot is not connected'], 'timestamp': time.time()})
+    with _terminal_lock:
+        if time.time() - _terminal_at < 5 and _terminal_cache:
+            return jsonify(_terminal_cache)
+        bot = _bot_ref
+        errors = []
+        out = dict(_terminal_cache)
+        out.update(status=_status(), timestamp=time.time())
+        for key, getter in [('positions', bot.client.get_positions), ('orders', bot.client.get_open_orders)]:
+            try:
+                out[key] = getter()
+            except Exception:
+                errors.append(key + ' unavailable; last successful values retained')
+        out['account'] = bot.account_snapshot
+        out['performance'] = bot.ledger.performance()
+        out['equity'] = bot.ledger.equity()
+        out['fills'] = bot.ledger.fills(200)
+        candles = bot.client.get_cached_candles(bot.coin)
+        if len(candles) < 50:
+            try:
+                candles = bot.client.get_candles(bot.coin, '1m', 500*60000)
+            except Exception:
+                errors.append('Candle history unavailable')
+        out['candles'] = sorted({int(c['t']): c for c in candles}.values(), key=lambda c: int(c['t']))[-500:]
+        out['book'] = bot.client.get_cached_orderbook(bot.coin) or {}
+        out['tape'] = bot.client.get_cached_trades(bot.coin)[-40:]
+        out['bbo_age_s'] = bot.client.bbo_age(bot.coin)
+        out['strategy'] = dict(bot.scalper.diagnostics, maker_fee_bps=bot.scalper.fee_entry*10000,
+                               taker_fee_bps=bot.scalper.fee_exit*10000, target_daily_pct=10,
+                               target_status='Unverified research target', mode='Forward demo evaluation',
+                               pending_signals=len(bot._pending_signals))
+        out['levels'] = [{'price': l.price, 'kind': l.kind, 'score': l.score} for l in bot.sr_detector._levels]
+        out['errors'] = errors
+        _terminal_cache, _terminal_at = out, time.time()
+        return jsonify(out)
+
+@app.route('/api/export/fills.csv')
+def export_fills():
+    output = io.StringIO()
+    fields = ['time', 'coin', 'dir', 'side', 'px', 'sz', 'closedPnl', 'fee', 'tid']
+    writer = csv.DictWriter(output, fieldnames=fields, extrasaction='ignore')
+    writer.writeheader()
+    for fill in _bot_ref.ledger.fills(1000000) if _bot_ref else []:
+        writer.writerow({k: ("'"+str(fill.get(k,'')) if str(fill.get(k,'')).startswith(('=', '+', '-', '@')) and k in ('coin','dir','tid') else fill.get(k,'')) for k in fields})
+    return Response(output.getvalue(), mimetype='text/csv', headers={'Content-Disposition':'attachment; filename=hl-bot-fills.csv'})
+
+@app.after_request
+def security_headers(response):
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+    response.headers['Cache-Control'] = 'no-store'
+    return response
+
 if __name__ == "__main__":
     import sys
     sys.path.insert(0, str(Path(__file__).parent.parent.parent))
     from config import DASHBOARD_PORT
     run_dashboard(port=DASHBOARD_PORT)
+

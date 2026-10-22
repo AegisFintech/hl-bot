@@ -28,3 +28,5 @@
 Review and research complete. See `docs/OVERHAUL.md` for findings, source links, milestones and measurable forward-validation gates. User mandates 5% persistent high-water drawdown on demo funds; 10% daily is unverified. Graphify is installed; refresh its deterministic code graph at each milestone. `AGENTS.md` contains operating instructions.
 
 Milestone 2: `RiskManager` persists equity peak and halt to data/risk_state.json. `FillLedger` stores durable fill identities and actual costs. `economics.py` supplies volatility/cost gates. Exchange equity supports the confirmed unified account; unsupported modes fail closed. No live parameter fitting. Eleven risk/execution regressions pass.
+
+Milestone 3: Professional Aegis terminal implemented in templates/index.html and static/terminal.{css,js}. `/api/terminal` shares cached exchange reads; `/api/export/fills.csv` exports the durable ledger. Fifteen Python tests plus real Chromium desktop/mobile interactions pass. No mutation controls are exposed by the dashboard.
