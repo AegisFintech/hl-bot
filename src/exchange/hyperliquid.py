@@ -2,6 +2,7 @@ import json
 import logging
 import time
 import threading
+import math
 from collections import defaultdict
 
 import eth_account
@@ -20,8 +21,8 @@ class HyperliquidClient:
         self.wallet = eth_account.Account.from_key(api_private_key)
         self.master_account = master_account
         self.address = self.master_account
-        self.info = Info(self.base_url, skip_ws=True)
-        self.exchange = Exchange(self.wallet, self.base_url, account_address=self.master_account)
+        self.info = Info(self.base_url, skip_ws=True, timeout=10)
+        self.exchange = Exchange(self.wallet, self.base_url, account_address=self.master_account, timeout=10)
         self._ws_info = None
         self._ws_subscriptions = []
         self._subscriptions = {}
@@ -37,6 +38,8 @@ class HyperliquidClient:
         self._meta_cache: dict | None = None
         self._meta_cache_time: float = 0.0
         self._mid_cache: dict[str, tuple[float, float]] = {}
+        self._abstraction = None
+        self._bbo_times = {}
 
     def audit_urls(self) -> dict:
         info_url = self.info.base_url
@@ -88,7 +91,7 @@ class HyperliquidClient:
 
     def round_size(self, coin: str, size: float) -> float:
         decimals = self.get_sz_decimals(coin)
-        return round(size, decimals)
+        return math.floor(size * 10**decimals) / 10**decimals
 
     def round_price(self, coin: str, price: float) -> float:
         tick = self.get_tick_size(coin)
@@ -142,7 +145,7 @@ class HyperliquidClient:
         return [p for p in state.get("assetPositions", []) if float(p["position"]["szi"]) != 0]
 
     def get_open_orders(self) -> list:
-        return self.info.open_orders(self.address)
+        return self.info.frontend_open_orders(self.address)
 
     def get_fills(self, limit: int = 50) -> list:
         return self.info.user_fills(self.address)[:limit]
@@ -158,11 +161,31 @@ class HyperliquidClient:
                 return float(amount)
         return 0.0
 
+    def get_account_snapshot(self) -> dict:
+        if self._abstraction is None:
+            self._abstraction = self.info.post('/info', {'type': 'userAbstraction', 'user': self.address})
+        state = self.get_user_state()
+        spot = self.get_spot_user_state()
+        usdc = next((float(b['total']) for b in spot.get('balances', []) if b['coin'] == 'USDC'), 0.0)
+        unrealized = sum(float(p['position'].get('unrealizedPnl', 0)) for p in state.get('assetPositions', []))
+        perps = float(state.get('marginSummary', {}).get('accountValue', 0))
+        if self._abstraction == 'unifiedAccount':
+            equity = usdc + unrealized
+            available = next((float(v) for token, v in spot.get('tokenToAvailableAfterMaintenance', []) if token == 0), 0)
+        elif self._abstraction in ('default', 'disabled', 'standard'):
+            equity = perps + usdc
+            available = float(state.get('withdrawable', 0))
+        else:
+            raise ValueError(f'Unsupported account abstraction: {self._abstraction}')
+        return dict(equity=equity, available=available, spot_usdc=usdc, perps_account_value=perps,
+                    unrealized_pnl=unrealized, margin_used=float(state.get('marginSummary', {}).get('totalMarginUsed',0)),
+                    mode=self._abstraction, positions=state.get('assetPositions', []), timestamp=time.time())
+
     def get_account_value(self) -> float:
-        available = self.get_available_to_trade()
-        if available > 0:
-            return available
-        return self.get_perps_account_value()
+        return self.get_account_snapshot()['equity']
+
+    def bbo_age(self, coin):
+        return time.time() - self._bbo_times.get(coin, 0)
 
     def transfer_spot_to_perps(self, amount_usd: float) -> dict:
         return self.exchange.usd_class_transfer(amount_usd, True)
@@ -185,7 +208,7 @@ class HyperliquidClient:
                                tp_price: float, sl_price: float, tif: str = "Gtc") -> dict:
         size = self.round_size(coin, size)
         exit_side = not is_buy
-        sl_buffer = sl_price * 0.00005
+        sl_buffer = sl_price * 0.02
         if is_buy:
             sl_limit_px = self.round_price(coin, sl_price - sl_buffer)
         else:
@@ -202,7 +225,7 @@ class HyperliquidClient:
             },
             {
                 "coin": coin, "is_buy": exit_side, "sz": size, "limit_px": sl_limit_px,
-                "order_type": {"trigger": {"triggerPx": sl_price, "isMarket": False, "tpsl": "sl"}},
+                "order_type": {"trigger": {"triggerPx": sl_price, "isMarket": True, "tpsl": "sl"}},
                 "reduce_only": True,
             },
         ]
@@ -227,7 +250,7 @@ class HyperliquidClient:
     def place_trigger_orders(self, coin: str, is_buy: bool, size: float,
                              tp_price: float, sl_price: float) -> dict:
         size = self.round_size(coin, size)
-        sl_buffer = sl_price * 0.00005
+        sl_buffer = sl_price * 0.02
         if is_buy:
             sl_limit_px = self.round_price(coin, sl_price + sl_buffer)
         else:
@@ -240,7 +263,7 @@ class HyperliquidClient:
             },
             {
                 "coin": coin, "is_buy": is_buy, "sz": size, "limit_px": sl_limit_px,
-                "order_type": {"trigger": {"triggerPx": sl_price, "isMarket": False, "tpsl": "sl"}},
+                "order_type": {"trigger": {"triggerPx": sl_price, "isMarket": True, "tpsl": "sl"}},
                 "reduce_only": True,
             },
         ]
@@ -307,6 +330,7 @@ class HyperliquidClient:
                 normalized = data
             with self._lock:
                 self._bbo[coin] = normalized
+                self._bbo_times[coin] = time.time()
             if callback:
                 callback(normalized)
         sub = {"type": "bbo", "coin": coin}

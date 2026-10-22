@@ -5,6 +5,7 @@ from dataclasses import dataclass, asdict
 from src.exchange.hyperliquid import HyperliquidClient
 from src.strategy.sr_detector import SRDetector, SRLevel, OrderBlock
 from src.risk.manager import RiskManager
+from src.strategy.economics import bracket_distances, viable
 
 log = logging.getLogger(__name__)
 
@@ -64,6 +65,9 @@ class Scalper:
         self._last_mid = 0.0
         self._cached_open_orders: list = []
         self._cached_open_orders_time = 0.0
+        self.diagnostics = {"reason": "Waiting for closed candles", "candidates": 0}
+        self.fee_entry = 0.00015
+        self.fee_exit = 0.00045
 
     @property
     def pip_size(self) -> float:
@@ -92,6 +96,7 @@ class Scalper:
                 lookback_ms = max(self.sr.lookback, 1000) * 60 * 1000
                 candles = self.client.get_candles(self.coin, "1m", lookback_ms)
 
+        candles = [c for c in candles if int(c["t"]) + 60000 <= int(time.time()*1000)]
         self.sr.detect(candles)
         self.sr.detect_order_blocks(candles)
         self._last_sr_update = time.time()
@@ -183,7 +188,8 @@ class Scalper:
             self.update_sr_levels()
 
         bbo = self.client.get_cached_bbo(self.coin)
-        if not bbo:
+        if not bbo or self.client.bbo_age(self.coin) > 10:
+            self.diagnostics = {"reason": "Market quote stale or unavailable", "candidates": 0}
             return []
 
         bid = float(bbo["bid"]["px"]) if "bid" in bbo else None
@@ -210,7 +216,12 @@ class Scalper:
                 self._rest_candles = self.client.get_candles(self.coin, "1m", 100 * 60 * 1000)
                 self._rest_candles_time = now
             candles = self._rest_candles
+        candles = [c for c in candles if int(c["t"]) + 60000 <= int(now*1000)]
+        if len(candles) < 50 or int(candles[-1]["t"]) < (now-180)*1000:
+            self.diagnostics = {"reason": "Closed candle history stale or insufficient", "candidates": 0}
+            return []
         trend = self._get_trend(candles)
+        tp_distance, sl_distance = bracket_distances(candles, mid)
 
         nearest = self.sr.get_nearest_levels(mid, n=3)
         obs = self.sr.get_nearest_order_blocks(mid, n=2)
@@ -241,8 +252,8 @@ class Scalper:
                 continue
 
             entry = self.client.round_price(self.coin, support.price + pip)
-            tp = self.client.round_price(self.coin, entry + pip * self.tp_pips)
-            sl = self.client.round_price(self.coin, entry - pip * self.sl_pips)
+            tp = self.client.round_price(self.coin, entry + tp_distance)
+            sl = self.client.round_price(self.coin, entry - sl_distance)
 
             ob_zone = self._find_confirming_ob(support.price, obs.get("bullish", []), "bullish")
 
@@ -271,8 +282,8 @@ class Scalper:
                 continue
 
             entry = self.client.round_price(self.coin, resistance.price - pip)
-            tp = self.client.round_price(self.coin, entry - pip * self.tp_pips)
-            sl = self.client.round_price(self.coin, entry + pip * self.sl_pips)
+            tp = self.client.round_price(self.coin, entry - tp_distance)
+            sl = self.client.round_price(self.coin, entry + sl_distance)
 
             ob_zone = self._find_confirming_ob(resistance.price, obs.get("bearish", []), "bearish")
 
@@ -289,7 +300,9 @@ class Scalper:
             )
             signals.append(signal)
 
+        signals = [s for s in signals if s.with_trend and s.has_rejection]
         signals.sort(key=lambda s: s.signal_score, reverse=True)
+        self.diagnostics = {"reason": "Candidate awaiting execution checks" if signals else "No confirmed trend pullback", "candidates": len(signals), "trend": trend, "stop_distance": sl_distance, "target_distance": tp_distance}
         return signals
 
     def _is_level_on_cooldown(self, level_price: float) -> bool:
@@ -324,11 +337,36 @@ class Scalper:
         if self._has_open_order_near(signal.entry_price):
             return None
 
+        bbo = self.client.get_cached_bbo(self.coin)
+        if not bbo or self.client.bbo_age(self.coin) > 10:
+            self.diagnostics['reason'] = 'Stale quote'
+            return None
+        ok, reason = viable(signal, float(bbo['bid']['px']), float(bbo['ask']['px']), self.fee_entry, self.fee_exit)
+        self.diagnostics['reason'] = reason
+        if not ok:
+            return None
+        # Recheck actual exposure and all pending orders before every submission.
+        try:
+            if any(p['position']['coin'] == self.coin for p in self.client.get_positions()):
+                self.diagnostics['reason'] = 'Position already open'
+                return None
+            if any(o['coin'] == self.coin for o in self.client.get_open_orders()):
+                self.diagnostics['reason'] = 'Pending bracket already exists'
+                return None
+            self.risk.update_equity(self.client.get_account_value())
+        except Exception:
+            self.diagnostics['reason'] = 'Exchange admission query failed'
+            return None
         if not self.risk.can_trade(signal):
+            self.diagnostics['reason'] = 'Account risk admission blocked'
             return None
 
         is_buy = signal.side == "long"
         size = self.risk.compute_position_size(signal)
+        size = self.client.round_size(self.coin, size)
+        if size * signal.entry_price < 10:
+            self.diagnostics["reason"] = "Risk-sized order below exchange minimum"
+            return None
         if size <= 0:
             return None
 
@@ -339,14 +377,15 @@ class Scalper:
         result = self.client.place_order_with_tpsl(
             coin=signal.coin, is_buy=is_buy, size=size,
             entry_price=signal.entry_price,
-            tp_price=signal.tp_price, sl_price=signal.sl_price,
+            tp_price=signal.tp_price, sl_price=signal.sl_price, tif="Alo",
         )
 
         log.info("Order result: %s", result)
         statuses = result.get("response", {}).get("data", {}).get("statuses", [])
         has_error = any(isinstance(s, dict) and "error" in s for s in statuses)
-        if has_error:
+        if result.get("status") != "ok" or not statuses or has_error:
             log.warning("Order rejected: %s", statuses)
+            self.risk.halt("Order bracket rejected or incomplete; operator review required")
             return None
 
         self._recent_entries[signal.sr_level] = time.time()

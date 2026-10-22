@@ -15,3 +15,6 @@ build/
 .pytest_cache/
 bot.log
 gh.sh
+.venv/
+data/
+artifacts/

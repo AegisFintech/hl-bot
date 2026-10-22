@@ -82,3 +82,5 @@ MIT
 See [review and implementation plan](docs/OVERHAUL.md) and [operating instructions](AGENTS.md). Existing demo funds only; 5% persistent equity drawdown halt. The requested 10% daily target is unverified. Current performance reports exclude fees and must not be interpreted as net profitability.
 
 Graphify is already installed. Rebuild with `graphify extract . --code-only --no-cluster` and `graphify export html`. Credentials and runtime account data are excluded.
+
+Risk/execution milestone implemented: durable 5% halt, account-mode-aware equity, post-only entries, stop-market exits, closed-candle confirmation, ATR and fee checks, conservative sizing, SQLite fill ledger. Legacy trade statistics remain gross; the ledger is the net realized source. Run `python3 -m unittest discover -s tests -v` (11 regressions at this milestone). Runtime data is private and ignored.

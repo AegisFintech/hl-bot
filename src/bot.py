@@ -9,6 +9,7 @@ from src.strategy.sr_detector import SRDetector
 from src.strategy.scalper import Scalper
 from src.risk.manager import RiskManager
 from src.learning.evaluator import Evaluator
+from src.learning.ledger import FillLedger
 from src.reconciler import PositionReconciler
 from src.dashboard.app import set_bot_reference, run_dashboard
 
@@ -37,9 +38,13 @@ class TradingBot:
             order_size_usd=order_size_usd,
             max_position_size_usd=order_size_usd,
             max_open_positions=len(self.coins),
+            state_file=Path(__file__).resolve().parents[1] / "data/risk_state.json",
         )
         self.evaluator = Evaluator(trades_file=trades_file, performance_file=performance_file)
 
+        self.ledger = FillLedger(Path(__file__).resolve().parents[1] / "data/ledger.sqlite")
+        self.account_snapshot = {}
+        self._halt_cleanup_at = 0.0
         self._scalpers: list[Scalper] = []
         self._reconcilers: list[PositionReconciler] = []
         for c in self.coins:
@@ -70,7 +75,7 @@ class TradingBot:
         self._last_learning = 0.0
         self._leverage_set: set[str] = set()
         self._last_equity_fetch = 0.0
-        self._equity_fetch_interval = 30.0
+        self._equity_fetch_interval = 5.0
         self._tuning_file = Path(__file__).parent.parent / "data" / "tuning.json"
         self._tuning_mtime = 0.0
         self._last_tuning_check = 0.0
@@ -80,6 +85,8 @@ class TradingBot:
         log.info("Starting HL-Bot on %s (%s)", self.coins,
                  "testnet" if self.client.testnet else "MAINNET")
 
+        if not self.client.testnet:
+            raise RuntimeError("Only testnet trading is authorized")
         self._init_exchange()
         self._subscribe_feeds()
         self._start_dashboard()
@@ -125,6 +132,11 @@ class TradingBot:
 
         log.info("Agent %s is REGISTERED on testnet — OK", preflight["agent_address"])
 
+        fees = self.client.info.user_fees(self.client.address)
+        for scalper in self._scalpers:
+            scalper.fee_entry = float(fees['userAddRate'])
+            scalper.fee_exit = float(fees['userCrossRate'])
+
         log.info("=== ACCOUNT STATE ===")
         user_state = self.client.get_user_state()
         log.info("Raw user_state (perps): %s", json.dumps(user_state, indent=2))
@@ -140,11 +152,16 @@ class TradingBot:
         log.info("spot USDC balance (total):        $%.2f", spot_usdc)
         log.info("tokenToAvailableAfterMaintenance: $%.2f", available_to_trade)
 
-        equity = available_to_trade if available_to_trade > 0 else perps_acct_value
+        self.account_snapshot = self.client.get_account_snapshot()
+        equity = self.account_snapshot["equity"]
         log.info("Effective equity (unified):       $%.2f", equity)
 
         self.risk_manager.update_equity(equity)
-        self.risk_manager.reset_daily()
+        self.risk_manager.check_daily_reset()
+        self.ledger.sample_equity(equity, self.risk_manager.state.peak_equity)
+        for fill in self.client.get_fills(2000):
+            self.ledger.add(fill)
+        self._processed_fill_ids = {self.ledger.identity(f) for f in self.ledger.fills(2000)}
 
         if equity > 0:
             for c in self.coins:
@@ -154,6 +171,10 @@ class TradingBot:
                     log.info("Leverage set to 5x cross for %s", c)
                 except Exception as e:
                     log.warning("Could not set leverage for %s: %s", c, e)
+
+        if self.risk_manager.should_kill():
+            self._emergency_flatten()
+            return
 
         log.info("=== POSITION RECONCILIATION ===")
         for rec in self._reconcilers:
@@ -184,6 +205,7 @@ class TradingBot:
     def _subscribe_feeds(self):
         for c in self.coins:
             self.client.subscribe_bbo(c)
+            self.client.subscribe_l2(c)
             self.client.subscribe_candles(c, "1m")
             self.client.subscribe_trades(c)
         self.client.subscribe_fills(callback=self._on_fill)
@@ -227,7 +249,23 @@ class TradingBot:
                 log.error("Tick error: %s", e, exc_info=True)
             time.sleep(1)
 
+    def _emergency_flatten(self):
+        # Keep dashboard and retry loop alive until exchange confirms flat, even after restart.
+        if time.time() - self._halt_cleanup_at < 5:
+            return
+        self._halt_cleanup_at = time.time()
+        for coin in self.coins:
+            try:
+                self.client.cancel_all_orders(coin)
+                self.client.close_position(coin)
+                self.client.cancel_all_orders(coin)
+            except Exception:
+                log.exception('Emergency cleanup failed for %s; will retry', coin)
+
     def _tick(self):
+        if self.risk_manager.should_kill():
+            self._emergency_flatten()
+            return
         for rec in self._reconcilers:
             try:
                 rec.periodic_check()
@@ -240,13 +278,15 @@ class TradingBot:
         self._flush_exit_buffers()
 
         self.risk_manager.check_daily_reset()
-        self._check_tuning()
+        # Unvalidated runtime tuning is intentionally disabled.
 
         now = time.time()
         if now - self._last_equity_fetch > self._equity_fetch_interval:
             try:
-                equity = self.client.get_account_value()
+                self.account_snapshot = self.client.get_account_snapshot()
+                equity = self.account_snapshot["equity"]
                 self.risk_manager.update_equity(equity)
+                self.ledger.sample_equity(equity, self.risk_manager.state.peak_equity)
                 self._last_equity_fetch = now
             except Exception as e:
                 log.warning("Equity fetch failed: %s", e)
@@ -264,7 +304,7 @@ class TradingBot:
 
         if self.risk_manager.should_kill():
             log.critical("Risk kill switch triggered — stopping bot")
-            self.running = False
+            self._emergency_flatten()
             return
 
         cutoff = now - 3600
@@ -274,6 +314,12 @@ class TradingBot:
                 self._pending_signals.pop(p, None)
 
         for scalper in self._scalpers:
+            if not any(r.position_count for r in self._reconcilers if r.coin == scalper.coin):
+                orders = self.client.get_open_orders()
+                expired = [o for o in orders if o['coin'] == scalper.coin and not o.get('reduceOnly')
+                           and now*1000 - int(o.get('timestamp', now*1000)) > 300000]
+                if expired:
+                    self.client.cancel_all_orders(scalper.coin)
             cutoff = time.time() - scalper._signal_cooldown
             scalper._recent_entries = {k: v for k, v in scalper._recent_entries.items() if v > cutoff}
 
@@ -290,13 +336,16 @@ class TradingBot:
                     self._cancel_stale_entries(scalper.coin, signal.entry_price)
 
         if now - self._last_learning > self._learning_interval:
-            self._run_learning()
+            # Report only: never fit strategy parameters to the live evaluation window.
+            self.evaluator.get_performance()
             self._last_learning = now
 
     def _on_fill(self, fills: list):
         for fill in fills:
-            fid = fill.get("tid") or fill.get("oid") or str(fill.get("time", ""))
+            fid = self.ledger.identity(fill)
             if fid in self._processed_fill_ids:
+                continue
+            if not self.ledger.add(fill):
                 continue
             self._processed_fill_ids.add(fid)
             if len(self._processed_fill_ids) > 1000:
@@ -308,8 +357,9 @@ class TradingBot:
             fill_coin = fill.get("coin")
             closed_pnl = float(fill.get("closedPnl", 0) or 0)
 
-            if closed_pnl != 0:
-                self.risk_manager.record_fill(closed_pnl)
+            is_close = "Close" in fill.get("dir", "") or closed_pnl != 0
+            self.risk_manager.record_fill(closed_pnl - float(fill.get("fee", 0)))
+            if is_close:
                 exit_price = float(fill["px"])
                 fill_size = float(fill["sz"])
 
@@ -360,7 +410,7 @@ class TradingBot:
                     if fid:
                         rec._processed_fill_ids.add(fid)
                     try:
-                        if closed_pnl != 0:
+                        if is_close:
                             rec._grace_until = time.time() + 60
                         else:
                             rec._grace_until = time.time() + 30
@@ -516,38 +566,9 @@ class TradingBot:
             log.info("Aggregated %d partial fills for %s: pnl=%.6f sz=%.5f reason=%s closed=%s",
                      len(fills), coin, total_pnl, total_size, exit_reason, position_closed)
 
-    def _cancel_stale_entries(self, coin: str, keep_price: float):
-        """Cancel all previous pending entry order groups for this coin."""
-        has_position = any(r.position_count > 0 for r in self._reconcilers if r.coin == coin)
-        if has_position:
-            return
-        try:
-            orders = self.client.get_open_orders()
-        except Exception:
-            return
-        cluster_range = keep_price * 0.001
-        stale_oids = []
-        for order in orders:
-            if order.get("coin") != coin:
-                continue
-            order_px = float(order.get("limitPx", 0))
-            if abs(order_px - keep_price) <= cluster_range:
-                continue
-            stale_oids.append(order["oid"])
-        for oid in stale_oids:
-            try:
-                self.client.cancel_order(coin, oid)
-            except Exception:
-                pass
-        if stale_oids:
-            log.info("Cancelled %d stale orders for %s (keeping entry near %.2f)",
-                     len(stale_oids), coin, keep_price)
-            with self._pending_signals_lock:
-                stale_prices = [p for p in self._pending_signals
-                                if self._pending_signals[p].get("coin") == coin
-                                and abs(p - keep_price) > cluster_range]
-                for p in stale_prices:
-                    self._pending_signals.pop(p, None)
+    def _cancel_stale_entries(self, coin, keep_price):
+        # Entry admission now allows only one pending bracket per coin.
+        return
 
     def _check_tuning(self):
         now = time.time()

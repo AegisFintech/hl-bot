@@ -117,7 +117,7 @@ class Evaluator:
             mean_pnl = statistics.mean(pnls)
             std_pnl = statistics.stdev(pnls)
             if std_pnl > 0:
-                sharpe = (mean_pnl / std_pnl) * (252 ** 0.5)
+                sharpe = mean_pnl / std_pnl  # Per-fill PnL dispersion only, not annualized Sharpe.
 
         perf = {
             "total_trades": len(self.trades),
@@ -128,7 +128,8 @@ class Evaluator:
             "avg_win": round(avg_win, 6),
             "avg_loss": round(avg_loss, 6),
             "profit_factor": round(profit_factor, 4),
-            "sharpe_ratio": round(sharpe, 4),
+            "pnl_mean_std_ratio": round(sharpe, 4),
+            "pnl_basis": "legacy gross, fees excluded",
             "avg_duration_s": round(statistics.mean([t.duration_s for t in self.trades]), 1),
         }
 

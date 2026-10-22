@@ -30,3 +30,8 @@ All automated regressions and browser checks must pass. Verify testnet endpoints
 - [Kraken Pro interface](https://support.kraken.com/au/articles/kraken-pro-trading-interface-guide): dense modular chart/book layout, depth bars, tooltips and market ribbon.
 - [Probability of backtest overfitting](https://escholarship.org/uc/item/4w1110bb): avoid treating selected historical winners as evidence of a durable edge.
 - [Graphify](https://github.com/Graphify-Labs/graphify): local deterministic code graph; exclude credentials and runtime data.
+
+## Milestone 2 implementation
+Implemented persistent risk state with exact 5% breach, zero-equity loss handling, no daily peak reset, latched halt and repeated cancel/flatten recovery. Actual account mode is `unifiedAccount`; equity uses spot USDC total plus perp unrealized PnL, never available margin. Actual account rates initialize execution economics. Stop-market protection, post-only entries, size rounding downward, 0.25% maximum risk budget per trade and remaining-drawdown reservation now gate orders. Closed candle trend/rejection, ATR/noise-floor brackets and net reward/risk filters replace fixed-dollar economics. Disable unvalidated tuning overlays and in-sample live learning. A SQLite fill ledger provides idempotency and exact fee-inclusive realized fill accounting. Legacy gross trade journal is preserved and labeled.
+
+Validation: 11 regression tests passed covering persistent/midnight risk, zero/stale/invalid equity, corrupt state, sizing, fee accounting, unified equity, downward size rounding and stop order payloads. Real demo API smoke confirms unified equity and fee rates; legacy resting orders cancelled during the maintenance pause.

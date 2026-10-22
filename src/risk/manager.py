@@ -1,10 +1,14 @@
-import time
+"""Durable account risk controls. Percentages are fractions internally."""
+import json
 import logging
-from dataclasses import dataclass
+import math
+import time
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
+from pathlib import Path
+from threading import RLock
 
 log = logging.getLogger(__name__)
-
 
 @dataclass
 class RiskState:
@@ -15,144 +19,129 @@ class RiskState:
     peak_equity: float = 0.0
     current_equity: float = 0.0
     day_start: float = 0.0
+    day_start_equity: float = 0.0
+    equity_updated_at: float = 0.0
+    halted: bool = False
+    halt_reason: str = ''
 
     @property
-    def drawdown_pct(self) -> float:
-        if self.peak_equity <= 0:
-            return 0.0
-        return (self.peak_equity - self.current_equity) / self.peak_equity
-
+    def drawdown_pct(self):
+        return max(0.0, 1 - self.current_equity / self.peak_equity) if self.peak_equity > 0 else 0.0
 
 class RiskManager:
-
-    def __init__(self, max_position_size_usd: float = 100, max_daily_loss_pct: float = 0.05,
-                 max_drawdown_pct: float = 0.10, max_open_positions: int = 3,
-                 max_daily_trades: int = 50, order_size_usd: float = 100):
+    def __init__(self, max_position_size_usd=100, max_daily_loss_pct=0.02,
+                 max_drawdown_pct=0.05, max_open_positions=1, max_daily_trades=30,
+                 order_size_usd=100, state_file=None, risk_per_trade=0.0025):
         self.max_position_size_usd = max_position_size_usd
         self.max_daily_loss_pct = max_daily_loss_pct
-        self.max_drawdown_pct = max_drawdown_pct
+        self.max_drawdown_pct = min(max_drawdown_pct, 0.05)
         self.max_open_positions = max_open_positions
         self.max_daily_trades = max_daily_trades
         self.order_size_usd = order_size_usd
-        self.state = RiskState()
-        self._orders = []
-        self._last_order_time: float = 0.0
-        self._order_cooldown: float = 60.0
-        self._last_block_log: float = 0.0
-        self._block_log_interval: float = 300.0
+        self.risk_per_trade = min(risk_per_trade, 0.0025)
+        self.state_file = Path(state_file) if state_file else None
+        self._lock = RLock()
+        self.state = RiskState(day_start=time.time())
+        self._last_order_time = 0.0
+        self._order_cooldown = 60.0
+        self._last_block_log = 0.0
+        if self.state_file and self.state_file.exists():
+            try:
+                self.state = RiskState(**json.loads(self.state_file.read_text()))
+            except Exception:
+                self.state.halted = True
+                self.state.halt_reason = 'Risk state unreadable; operator review required'
+                log.exception('Risk state unreadable: refusing new entries')
 
-    def update_equity(self, equity: float):
-        if equity <= 0:
-            return
-        if self.state.current_equity > 0 and equity < self.state.current_equity * 0.1:
-            log.warning("Equity update rejected (likely API glitch): $%.2f vs current $%.2f",
-                        equity, self.state.current_equity)
-            return
-        self.state.current_equity = equity
-        if equity > self.state.peak_equity:
-            self.state.peak_equity = equity
+    def _save(self):
+        if self.state_file:
+            self.state_file.parent.mkdir(parents=True, exist_ok=True)
+            temp = self.state_file.with_suffix('.tmp')
+            temp.write_text(json.dumps(asdict(self.state), indent=2))
+            temp.replace(self.state_file)
+
+    def halt(self, reason):
+        with self._lock:
+            self.state.halted = True
+            self.state.halt_reason = reason
+            self._save()
+
+    def update_equity(self, equity):
+        with self._lock:
+            if not math.isfinite(equity) or equity < 0:
+                raise ValueError('Invalid account equity')
+            self.state.current_equity = equity
+            self.state.equity_updated_at = time.time()
+            self.state.peak_equity = max(self.state.peak_equity, equity)
+            if not self.state.day_start_equity:
+                self.state.day_start_equity = equity
+            if self.state.drawdown_pct + 1e-12 >= self.max_drawdown_pct:
+                self.state.halted = True
+                self.state.halt_reason = '5% equity high-water drawdown limit'
+            self._save()
 
     def reset_daily(self):
-        self.state.daily_pnl = 0.0
-        self.state.daily_trades = 0
-        self.state.day_start = time.time()
+        with self._lock:
+            self.state.daily_pnl = 0.0
+            self.state.daily_trades = 0
+            self.state.day_start = time.time()
+            self.state.day_start_equity = self.state.current_equity
+            self._save()
 
     def check_daily_reset(self):
-        now_utc = datetime.now(timezone.utc)
-        start_utc = datetime.fromtimestamp(self.state.day_start, tz=timezone.utc) if self.state.day_start else now_utc
-        if now_utc.date() > start_utc.date():
-            log.info("Daily reset (UTC midnight) — PnL: $%.4f, trades: %d",
-                     self.state.daily_pnl, self.state.daily_trades)
-            self.state.peak_equity = self.state.current_equity
-            self.reset_daily()
+        if datetime.now(timezone.utc).date() > datetime.fromtimestamp(self.state.day_start, timezone.utc).date():
+            self.reset_daily()  # Never reset peak or a latched halt.
 
-    def can_trade(self, signal) -> bool:
-        now = time.time()
-
-        if self.state.open_positions >= self.max_open_positions:
-            self._log_block_throttled("Max open positions (%d)", self.max_open_positions)
+    def can_trade(self, signal):
+        s = self.state
+        if s.halted or s.current_equity <= 0 or time.time() - s.equity_updated_at > 30:
             return False
-
-        if now - self._last_order_time < self._order_cooldown:
+        if s.open_positions >= self.max_open_positions or s.open_order_count > 0:
             return False
-
-        if self.state.daily_trades >= self.max_daily_trades:
-            self._log_block_throttled("Max daily trades (%d)", self.max_daily_trades)
+        if time.time() - self._last_order_time < self._order_cooldown or s.daily_trades >= self.max_daily_trades:
             return False
-
-        if self.state.current_equity > 0:
-            daily_loss_limit = self.state.current_equity * self.max_daily_loss_pct
-            if self.state.daily_pnl < -daily_loss_limit:
-                self._log_block_throttled("Daily loss limit hit ($%.2f)", self.state.daily_pnl)
-                return False
-
-        if self.state.drawdown_pct > self.max_drawdown_pct:
-            self._log_block_throttled("Max drawdown exceeded (%.1f%%)", self.state.drawdown_pct * 100)
+        if s.day_start_equity and s.current_equity <= s.day_start_equity * (1 - self.max_daily_loss_pct):
             return False
+        if s.daily_pnl <= -s.day_start_equity * self.max_daily_loss_pct:
+            return False
+        return s.drawdown_pct < self.max_drawdown_pct
 
-        return True
-
-    def _log_block_throttled(self, msg: str, *args):
-        now = time.time()
-        if now - self._last_block_log > self._block_log_interval:
-            log.warning(msg, *args)
-            self._last_block_log = now
-
-    def compute_position_size(self, signal) -> float:
-        size_usd = min(self.order_size_usd, self.max_position_size_usd)
-
-        if self.state.current_equity > 0:
-            max_from_equity = self.state.current_equity * 0.05
-            size_usd = min(size_usd, max_from_equity)
-
-        quality = 0.5
-        if getattr(signal, "with_trend", False):
-            quality += 0.2
-        if getattr(signal, "has_ob", False):
-            quality += 0.15
-        if getattr(signal, "has_rejection", False):
-            quality += 0.15
-        quality = min(quality, 1.0)
-        size_usd *= quality
-
-        if signal.entry_price <= 0:
+    def compute_position_size(self, signal):
+        entry = signal.entry_price
+        distance = abs(entry - signal.sl_price)
+        if entry <= 0 or distance <= 0 or self.state.current_equity <= 0:
             return 0.0
+        # Budget for stop distance plus conservative fees/slippage (12bps round trip).
+        budget = self.state.current_equity * self.risk_per_trade
+        remaining = max(0, self.state.current_equity - self.state.peak_equity * (1 - self.max_drawdown_pct))
+        budget = min(budget, remaining * 0.25)
+        notional = min(self.order_size_usd, self.max_position_size_usd, self.state.current_equity * 0.2,
+                       budget / (distance / entry + 0.0012))
+        return max(0.0, notional / entry)
 
-        return size_usd / signal.entry_price
-
-    def sync_open_positions(self, count: int):
-        if count != self.state.open_positions:
-            log.warning("Syncing open_positions: %d -> %d (from exchange)",
-                        self.state.open_positions, count)
+    def sync_open_positions(self, count):
         self.state.open_positions = count
 
-    def record_order(self, signal, size: float):
-        self.state.daily_trades += 1
-        self._last_order_time = time.time()
-        self._orders.append({
-            "signal": signal.to_dict(),
-            "size": size,
-            "timestamp": self._last_order_time,
-        })
+    def record_order(self, signal, size):
+        with self._lock:
+            self.state.daily_trades += 1
+            self._last_order_time = time.time()
+            self._save()
 
-    def record_fill(self, pnl: float):
-        self.state.daily_pnl += pnl
-        if self.state.open_positions > 0:
-            self.state.open_positions -= 1
+    def record_fill(self, pnl):
+        with self._lock:
+            self.state.daily_pnl += pnl
+            self._save()
 
-    def should_kill(self) -> bool:
-        if self.state.drawdown_pct > self.max_drawdown_pct * 1.5:
-            log.critical("Emergency stop: drawdown %.2f%% exceeds kill threshold",
-                         self.state.drawdown_pct * 100)
-            return True
-        return False
+    def should_kill(self):
+        return self.state.halted
 
-    def get_state_dict(self) -> dict:
-        return {
-            "daily_pnl": round(self.state.daily_pnl, 4),
-            "daily_trades": self.state.daily_trades,
-            "open_positions": self.state.open_positions,
-            "peak_equity": round(self.state.peak_equity, 2),
-            "current_equity": round(self.state.current_equity, 2),
-            "drawdown_pct": round(self.state.drawdown_pct * 100, 2),
-        }
+    def get_state_dict(self):
+        with self._lock:
+            d = asdict(self.state)
+            d.update(drawdown_pct=round(self.state.drawdown_pct * 100, 4),
+                     max_drawdown_pct=self.max_drawdown_pct * 100,
+                     risk_per_trade_pct=self.risk_per_trade * 100,
+                     equity_age_s=round(time.time() - self.state.equity_updated_at, 1),
+                     drawdown_budget_usd=max(0, self.state.current_equity - self.state.peak_equity * (1-self.max_drawdown_pct)))
+            return d

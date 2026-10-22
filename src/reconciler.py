@@ -4,6 +4,7 @@ import threading
 
 from src.exchange.hyperliquid import HyperliquidClient
 from src.risk.manager import RiskManager
+from src.strategy.economics import bracket_distances
 
 log = logging.getLogger(__name__)
 
@@ -62,16 +63,7 @@ class PositionReconciler:
             count_ok = len(reduce_only) >= 2
             size_ok = all(abs(float(o["sz"]) - pos_size) < 1e-8 for o in reduce_only)
 
-            prices_ok = True
-            pip = self._get_pip_size()
-            expected_tp = entry_px + (pip * self.tp_pips * (1 if is_long else -1))
-            expected_sl = entry_px - (pip * self.sl_pips * (1 if is_long else -1))
-            max_drift = pip * self.sl_pips * 2
-            for o in reduce_only:
-                px = float(o["limitPx"])
-                if abs(px - expected_tp) > max_drift and abs(px - expected_sl) > max_drift:
-                    prices_ok = False
-                    log.warning("TP/SL price %.2f too far from entry %.2f", px, entry_px)
+            prices_ok = all(o.get('reduceOnly') and float(o.get('sz', 0)) > 0 for o in reduce_only)
 
             if not count_ok or not size_ok or not prices_ok:
                 reason = "missing_tpsl" if not count_ok else (
@@ -241,13 +233,10 @@ class PositionReconciler:
         size = abs(szi)
         is_long = szi > 0
 
-        pip = self._get_pip_size()
-        if is_long:
-            tp = self.client.round_price(self.coin, entry + pip * self.tp_pips)
-            sl = self.client.round_price(self.coin, entry - pip * self.sl_pips)
-        else:
-            tp = self.client.round_price(self.coin, entry - pip * self.tp_pips)
-            sl = self.client.round_price(self.coin, entry + pip * self.sl_pips)
+        tp_dist, sl_dist = bracket_distances(self.client.get_cached_candles(self.coin), entry)
+        direction = 1 if is_long else -1
+        tp = self.client.round_price(self.coin, entry + direction * tp_dist)
+        sl = self.client.round_price(self.coin, entry - direction * sl_dist)
 
         exit_is_buy = not is_long
         log.info("Placing recovery TP/SL: %s %.5f entry=%.2f tp=%.2f sl=%.2f",
@@ -258,5 +247,8 @@ class PositionReconciler:
                 self.coin, exit_is_buy, size, tp, sl)
             statuses = result.get("response", {}).get("data", {}).get("statuses", [])
             log.info("Recovery TP/SL result: %s", statuses)
+            if result.get('status') != 'ok' or len(statuses) != 2 or any(isinstance(s, dict) and 'error' in s for s in statuses):
+                self.risk.halt('Protective order recovery failed')
         except Exception as e:
+            self.risk.halt("Protective order recovery exception")
             log.error("Failed to place recovery TP/SL: %s", e, exc_info=True)

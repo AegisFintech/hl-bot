@@ -11,3 +11,5 @@ This is an actively running Hyperliquid **testnet** bot. User authorizes review,
 - Architecture and milestone status are in docs/OVERHAUL.md and agents.md.
 
 Current milestone: review and research complete; risk/execution implementation next.
+
+Milestone 2 complete: risk/execution regressions pass. Runtime state is private under data/. Unsupported account modes and corrupt risk state fail closed. Do not remove an existing halt or risk state to restart trading. Next: dashboard and research replay.
