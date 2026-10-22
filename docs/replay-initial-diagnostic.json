@@ -1,0 +1,48 @@
+{
+  "data_source": "Hyperliquid testnet BTC 1m",
+  "bars": 5000,
+  "configuration": "Fixed live signal rules; no parameter search",
+  "assumptions": "Chronological research replay of live signal rules; never submits orders.\n\nUsage: python3 scripts/replay.py --fetch\nCaveats: OHLC cannot establish maker fills/queue priority. Assumes a 1bp spread,\n1.5bp entry fee, 4.5bp exit fee, 2bp adverse exit slippage and 1bp/hour funding\nstress. A touched entry is not assumed filled until the bar crosses it. Stop wins\nwhen both barriers touch. Gap exits use the worse opening price. No optimization.\n",
+  "development": {
+    "start_time": 1792344660000,
+    "end_time": 1792542600000,
+    "closed_trades": 0,
+    "initial_equity": 981.069527,
+    "ending_equity": 981.069527,
+    "net_pnl": 0.0,
+    "return_pct": 0.0,
+    "max_drawdown_pct": 0,
+    "halted": false,
+    "profit_factor": null,
+    "fees": 0,
+    "funding_stress": 0,
+    "expectancy": null,
+    "diagnostics": {
+      "No confirmed trend pullback": 3183,
+      "signal_candidates": 116,
+      "Insufficient reward after fees, spread and slippage": 112,
+      "no_next_bar_cross": 4
+    }
+  },
+  "holdout": {
+    "start_time": 1792542660000,
+    "end_time": 1792632600000,
+    "closed_trades": 0,
+    "initial_equity": 981.069527,
+    "ending_equity": 981.069527,
+    "net_pnl": 0.0,
+    "return_pct": 0.0,
+    "max_drawdown_pct": 0,
+    "halted": false,
+    "profit_factor": null,
+    "fees": 0,
+    "funding_stress": 0,
+    "expectancy": null,
+    "diagnostics": {
+      "signal_candidates": 48,
+      "Insufficient reward after fees, spread and slippage": 48,
+      "No confirmed trend pullback": 1451
+    }
+  },
+  "conclusion": "Short OHLC replay is a diagnostic, not profitability proof. Require 30 days / 100 forward closed trades net of fees and actual funding. 10% daily target remains unverified."
+}

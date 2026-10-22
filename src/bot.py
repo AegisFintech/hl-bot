@@ -45,6 +45,8 @@ class TradingBot:
         self.ledger = FillLedger(Path(__file__).resolve().parents[1] / "data/ledger.sqlite")
         self.account_snapshot = {}
         self._halt_cleanup_at = 0.0
+        self.halt_cleanup_status = "Not required"
+        self._last_order_maintenance = 0.0
         self._scalpers: list[Scalper] = []
         self._reconcilers: list[PositionReconciler] = []
         for c in self.coins:
@@ -206,6 +208,9 @@ class TradingBot:
         for c in self.coins:
             self.client.subscribe_bbo(c)
             self.client.subscribe_l2(c)
+            history = self.client.get_candles(c, '1m', 2000*60000)
+            with self.client._lock:
+                self.client._candles[f'{c}_1m'] = sorted(history, key=lambda b: int(b['t']))[-2000:]
             self.client.subscribe_candles(c, "1m")
             self.client.subscribe_trades(c)
         self.client.subscribe_fills(callback=self._on_fill)
@@ -254,13 +259,34 @@ class TradingBot:
         if time.time() - self._halt_cleanup_at < 5:
             return
         self._halt_cleanup_at = time.time()
-        for coin in self.coins:
-            try:
-                self.client.cancel_all_orders(coin)
-                self.client.close_position(coin)
-                self.client.cancel_all_orders(coin)
-            except Exception:
-                log.exception('Emergency cleanup failed for %s; will retry', coin)
+        cleanup_coins = set(self.coins)
+        try:
+            cleanup_coins.update(p['position']['coin'] for p in self.client.get_positions())
+            cleanup_coins.update(o['coin'] for o in self.client.get_open_orders())
+        except Exception:
+            log.exception('Unable to enumerate full account exposure; cleaning known instruments')
+        for coin in cleanup_coins:
+            # Cancellation failures must not prevent attempting to close exposure.
+            for action in (lambda: self.client.cancel_all_orders(coin),
+                           lambda: self.client.close_position(coin),
+                           lambda: self.client.cancel_all_orders(coin)):
+                try:
+                    action()
+                except Exception:
+                    log.exception('Emergency action failed for %s; retrying', coin)
+        try:
+            positions = self.client.get_positions()
+            orders = self.client.get_open_orders()
+            flat = not positions
+            clear = not orders
+            self.halt_cleanup_status = 'Confirmed flat; no orders' if flat and clear else 'Exposure/orders remain; retrying'
+            self.risk_manager.sync_open_positions(len(positions))
+            self.account_snapshot = self.client.get_account_snapshot()
+            self.risk_manager.update_equity(self.account_snapshot['equity'])
+            self.ledger.sample_equity(self.risk_manager.state.current_equity, self.risk_manager.state.peak_equity)
+        except Exception:
+            self.halt_cleanup_status = 'Unable to confirm flat; retrying'
+            log.exception('Emergency confirmation failed')
 
     def _tick(self):
         if self.risk_manager.should_kill():
@@ -303,7 +329,7 @@ class TradingBot:
                     log.warning("Could not set leverage for %s: %s", c, e)
 
         if self.risk_manager.should_kill():
-            log.critical("Risk kill switch triggered — stopping bot")
+            log.critical("Risk halt latched — flattening and preserving dashboard")
             self._emergency_flatten()
             return
 
@@ -313,8 +339,13 @@ class TradingBot:
             for p in stale:
                 self._pending_signals.pop(p, None)
 
+        maintain_orders = now - self._last_order_maintenance > 15
+        if maintain_orders:
+            self._last_order_maintenance = now
         for scalper in self._scalpers:
-            if not any(r.position_count for r in self._reconcilers if r.coin == scalper.coin):
+            if scalper.coin not in self._leverage_set:
+                continue
+            if maintain_orders and not any(r.position_count for r in self._reconcilers if r.coin == scalper.coin):
                 orders = self.client.get_open_orders()
                 expired = [o for o in orders if o['coin'] == scalper.coin and not o.get('reduceOnly')
                            and now*1000 - int(o.get('timestamp', now*1000)) > 300000]

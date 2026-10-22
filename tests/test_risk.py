@@ -55,7 +55,10 @@ class RiskTests(unittest.TestCase):
         s.tp_price=101;s.sl_price=99.7
         self.assertTrue(viable(s,100,100.01)[0])
         self.assertFalse(viable(s,99.9,99.99)[0])
-        self.assertEqual(bracket_distances([],100),(0.3,0.15))
+        self.assertFalse(viable(s,float('nan'),100.01)[0])
+        target,stop=bracket_distances([],100)
+        self.assertAlmostEqual(stop,0.15)
+        self.assertGreaterEqual((target-.09)/(stop+.09),1.5-1e-9)
 
     def test_ledger_idempotency_and_fee_totals(self):
         with tempfile.TemporaryDirectory() as d:

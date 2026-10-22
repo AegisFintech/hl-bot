@@ -37,6 +37,7 @@ def _status() -> dict:
         "network": "testnet" if _bot_ref.client.testnet else "MAINNET",
         "price": price,
         "risk": risk,
+        "halt_cleanup": getattr(_bot_ref, "halt_cleanup_status", "Not required"),
     }
 
 
@@ -168,7 +169,8 @@ def api_account():
 
 
 def run_dashboard(host: str = "0.0.0.0", port: int = 8080):
-    app.run(host=host, port=port, threaded=True)
+    from waitress import serve
+    serve(app, host=host, port=port, threads=8)
 
 
 # One shared cache prevents every connected browser from multiplying exchange reads.
@@ -199,6 +201,8 @@ def api_terminal():
             except Exception:
                 errors.append(key + ' unavailable; last successful values retained')
         out['account'] = bot.account_snapshot
+        if time.time() - bot.account_snapshot.get('timestamp', 0) > 30:
+            errors.append('Account equity is stale; new entries blocked')
         out['performance'] = bot.ledger.performance()
         out['equity'] = bot.ledger.equity()
         out['fills'] = bot.ledger.fills(200)

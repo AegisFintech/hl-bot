@@ -60,21 +60,14 @@ def print_header():
 
 
 def print_overall_stats():
-    perf = load_json(PERF_FILE)
-    if not perf:
-        print("\n  No performance data yet.")
-        return
-    print(f"\n  ALL-TIME STATS")
-    print(f"  {'─'*40}")
-    print(f"  Trades:  {perf.get('total_trades', 0)}")
-    print(f"  Wins:    {perf.get('wins', 0)}  |  Losses: {perf.get('losses', 0)}")
-    wr = perf.get('win_rate', 0) * 100
-    print(f"  Win Rate: {wr:.1f}%")
-    print(f"  Total PnL: ${perf.get('total_pnl', 0):.4f}")
-    print(f"  Profit Factor: {perf.get('profit_factor', 0):.3f}")
-    print(f"  Sharpe: {perf.get('sharpe_ratio', 0):.3f}")
-    print(f"  Avg Win: ${perf.get('avg_win', 0):.4f}  |  Avg Loss: ${perf.get('avg_loss', 0):.4f}")
-    print(f"  Avg Duration: {perf.get('avg_duration_s', 0):.0f}s")
+    sys.path.insert(0, str(PROJECT))
+    from src.learning.ledger import FillLedger
+    perf = FillLedger(PROJECT / 'data/ledger.sqlite').performance()
+    print("\n  EXCHANGE LEDGER (funding excluded)")
+    print(f"  Imported fills: {perf['fill_count']} | closing fills: {perf['closing_fills']}")
+    print(f"  Gross realized: ${perf['gross_pnl']:+.6f} | Fees: ${perf['fees']:.6f}")
+    print(f"  Net realized: ${perf['net_pnl']:+.6f}")
+    print("  Partial fills are not complete trades. Legacy journal below is gross.")
 
 
 def print_recent_trades(since: timedelta | None = None):

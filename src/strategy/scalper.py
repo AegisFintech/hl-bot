@@ -221,7 +221,7 @@ class Scalper:
             self.diagnostics = {"reason": "Closed candle history stale or insufficient", "candidates": 0}
             return []
         trend = self._get_trend(candles)
-        tp_distance, sl_distance = bracket_distances(candles, mid)
+        tp_distance, sl_distance = bracket_distances(candles, mid, self.fee_entry, self.fee_exit, (ask-bid)/mid)
 
         nearest = self.sr.get_nearest_levels(mid, n=3)
         obs = self.sr.get_nearest_order_blocks(mid, n=2)
@@ -383,9 +383,13 @@ class Scalper:
         log.info("Order result: %s", result)
         statuses = result.get("response", {}).get("data", {}).get("statuses", [])
         has_error = any(isinstance(s, dict) and "error" in s for s in statuses)
-        if result.get("status") != "ok" or not statuses or has_error:
+        if result.get("status") != "ok" or len(statuses) != 3 or has_error:
             log.warning("Order rejected: %s", statuses)
-            self.risk.halt("Order bracket rejected or incomplete; operator review required")
+            entry_rejected = bool(statuses and isinstance(statuses[0], dict) and 'error' in statuses[0])
+            if not entry_rejected:
+                self.risk.halt("Order bracket rejected or incomplete; operator review required")
+            self.diagnostics['reason'] = 'Post-only entry rejected' if entry_rejected else 'Incomplete protective bracket'
+            self._recent_entries[signal.sr_level] = time.time()
             return None
 
         self._recent_entries[signal.sr_level] = time.time()

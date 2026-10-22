@@ -1,10 +1,21 @@
 """Real Chromium checks against the running local dashboard."""
 import json
+import time
+import requests
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 root=Path(__file__).resolve().parents[1]
 (root/'artifacts').mkdir(exist_ok=True)
+deadline=time.monotonic()+30
+while True:
+    try:
+        response=requests.get('http://127.0.0.1:8080/api/status',timeout=2)
+        if response.ok and response.json().get('risk'):break
+    except requests.RequestException:
+        pass
+    if time.monotonic()>deadline:raise RuntimeError('Dashboard did not become ready within 30s')
+    time.sleep(.5)
 with sync_playwright() as p:
     browser=p.chromium.launch(headless=True,args=['--no-sandbox'])
     page=browser.new_page(viewport={'width':1512,'height':1100},device_scale_factor=1)

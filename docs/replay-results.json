@@ -1,0 +1,49 @@
+{
+  "data_source": "Hyperliquid testnet BTC 1m",
+  "bars": 5000,
+  "configuration": "Fixed live signal rules; no parameter search. Cost-floor geometry corrected after initial diagnostic; initial result preserved, so this is not a pristine holdout.",
+  "assumptions": "Chronological research replay of live signal rules; never submits orders.\n\nUsage: python3 scripts/replay.py --fetch\nCaveats: OHLC cannot establish maker fills/queue priority. Assumes a 1bp spread,\n1.5bp entry fee, 4.5bp exit fee, 2bp adverse exit slippage and 1bp/hour funding\nstress. Orders rest for five minutes. A touched entry is not assumed filled until the bar crosses it. Stop wins\nwhen both barriers touch. Gap exits use the worse opening price. No optimization.\n",
+  "development": {
+    "start_time": 1792344660000,
+    "end_time": 1792542600000,
+    "closed_trades": 12,
+    "initial_equity": 981.069527,
+    "ending_equity": 979.9879593530559,
+    "net_pnl": -1.0815676469441087,
+    "return_pct": -0.11024373066110815,
+    "max_drawdown_pct": 0.12662422091825887,
+    "halted": false,
+    "profit_factor": 0.501922196505956,
+    "fees": 0.7170788791274999,
+    "funding_stress": 0.06223458181666667,
+    "expectancy": -0.09013063724534498,
+    "diagnostics": {
+      "No confirmed trend pullback": 2676,
+      "signal_candidates": 48,
+      "expired_entries": 36,
+      "simulated_entries": 12
+    }
+  },
+  "holdout": {
+    "start_time": 1792542660000,
+    "end_time": 1792632600000,
+    "closed_trades": 4,
+    "initial_equity": 981.069527,
+    "ending_equity": 980.145917926085,
+    "net_pnl": -0.9236090739150313,
+    "return_pct": -0.09414308043379505,
+    "max_drawdown_pct": 0.09414308043379505,
+    "halted": false,
+    "profit_factor": 0.0,
+    "fees": 0.23945589878159998,
+    "funding_stress": 0.005645607133333333,
+    "expectancy": -0.23090226847873296,
+    "diagnostics": {
+      "signal_candidates": 21,
+      "expired_entries": 17,
+      "No confirmed trend pullback": 1354,
+      "simulated_entries": 4
+    }
+  },
+  "conclusion": "Short OHLC replay is a diagnostic, not profitability proof. Require 30 days / 100 forward closed trades net of fees and actual funding. 10% daily target remains unverified."
+}

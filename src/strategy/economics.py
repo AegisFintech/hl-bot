@@ -1,4 +1,5 @@
-"""Fixed ex-ante execution economics shared by live strategy and replay."""
+"""Fixed execution economics shared by live strategy and replay."""
+import math
 def atr(candles, period=14):
     if len(candles) < period + 1:
         return 0.0
@@ -9,14 +10,21 @@ def atr(candles, period=14):
     return sum(spans)/len(spans)
 
 
-def bracket_distances(candles, entry):
+def bracket_distances(candles, entry, fee_entry=0.00015, fee_exit=0.00045, spread_fraction=0.0001):
     # 1.5 ATR stop with a 15bps noise/cost floor; 2:1 gross reward/risk.
     stop = max(atr(candles)*1.5, entry*0.0015)
-    return stop*2, stop
+    # Solve (target - costs)/(stop + costs) >= 1.5 algebraically.
+    # This is a price geometry requirement, not a prediction of win probability.
+    costs = entry * (fee_entry + fee_exit + 0.0002 + spread_fraction)
+    target = max(stop*2, 1.5*stop + 2.5*costs)
+    return target, stop
 
 
 def viable(signal, bid, ask, fee_entry=0.00015, fee_exit=0.00045):
     entry = signal.entry_price
+    if signal.side not in ('long', 'short') or not all(math.isfinite(v) for v in
+            (entry, signal.sl_price, signal.tp_price, bid, ask, fee_entry, fee_exit)):
+        return False, 'Non-finite price or invalid direction'
     if entry <= 0 or ask < bid or bid <= 0:
         return False, 'Invalid quote'
     if signal.side == 'long':

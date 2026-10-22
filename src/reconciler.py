@@ -63,7 +63,7 @@ class PositionReconciler:
             count_ok = len(reduce_only) >= 2
             size_ok = all(abs(float(o["sz"]) - pos_size) < 1e-8 for o in reduce_only)
 
-            prices_ok = all(o.get('reduceOnly') and float(o.get('sz', 0)) > 0 for o in reduce_only)
+            prices_ok = self._valid_protection(pos, reduce_only)
 
             if not count_ok or not size_ok or not prices_ok:
                 reason = "missing_tpsl" if not count_ok else (
@@ -71,7 +71,7 @@ class PositionReconciler:
                 log.warning("TP/SL %s — replacing all orders", reason)
                 for o in coin_orders:
                     self.client.cancel_order(self.coin, o["oid"])
-                self._place_recovery_tpsl(coin_pos[0])
+                self._place_recovery_tpsl(coin_pos[0], reduce_only)
                 return {"status": f"recovered_{reason}", "position": pos["szi"],
                         "entry": pos["entryPx"]}
 
@@ -91,7 +91,7 @@ class PositionReconciler:
                 log.info("Cancelling %d orphaned entry orders", len(entry_orders))
                 for o in entry_orders:
                     self.client.cancel_order(self.coin, o["oid"])
-            self._place_recovery_tpsl(coin_pos[0])
+            self._place_recovery_tpsl(coin_pos[0], reduce_only)
             return {"status": "recovered", "position": pos["szi"],
                     "entry": pos["entryPx"]}
 
@@ -143,7 +143,7 @@ class PositionReconciler:
             reduce_only = [o for o in orders
                            if o["coin"] == self.coin and o.get("reduceOnly")]
             needs_recovery = False
-            if len(reduce_only) < 2:
+            if len(reduce_only) < 2 or not self._valid_protection(coin_pos[0]['position'], reduce_only):
                 log.warning("Periodic: position has %d TP/SL (need 2) — recovering",
                             len(reduce_only))
                 needs_recovery = True
@@ -160,7 +160,7 @@ class PositionReconciler:
                 else:
                     for o in [o for o in orders if o["coin"] == self.coin]:
                         self.client.cancel_order(self.coin, o["oid"])
-                    self._place_recovery_tpsl(coin_pos[0])
+                    self._place_recovery_tpsl(coin_pos[0], reduce_only)
 
         elif actual == 0 and expected > 0:
             orders = self.client.get_open_orders()
@@ -226,7 +226,21 @@ class PositionReconciler:
         except Exception:
             return self.pip_size
 
-    def _place_recovery_tpsl(self, position_data: dict):
+    @staticmethod
+    def _valid_protection(pos, orders):
+        entry = float(pos['entryPx'])
+        long = float(pos['szi']) > 0
+        expected_side = 'A' if long else 'B'
+        stops = [o for o in orders if o.get('orderType') == 'Stop Market'
+                 and o.get('side') == expected_side and o.get('reduceOnly')
+                 and float(o.get('triggerPx',0)) > 0
+                 and (float(o.get('triggerPx',0)) < entry if long else float(o.get('triggerPx',0)) > entry)]
+        targets = [o for o in orders if 'Take Profit' in o.get('orderType','')
+                   and o.get('side') == expected_side and o.get('reduceOnly')
+                   and (float(o.get('triggerPx',0)) > entry if long else 0 < float(o.get('triggerPx',0)) < entry)]
+        return bool(stops and targets)
+
+    def _place_recovery_tpsl(self, position_data: dict, existing_orders=None):
         pos = position_data["position"]
         entry = float(pos["entryPx"])
         szi = float(pos["szi"])
@@ -238,6 +252,15 @@ class PositionReconciler:
         tp = self.client.round_price(self.coin, entry + direction * tp_dist)
         sl = self.client.round_price(self.coin, entry - direction * sl_dist)
 
+        # Preserve original protective prices during partial-fill size recovery.
+        for order in existing_orders or []:
+            trigger = float(order.get('triggerPx', 0))
+            if order.get('orderType') == 'Stop Market' and trigger > 0:
+                if (is_long and trigger < entry) or (not is_long and trigger > entry):
+                    sl = trigger
+            if 'Take Profit' in order.get('orderType', '') and trigger > 0:
+                if (is_long and trigger > entry) or (not is_long and trigger < entry):
+                    tp = trigger
         exit_is_buy = not is_long
         log.info("Placing recovery TP/SL: %s %.5f entry=%.2f tp=%.2f sl=%.2f",
                  "LONG" if is_long else "SHORT", size, entry, tp, sl)

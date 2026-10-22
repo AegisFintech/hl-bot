@@ -27,3 +27,12 @@ class ExchangeTests(unittest.TestCase):
     def test_size_rounding_never_increases_risk(self):
         c=self.client();c.get_sz_decimals=lambda coin:5
         self.assertEqual(HyperliquidClient.round_size(c,'BTC',0.0002999),0.00029)
+    def test_protection_requires_adverse_stop_market_and_correct_side(self):
+        from src.reconciler import PositionReconciler
+        pos={'entryPx':'100','szi':'1'}
+        stop={'orderType':'Stop Market','side':'A','reduceOnly':True,'triggerPx':'99'}
+        target={'orderType':'Take Profit Limit','side':'A','reduceOnly':True,'triggerPx':'102'}
+        self.assertTrue(PositionReconciler._valid_protection(pos,[stop,target]))
+        self.assertFalse(PositionReconciler._valid_protection(pos,[dict(stop,orderType='Stop Limit'),target]))
+        self.assertFalse(PositionReconciler._valid_protection(pos,[dict(stop,side='B'),target]))
+        self.assertFalse(PositionReconciler._valid_protection(pos,[dict(stop,triggerPx='0'),target]))
