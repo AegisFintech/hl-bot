@@ -47,6 +47,13 @@ class MicrostructureTests(unittest.TestCase):
         self.assertEqual(result['walls'][0]['persistence_s'],0)
         with self.assertRaises(ValueError):engine.analyze(book(1020),1020)
 
+    def test_persistence_resets_when_level_falls_below_wall_threshold(self):
+        engine=Microstructure(whale_usd=500)
+        engine.analyze(book(),1000)
+        engine.analyze(book(1005,bid_size=1),1005)
+        result=engine.analyze(book(1010),1010)
+        self.assertEqual(result['walls'][0]['persistence_s'],0)
+
     def test_band_coverage_is_explicit(self):
         result=Microstructure().analyze(book(),1000)
         self.assertFalse(result['bands'][-1]['bid_complete'])
@@ -82,7 +89,7 @@ class JournalTests(unittest.TestCase):
             restarted=ResearchJournal(path)
             restarted.mark(dict(s,sampled_at=1060,bid=101,ask=101.02,mid=101.01))
             rows=restarted.summary()['results']
-            self.assertEqual(rows[0]['n'],2)
+            self.assertEqual(sum(r['n'] for r in rows),2)
             self.assertEqual(restarted.summary()['signal_count'],2)
 
 class SourceTests(unittest.TestCase):
@@ -137,3 +144,28 @@ class CoverageTests(unittest.TestCase):
             with patch('time.time',return_value=1061):service._refresh('context',60,fail,1061)
             self.assertEqual(service._slow['context']['updated_at'],1000)
             self.assertIsNotNone(service._slow['context']['error'])
+
+    def test_malformed_comparison_does_not_break_research_snapshot(self):
+        with tempfile.TemporaryDirectory() as d:
+            service=ResearchService(Path(d)/'r.sqlite',wallets=[])
+            service._state['market']=dict(source_time=1000,score=0,lean='neutral',bid=100,ask=100.02)
+            service._state['sources']={'comparison':{'value':{'spot':{'bids':[],'asks':[]}},'updated_at':1000}}
+            with patch('time.time',return_value=1001):result=service.snapshot()
+            self.assertNotIn('divergence',result)
+            self.assertIn('suppressed',result['sources']['comparison']['error'])
+
+    def test_wallet_size_changes_survive_restart_and_include_closed_positions(self):
+        with tempfile.TemporaryDirectory() as d:
+            path=Path(d)/'r.sqlite'
+            first=ResearchJournal(path).wallet_changes('public-address',[{'coin':'BTC','szi':'2'}],1000)
+            self.assertIsNone(first['previous_at'])
+            second=ResearchJournal(path).wallet_changes('public-address',[],1120)
+            self.assertEqual(second['deltas'][0]['delta_size'],-2)
+            self.assertEqual(second['deltas'][0]['current_size'],0)
+
+    def test_old_published_sentiment_is_stale_even_after_successful_fetch(self):
+        with tempfile.TemporaryDirectory() as d:
+            service=ResearchService(Path(d)/'r.sqlite',wallets=[])
+            service._state['sources']={'sentiment':{'value':{'published_at':1,'value':50},'updated_at':200000}}
+            with patch('time.time',return_value=200001):result=service.snapshot()
+            self.assertTrue(result['sources']['sentiment']['stale'])

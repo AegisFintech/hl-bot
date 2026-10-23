@@ -1,40 +1,36 @@
-# Agents
+# Modules and milestone history
 
-## Market Data Agent
-**Module:** `src/exchange/hyperliquid.py`
-**Role:** Connects to Hyperliquid via SDK. Streams real-time price data, orderbook depth, and candle history. Provides clean data interface to strategy agents.
+## Execution and risk
 
-## S/R Detection Agent
-**Module:** `src/strategy/sr_detector.py`
-**Role:** Analyzes price action to identify major support and resistance zones. Uses swing high/low clustering, volume profile, and order flow imbalance. Outputs ranked S/R levels with confidence scores.
+| Module | Current responsibility |
+| --- | --- |
+| `src/exchange/hyperliquid.py` | Testnet SDK transport, precision, account-mode-aware equity, BBO/L2/candle/trade subscriptions, protected orders |
+| `src/strategy/sr_detector.py` | S/R clustering and candle-pattern order blocks; patterns do not identify institutional orders |
+| `src/strategy/scalper.py` | Closed-candle trend pullback/rejection candidates; post-only entry admission, freshness and exposure checks |
+| `src/strategy/economics.py` | ATR/noise-floor brackets and fee/spread/slippage reward/risk geometry |
+| `src/risk/manager.py` | Persistent account high-water peak, exact 5% latched halt, daily loss/entry limits and conservative sizing |
+| `src/reconciler.py` | Validate protective stop-market/target side and size; preserve protective prices during partial-fill recovery |
+| `src/bot.py` | Lifecycle, fill handling, stale-entry expiration, cancel/flatten/verify retries and observer startup |
+| `src/learning/ledger.py` | Durable idempotent actual-fee fill accounting and equity history |
+| `src/learning/evaluator.py` | Preserved legacy gross journal; live parameter fitting is disabled |
 
-## Scalper Agent
-**Module:** `src/strategy/scalper.py`
-**Role:** Core trading logic. Monitors price relative to S/R zones. Places stop orders beyond confirmed zones — buy stops above resistance breaks, sell stops below support breaks. Manages TP (5 pips) and SL (10 pips) per trade.
+Execution uses demo funds only. Drawdown peak/halt survives midnight and restart. The threshold triggers recovery but cannot guarantee an exact realized ceiling through gaps/outages. No risk-state deletion or automated halt reset. The requested 10% daily return remains unproven.
 
-## Risk Manager Agent
-**Module:** `src/risk/manager.py`
-**Role:** Enforces position limits, max drawdown, and daily loss caps. Validates every order before submission. Kills the bot if risk thresholds are breached.
+## Public market observer
 
-## Learning Agent
-**Module:** `src/learning/evaluator.py`
-**Role:** Post-trade analysis engine. Logs every trade with entry context (which S/R level, confidence, market conditions). Computes win rate, avg P/L, Sharpe ratio. Identifies which S/R patterns produce winning trades and feeds adjustments back to the detector.
+| Module | Current responsibility |
+| --- | --- |
+| `src/research/microstructure.py` | Sampled L2 depth, walls, streamed executed pressure, absorption hypotheses and closed-candle block confluence |
+| `src/research/service.py` | Public mainnet BTC stream, source freshness, large-print wallet discovery, observed-wallet position/ledger reads, sentiment/funding and indicative Kraken comparison |
+| `src/research/journal.py` | Persistent prospective 10s/1m/5m/15m quote markouts, fixed cost assumptions, sampled excursions, missed horizons, unconditional controls and wallet size baselines |
+| `src/dashboard/` | Read-only demo account terminal plus a clearly separated mainnet research workspace; shared cached API, CSV fills export, source health and per-event explanations |
 
-## Dashboard Agent
-**Module:** `src/dashboard/app.py`
-**Role:** Flask web UI showing live bot status, open positions, trade history, cumulative P/L chart, and S/R levels on a price chart. Auto-refreshes via WebSocket.
+The observer has no signing keys or trading client and never submits orders. Scores are uncalibrated heuristics; large prints do not establish whale identity, watched-wallet liquidation counts are not a global feed, and modeled divergence is not executable arbitrage. Definitions: [RESEARCH.md](docs/RESEARCH.md).
 
-## Overhaul progress — 2026-10-22
-Review and research complete. See `docs/OVERHAUL.md` for findings, source links, milestones and measurable forward-validation gates. User mandates 5% persistent high-water drawdown on demo funds; 10% daily is unverified. Graphify is installed; refresh its deterministic code graph at each milestone. `AGENTS.md` contains operating instructions.
+## Completed milestones
 
-Milestone 2: `RiskManager` persists equity peak and halt to data/risk_state.json. `FillLedger` stores durable fill identities and actual costs. `economics.py` supplies volatility/cost gates. Exchange equity supports the confirmed unified account; unsupported modes fail closed. No live parameter fitting. Eleven risk/execution regressions pass.
+- 2026-10-22: review/research plan, persistent 5% risk/execution overhaul, professional terminal, negative chronological replay and deployment audit. Final expiration-race fix: `9563c8c`. Twenty-one regressions and desktop/mobile checks passed. See [OVERHAUL.md](docs/OVERHAUL.md) and preserved replay reports.
+- 2026-10-23: isolated public-market observer and prospective journal, committed/pushed as `7226b36`.
+- 2026-10-23: research dashboard, wallet size changes, per-event cost explanations, source publication-age validation, source failure suppression and browser coverage. **41 regression tests**, JavaScript syntax, desktop/mobile Chromium and public-source/testnet health checks pass. Observer is deployed in observation mode; no profitability claim or signal promotion.
 
-Milestone 3: Professional Aegis terminal implemented in templates/index.html and static/terminal.{css,js}. `/api/terminal` shares cached exchange reads; `/api/export/fills.csv` exports the durable ledger. Fifteen Python tests plus real Chromium desktop/mobile interactions pass. No mutation controls are exposed by the dashboard.
-
-## Final upgrade status — 2026-10-22
-Risk/execution, terminal, diagnostics, replay and deployment validation implemented. Twenty regression tests and desktop/mobile Chromium checks pass. Signed testnet bracket smoke accepted all three legs and cleanup confirmed flat/no orders. Current demo service is active. Chronological replay remains negative (12 / 4 simulated closed trades in the 70/30 segments); profitability and 10% daily are unproven. Read `docs/OVERHAUL.md` and `docs/replay-results.json` before proposing strategy promotion. Snapshots/monitor now use the net fill ledger; funding exclusion is explicit. Graphify code graph, HTML and report are refreshed for this milestone. Every future major milestone must update these docs and push its commit.
-
-Final race audit: expired entries cancel parent orders individually and force reconciliation before removing children only when confirmed flat. This preserves protection if an entry filled since cached position sync. Twenty-one regression tests now pass, including this case.
-
-## Research backend milestone — 2026-10-23
-`src/research/` adds a public mainnet observer isolated from demo execution: sampled microstructure, continuous trade stream with coverage gating, observed-wallet discovery, context/sentiment/venue comparison and durable prospective markouts. Thresholds and missing-feed limits are documented in docs/RESEARCH.md. Research is observation-only; no model probability or profitability claim. Backend regressions and public-source smoke checks pass. Next milestone: dashboard research workspace and full deployment/browser validation.
+Every major milestone must update README.md, AGENTS.md, this file and Graphify, then commit and push. Credentials/runtime data/screenshots remain private. Preserve the pre-existing uncommitted CLAUDE.md deletion.

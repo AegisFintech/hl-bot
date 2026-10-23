@@ -31,7 +31,7 @@ def normalize_book(raw, now):
 
 
 def active_blocks(candles, now):
-    closed = [c for c in candles if int(c['t'])+60000 <= now*1000]
+    closed = [c for c in candles if int(c['t'])+60000 <= now*1000][-500:]
     detector = SRDetector(lookback=500)
     result = []
     for block in detector.detect_order_blocks(closed):
@@ -120,7 +120,7 @@ class Microstructure:
         disappeared = [dict(side=k[0],price=k[1],usd=v['usd']) for k,v in self.previous.items()
                        if v.get('is_wall') and k not in current and now-v['time']<=15
                        and bids[-1][0] <= k[1] <= asks[-1][0]]
-        self.wall_since = {k:v for k,v in self.wall_since.items() if k in current and now-v[1]<=15}
+        self.wall_since = {k:v for k,v in self.wall_since.items() if k in current and current[k]['is_wall'] and now-v[1]<=15}
         self.previous = current
         baseline = next((h for h in self.history if h['time'] >= now-60),None)
         change = (mid/baseline['mid']-1)*10000 if baseline and now-baseline['time']>=45 else None

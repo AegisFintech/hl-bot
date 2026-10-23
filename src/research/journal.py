@@ -10,6 +10,7 @@ class ResearchJournal:
         with self.connect() as db:
             db.executescript('''
                 CREATE TABLE IF NOT EXISTS observations(time INTEGER PRIMARY KEY, raw TEXT);
+                CREATE TABLE IF NOT EXISTS wallet_positions(address TEXT PRIMARY KEY,time REAL,raw TEXT);
                 CREATE TABLE IF NOT EXISTS signals(id INTEGER PRIMARY KEY, fingerprint TEXT UNIQUE,
                     time REAL, kind TEXT, direction INTEGER, bid REAL, ask REAL, mid REAL,
                     funding REAL, reason TEXT, favorable REAL DEFAULT 0, adverse REAL DEFAULT 0);
@@ -64,17 +65,29 @@ class ResearchJournal:
                         values=(signal['id'],horizon,now,'complete',mid_return,net,favorable,adverse)
                     db.execute('INSERT OR IGNORE INTO outcomes VALUES (?,?,?,?,?,?,?,?)',values)
 
+    def wallet_changes(self,address,positions,now):
+        current={p['coin']:float(p['szi']) for p in positions}
+        with self.connect() as db:
+            row=db.execute('SELECT time,raw FROM wallet_positions WHERE address=?',(address,)).fetchone()
+            db.execute('INSERT OR REPLACE INTO wallet_positions VALUES (?,?,?)',(address,now,json.dumps(current)))
+        if row is None:return dict(previous_at=None,deltas=[])
+        previous=json.loads(row['raw'])
+        return dict(previous_at=row['time'],deltas=[dict(coin=coin,previous_size=previous.get(coin,0),
+                    current_size=current.get(coin,0),delta_size=current.get(coin,0)-previous.get(coin,0))
+                    for coin in sorted(set(previous)|set(current)) if current.get(coin,0)!=previous.get(coin,0)])
+
     def summary(self):
         with self.connect() as db:
             counts=db.execute('SELECT COUNT(*) n,MIN(time) first,MAX(time) last FROM signals').fetchone()
-            rows=db.execute('''SELECT s.kind,o.horizon,COUNT(*) n,AVG(o.net_bps) mean_net_bps,
+            rows=db.execute('''SELECT s.kind,s.direction,o.horizon,COUNT(*) n,AVG(o.net_bps) mean_net_bps,
                 AVG(CASE WHEN o.net_bps>0 THEN 1.0 ELSE 0 END) positive_rate,
                 AVG(o.favorable_bps) mean_favorable_bps,AVG(o.adverse_bps) mean_adverse_bps
                 FROM outcomes o JOIN signals s ON s.id=o.signal_id WHERE o.status='complete'
-                GROUP BY s.kind,o.horizon ORDER BY s.kind,o.horizon''').fetchall()
+                GROUP BY s.kind,s.direction,o.horizon ORDER BY s.kind,s.direction,o.horizon''').fetchall()
             missed=db.execute("SELECT COUNT(*) FROM outcomes WHERE status='missed'").fetchone()[0]
             recent=db.execute('SELECT id,time,kind,direction,reason FROM signals ORDER BY id DESC LIMIT 30').fetchall()
+            recent_outcomes=db.execute('SELECT * FROM outcomes WHERE signal_id IN (SELECT id FROM signals ORDER BY id DESC LIMIT 30)').fetchall()
         return dict(signal_count=counts['n'],first_signal_at=counts['first'],last_signal_at=counts['last'],
-                    missed_markouts=missed,results=[dict(r) for r in rows],recent=[dict(r) for r in recent],
+                    missed_markouts=missed,results=[dict(r) for r in rows],recent=[dict(r,outcomes=[dict(o) for o in recent_outcomes if o['signal_id']==r['id']]) for r in recent],
                     horizons_s=HORIZONS,model='Quote-based markouts: bid/ask spread + 9bps fees + 4bps slippage + frozen hourly funding debit stress when available. Not fills or realized P&L.',
                     limitations='Signals overlap and are correlated. MFE/MAE are sampled mid-price changes, not intrabar extremes. No calibrated probability or profitability claim.')

@@ -30,3 +30,14 @@ class DashboardTests(unittest.TestCase):
         dashboard.set_bot_reference(SimpleNamespace(ledger=SimpleNamespace(fills=lambda n:[dict(coin='=HYPERLINK(1)',dir='+bad',time=1)])))
         r=self.client.get('/api/export/fills.csv')
         self.assertIn(b"'=HYPERLINK",r.data)
+
+    def test_research_disconnected_is_explicit(self):
+        r=self.client.get('/api/research')
+        self.assertEqual(r.status_code,503)
+        self.assertEqual(r.json['mode'],'Observation only')
+
+    def test_research_api_is_read_only_and_exposes_observer_snapshot(self):
+        snapshot={'mode':'Observation only','status':'observing','source':'Mainnet public data'}
+        dashboard.set_bot_reference(SimpleNamespace(research=SimpleNamespace(snapshot=lambda:snapshot)))
+        self.assertEqual(self.client.get('/api/research').json,snapshot)
+        self.assertEqual(self.client.post('/api/research').status_code,405)

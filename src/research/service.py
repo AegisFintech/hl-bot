@@ -14,7 +14,7 @@ import time
 from pathlib import Path
 import requests
 import websocket
-from .microstructure import Microstructure, active_blocks
+from .microstructure import Microstructure, active_blocks, finite
 from .journal import ResearchJournal
 
 log=logging.getLogger(__name__)
@@ -24,10 +24,10 @@ KRAKEN='https://api.kraken.com/0/public/Depth'
 
 def divergence(book,spot,fx=None,notional=100,spot_fee_bps=60):
     """Indicative two-venue, four-leg roundtrip economics; no claim of executability."""
-    bid,ask=book['bid'],book['ask']
-    cb_bid,cb_ask=float(spot['bids'][0][0]),float(spot['asks'][0][0])
-    fx_bid,fx_ask=(float(fx['bids'][0][0]),float(fx['asks'][0][0])) if fx else (1.0,1.0)
-    if not (0<cb_bid<cb_ask and 0<fx_bid<=fx_ask):
+    bid,ask=finite(book['bid']),finite(book['ask'])
+    cb_bid,cb_ask=finite(spot['bids'][0][0]),finite(spot['asks'][0][0])
+    fx_bid,fx_ask=(finite(fx['bids'][0][0]),finite(fx['asks'][0][0])) if fx else (1.0,1.0)
+    if not (0<bid<ask and 0<cb_bid<cb_ask and 0<fx_bid<=fx_ask):
         raise ValueError('Invalid comparison quotes')
     sell_perp=(bid*fx_bid/cb_ask-1)*10000
     buy_perp=(cb_bid/(ask*fx_ask)-1)*10000
@@ -36,7 +36,7 @@ def divergence(book,spot,fx=None,notional=100,spot_fee_bps=60):
     return dict(direction='Buy Kraken spot / sell HL perp' if sell_perp>=buy_perp else 'Buy HL perp / sell Kraken spot',
                 opening_edge_bps=edge, modeled_roundtrip_cost_bps=costs,net_candidate_bps=edge-costs,
                 notional_usd=notional,spot_bid=cb_bid,spot_ask=cb_ask,fx_bid=fx_bid,fx_ask=fx_ask,
-                best_quote_capacity_usd=min(float(spot['asks'][0][1])*cb_ask,float(spot['bids'][0][1])*cb_bid),
+                spot_best_quote_capacity_usd=min(finite(spot['asks'][0][1])*cb_ask,finite(spot['bids'][0][1])*cb_bid),
                 status='Indicative only; unhedged/basis, financing, transfer and multi-leg risks remain',
                 quote_basis='Kraken BTC/USDC spot vs Hyperliquid BTC perp; derivative basis risk remains',
                 assumptions=f'Kraken fee assumed {spot_fee_bps}bps/leg, HL 4.5bps/leg, four legs, 2bps slippage/leg, exit basis assumed zero. No accounts funded or connected.')
@@ -119,7 +119,7 @@ class ResearchService:
         addresses=[]
         for trade in candidates:
             for address in trade.get('users',[]):
-                if re.fullmatch(r'0x[0-9a-fA-F]{40}',address) and int(address,16) and address not in addresses:
+                if isinstance(address,str) and re.fullmatch(r'0x[0-9a-fA-F]{40}',address) and int(address,16) and address not in addresses:
                     addresses.append(address)
         if addresses:
             self.wallets=addresses[:2]
@@ -171,7 +171,8 @@ class ResearchService:
             positions=[p['position'] for p in state.get('assetPositions',[]) if float(p['position']['szi'])!=0]
             fills=self._info('userFills',user=address)
             recent=[f for f in fills if int(f['time'])/1000>=time.time()-3600]
-            accounts.append(dict(address=address,positions=[dict(coin=p['coin'],size=float(p['szi']),
+            changes=self.journal.wallet_changes(address,positions,time.time())
+            accounts.append(dict(address=address,changes=changes,positions=[dict(coin=p['coin'],size=float(p['szi']),
                                 entry_price=float(p['entryPx']),unrealized_pnl=float(p['unrealizedPnl'])) for p in positions],
                                  recent_fills=len(recent),caveat='One public wallet only; other hedges and accounts are unknown'))
             updates=self._info('userNonFundingLedgerUpdates',user=address,startTime=int((time.time()-3600)*1000))
@@ -243,9 +244,16 @@ class ResearchService:
             if key in sources:
                 sources[key]['age_s']=now-sources[key].get('updated_at',0)
                 sources[key]['stale']=sources[key]['age_s']>ttl
+        sentiment=sources.get('sentiment',{})
+        if sentiment.get('value'):
+            sentiment['published_age_s']=now-sentiment['value']['published_at']
+            sentiment['stale']=sentiment.get('stale',False) or not -300<=sentiment['published_age_s']<=172800
         comparison=sources.get('comparison',{})
         if market and age<=15 and comparison.get('value') and not comparison.get('stale'):
-            result['divergence']=divergence(market,**comparison['value'])
+            try:
+                result['divergence']=divergence(market,**comparison['value'])
+            except (ValueError,KeyError,IndexError,TypeError):
+                comparison['error']='Invalid comparison quote; candidate suppressed'
         if sources.get('wallet_watch',{}).get('value'):
             value=sources['wallet_watch']['value']
             result['wallets']=dict(status='Configured public wallets' if self._configured_wallets else 'Addresses observed in large prints; ownership/hedges unknown',accounts=value['accounts'])

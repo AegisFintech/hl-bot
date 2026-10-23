@@ -160,26 +160,13 @@
       "source_location": "L13"
     },
     {
-      "id": "src_learning_ledger_fillledger",
-      "label": "FillLedger",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": "fillledger",
-      "source_file": "src/learning/ledger.py",
-      "source_location": "L7"
-    },
-    {
       "id": "src_risk_manager_riskstate",
       "label": "RiskState",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 13,
-      "community_name": "FillLedger",
+      "community": 11,
+      "community_name": "Evaluator",
       "file_type": "code",
       "norm_label": "riskstate",
       "source_file": "src/risk/manager.py",
@@ -248,7 +235,7 @@
       "file_type": "code",
       "norm_label": "coveragetests",
       "source_file": "tests/test_research.py",
-      "source_location": "L113"
+      "source_location": "L120"
     },
     {
       "id": "tests_test_research_journaltests",
@@ -261,7 +248,7 @@
       "file_type": "code",
       "norm_label": "journaltests",
       "source_file": "tests/test_research.py",
-      "source_location": "L60"
+      "source_location": "L67"
     },
     {
       "id": "tests_test_research_microstructuretests",
@@ -287,7 +274,20 @@
       "file_type": "code",
       "norm_label": "sourcetests",
       "source_file": "tests/test_research.py",
-      "source_location": "L88"
+      "source_location": "L95"
+    },
+    {
+      "id": "src_learning_ledger_fillledger",
+      "label": "FillLedger",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": "fillledger",
+      "source_file": "src/learning/ledger.py",
+      "source_location": "L7"
     },
     {
       "id": "src_reconciler_positionreconciler",
@@ -321,8 +321,8 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "app.py",
+      "community": 32,
+      "community_name": "DashboardTests",
       "file_type": "code",
       "norm_label": "dashboardtests",
       "source_file": "tests/test_dashboard.py",
@@ -1310,12 +1310,36 @@
       "source_location": "L34"
     },
     {
+      "id": "src_risk_manager_riskmanager_init",
+      "label": ".__init__()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "Evaluator",
+      "file_type": "code",
+      "norm_label": ".__init__()",
+      "source_file": "src/risk/manager.py",
+      "source_location": "L32"
+    },
+    {
+      "id": "src_risk_manager_riskstate_drawdown_pct",
+      "label": ".drawdown_pct()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "Evaluator",
+      "file_type": "code",
+      "norm_label": ".drawdown_pct()",
+      "source_file": "src/risk/manager.py",
+      "source_location": "L28"
+    },
+    {
       "id": "scripts_monitor_bot_status",
       "label": "bot_status()",
       "_callable": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "FillLedger",
+      "community_name": "monitor.py",
       "file_type": "code",
       "norm_label": "bot_status()",
       "source_file": "scripts/monitor.py",
@@ -1327,7 +1351,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "FillLedger",
+      "community_name": "monitor.py",
       "file_type": "code",
       "norm_label": "live_tail()",
       "source_file": "scripts/monitor.py",
@@ -1339,7 +1363,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "FillLedger",
+      "community_name": "monitor.py",
       "file_type": "code",
       "norm_label": "load_json()",
       "source_file": "scripts/monitor.py",
@@ -1351,7 +1375,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "FillLedger",
+      "community_name": "monitor.py",
       "file_type": "code",
       "norm_label": "main()",
       "source_file": "scripts/monitor.py",
@@ -1363,7 +1387,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "FillLedger",
+      "community_name": "monitor.py",
       "file_type": "code",
       "norm_label": "parse_duration()",
       "source_file": "scripts/monitor.py",
@@ -1375,7 +1399,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "FillLedger",
+      "community_name": "monitor.py",
       "file_type": "code",
       "norm_label": "print_header()",
       "source_file": "scripts/monitor.py",
@@ -1387,7 +1411,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "FillLedger",
+      "community_name": "monitor.py",
       "file_type": "code",
       "norm_label": "print_overall_stats()",
       "source_file": "scripts/monitor.py",
@@ -1399,7 +1423,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "FillLedger",
+      "community_name": "monitor.py",
       "file_type": "code",
       "norm_label": "print_recent_trades()",
       "source_file": "scripts/monitor.py",
@@ -1411,155 +1435,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "FillLedger",
+      "community_name": "monitor.py",
       "file_type": "code",
       "norm_label": "print_signal_stats()",
       "source_file": "scripts/monitor.py",
       "source_location": "L111"
-    },
-    {
-      "id": "scripts_snapshot_perf_main",
-      "label": "main()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": "main()",
-      "source_file": "scripts/snapshot_perf.py",
-      "source_location": "L12"
-    },
-    {
-      "id": "src_learning_ledger_fillledger_add",
-      "label": ".add()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".add()",
-      "source_file": "src/learning/ledger.py",
-      "source_location": "L22"
-    },
-    {
-      "id": "src_learning_ledger_fillledger_connect",
-      "label": ".connect()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".connect()",
-      "source_file": "src/learning/ledger.py",
-      "source_location": "L15"
-    },
-    {
-      "id": "src_learning_ledger_fillledger_equity",
-      "label": ".equity()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".equity()",
-      "source_file": "src/learning/ledger.py",
-      "source_location": "L37"
-    },
-    {
-      "id": "src_learning_ledger_fillledger_fills",
-      "label": ".fills()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".fills()",
-      "source_file": "src/learning/ledger.py",
-      "source_location": "L28"
-    },
-    {
-      "id": "src_learning_ledger_fillledger_identity",
-      "label": ".identity()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".identity()",
-      "source_file": "src/learning/ledger.py",
-      "source_location": "L19"
-    },
-    {
-      "id": "src_learning_ledger_fillledger_init",
-      "label": ".__init__()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".__init__()",
-      "source_file": "src/learning/ledger.py",
-      "source_location": "L8"
-    },
-    {
-      "id": "src_learning_ledger_fillledger_performance",
-      "label": ".performance()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".performance()",
-      "source_file": "src/learning/ledger.py",
-      "source_location": "L42"
-    },
-    {
-      "id": "src_learning_ledger_fillledger_sample_equity",
-      "label": ".sample_equity()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".sample_equity()",
-      "source_file": "src/learning/ledger.py",
-      "source_location": "L33"
-    },
-    {
-      "id": "src_risk_manager_riskmanager_init",
-      "label": ".__init__()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".__init__()",
-      "source_file": "src/risk/manager.py",
-      "source_location": "L32"
-    },
-    {
-      "id": "src_risk_manager_riskstate_drawdown_pct",
-      "label": ".drawdown_pct()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".drawdown_pct()",
-      "source_file": "src/risk/manager.py",
-      "source_location": "L28"
-    },
-    {
-      "id": "tests_test_risk_risktests_test_ledger_idempotency_and_fee_totals",
-      "label": ".test_ledger_idempotency_and_fee_totals()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".test_ledger_idempotency_and_fee_totals()",
-      "source_file": "tests/test_risk.py",
-      "source_location": "L63"
     },
     {
       "id": "src_agent_audit_append_audit",
@@ -1907,7 +1787,7 @@
       "file_type": "code",
       "norm_label": ".connect()",
       "source_file": "src/research/journal.py",
-      "source_location": "L21"
+      "source_location": "L22"
     },
     {
       "id": "src_research_journal_researchjournal_init",
@@ -1931,7 +1811,7 @@
       "file_type": "code",
       "norm_label": ".mark()",
       "source_file": "src/research/journal.py",
-      "source_location": "L40"
+      "source_location": "L41"
     },
     {
       "id": "src_research_journal_researchjournal_observe",
@@ -1943,7 +1823,7 @@
       "file_type": "code",
       "norm_label": ".observe()",
       "source_file": "src/research/journal.py",
-      "source_location": "L26"
+      "source_location": "L27"
     },
     {
       "id": "src_research_journal_researchjournal_signal",
@@ -1955,7 +1835,7 @@
       "file_type": "code",
       "norm_label": ".signal()",
       "source_file": "src/research/journal.py",
-      "source_location": "L32"
+      "source_location": "L33"
     },
     {
       "id": "src_research_journal_researchjournal_summary",
@@ -1967,7 +1847,19 @@
       "file_type": "code",
       "norm_label": ".summary()",
       "source_file": "src/research/journal.py",
-      "source_location": "L67"
+      "source_location": "L79"
+    },
+    {
+      "id": "src_research_journal_researchjournal_wallet_changes",
+      "label": ".wallet_changes()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".wallet_changes()",
+      "source_file": "src/research/journal.py",
+      "source_location": "L68"
     },
     {
       "id": "src_research_microstructure_active_blocks",
@@ -2159,7 +2051,7 @@
       "file_type": "code",
       "norm_label": "._run()",
       "source_file": "src/research/service.py",
-      "source_location": "L223"
+      "source_location": "L224"
     },
     {
       "id": "src_research_service_researchservice_sentiment",
@@ -2183,7 +2075,7 @@
       "file_type": "code",
       "norm_label": ".snapshot()",
       "source_file": "src/research/service.py",
-      "source_location": "L233"
+      "source_location": "L234"
     },
     {
       "id": "src_research_service_researchservice_start",
@@ -2207,7 +2099,7 @@
       "file_type": "code",
       "norm_label": ".step()",
       "source_file": "src/research/service.py",
-      "source_location": "L183"
+      "source_location": "L184"
     },
     {
       "id": "src_research_service_researchservice_stop",
@@ -2267,7 +2159,31 @@
       "file_type": "code",
       "norm_label": ".test_auto_discovery_is_from_fresh_large_public_prints()",
       "source_file": "tests/test_research.py",
-      "source_location": "L122"
+      "source_location": "L129"
+    },
+    {
+      "id": "tests_test_research_coveragetests_test_malformed_comparison_does_not_break_research_snapshot",
+      "label": ".test_malformed_comparison_does_not_break_research_snapshot()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".test_malformed_comparison_does_not_break_research_snapshot()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L148"
+    },
+    {
+      "id": "tests_test_research_coveragetests_test_old_published_sentiment_is_stale_even_after_successful_fetch",
+      "label": ".test_old_published_sentiment_is_stale_even_after_successful_fetch()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".test_old_published_sentiment_is_stale_even_after_successful_fetch()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L166"
     },
     {
       "id": "tests_test_research_coveragetests_test_partial_stream_cannot_create_trade_imbalance_or_absorption",
@@ -2279,7 +2195,7 @@
       "file_type": "code",
       "norm_label": ".test_partial_stream_cannot_create_trade_imbalance_or_absorption()",
       "source_file": "tests/test_research.py",
-      "source_location": "L114"
+      "source_location": "L121"
     },
     {
       "id": "tests_test_research_coveragetests_test_secondary_source_failure_retains_timestamp_and_reports_error",
@@ -2291,7 +2207,19 @@
       "file_type": "code",
       "norm_label": ".test_secondary_source_failure_retains_timestamp_and_reports_error()",
       "source_file": "tests/test_research.py",
-      "source_location": "L132"
+      "source_location": "L139"
+    },
+    {
+      "id": "tests_test_research_coveragetests_test_wallet_size_changes_survive_restart_and_include_closed_positions",
+      "label": ".test_wallet_size_changes_survive_restart_and_include_closed_positions()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".test_wallet_size_changes_survive_restart_and_include_closed_positions()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L157"
     },
     {
       "id": "tests_test_research_journaltests_test_prospective_costs_baseline_and_idempotence",
@@ -2303,7 +2231,7 @@
       "file_type": "code",
       "norm_label": ".test_prospective_costs_baseline_and_idempotence()",
       "source_file": "tests/test_research.py",
-      "source_location": "L61"
+      "source_location": "L68"
     },
     {
       "id": "tests_test_research_journaltests_test_restart_preserves_pending_events_and_long_short_controls",
@@ -2315,7 +2243,7 @@
       "file_type": "code",
       "norm_label": ".test_restart_preserves_pending_events_and_long_short_controls()",
       "source_file": "tests/test_research.py",
-      "source_location": "L77"
+      "source_location": "L84"
     },
     {
       "id": "tests_test_research_microstructuretests_test_absorption_requires_time_flow_and_persistent_wall",
@@ -2339,7 +2267,7 @@
       "file_type": "code",
       "norm_label": ".test_band_coverage_is_explicit()",
       "source_file": "tests/test_research.py",
-      "source_location": "L50"
+      "source_location": "L57"
     },
     {
       "id": "tests_test_research_microstructuretests_test_no_order_block_from_unclosed_candles",
@@ -2351,7 +2279,19 @@
       "file_type": "code",
       "norm_label": ".test_no_order_block_from_unclosed_candles()",
       "source_file": "tests/test_research.py",
-      "source_location": "L56"
+      "source_location": "L63"
+    },
+    {
+      "id": "tests_test_research_microstructuretests_test_persistence_resets_when_level_falls_below_wall_threshold",
+      "label": ".test_persistence_resets_when_level_falls_below_wall_threshold()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".test_persistence_resets_when_level_falls_below_wall_threshold()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L50"
     },
     {
       "id": "tests_test_research_microstructuretests_test_stale_crossed_and_nonfinite_books_rejected",
@@ -2399,7 +2339,7 @@
       "file_type": "code",
       "norm_label": ".test_divergence_deducts_four_leg_costs_and_normalizes_fx()",
       "source_file": "tests/test_research.py",
-      "source_location": "L89"
+      "source_location": "L96"
     },
     {
       "id": "tests_test_research_sourcetests_test_stale_snapshot_suppresses_direction",
@@ -2411,7 +2351,7 @@
       "file_type": "code",
       "norm_label": ".test_stale_snapshot_suppresses_direction()",
       "source_file": "tests/test_research.py",
-      "source_location": "L97"
+      "source_location": "L104"
     },
     {
       "id": "tests_test_research_sourcetests_test_wallets_only_accept_bounded_explicit_addresses",
@@ -2423,7 +2363,7 @@
       "file_type": "code",
       "norm_label": ".test_wallets_only_accept_bounded_explicit_addresses()",
       "source_file": "tests/test_research.py",
-      "source_location": "L107"
+      "source_location": "L114"
     },
     {
       "id": "scripts_healthcheck_main",
@@ -2436,6 +2376,114 @@
       "norm_label": "main()",
       "source_file": "scripts/healthcheck.py",
       "source_location": "L5"
+    },
+    {
+      "id": "scripts_snapshot_perf_main",
+      "label": "main()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": "main()",
+      "source_file": "scripts/snapshot_perf.py",
+      "source_location": "L12"
+    },
+    {
+      "id": "src_learning_ledger_fillledger_add",
+      "label": ".add()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": ".add()",
+      "source_file": "src/learning/ledger.py",
+      "source_location": "L22"
+    },
+    {
+      "id": "src_learning_ledger_fillledger_connect",
+      "label": ".connect()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": ".connect()",
+      "source_file": "src/learning/ledger.py",
+      "source_location": "L15"
+    },
+    {
+      "id": "src_learning_ledger_fillledger_equity",
+      "label": ".equity()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": ".equity()",
+      "source_file": "src/learning/ledger.py",
+      "source_location": "L37"
+    },
+    {
+      "id": "src_learning_ledger_fillledger_fills",
+      "label": ".fills()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": ".fills()",
+      "source_file": "src/learning/ledger.py",
+      "source_location": "L28"
+    },
+    {
+      "id": "src_learning_ledger_fillledger_identity",
+      "label": ".identity()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": ".identity()",
+      "source_file": "src/learning/ledger.py",
+      "source_location": "L19"
+    },
+    {
+      "id": "src_learning_ledger_fillledger_init",
+      "label": ".__init__()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": ".__init__()",
+      "source_file": "src/learning/ledger.py",
+      "source_location": "L8"
+    },
+    {
+      "id": "src_learning_ledger_fillledger_performance",
+      "label": ".performance()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": ".performance()",
+      "source_file": "src/learning/ledger.py",
+      "source_location": "L42"
+    },
+    {
+      "id": "src_learning_ledger_fillledger_sample_equity",
+      "label": ".sample_equity()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": ".sample_equity()",
+      "source_file": "src/learning/ledger.py",
+      "source_location": "L33"
     },
     {
       "id": "src_bot_tradingbot_init",
@@ -2870,12 +2918,120 @@
       "source_location": "L19"
     },
     {
+      "id": "src_dashboard_static_research_renderresearch",
+      "label": "renderResearch()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "research.js",
+      "file_type": "code",
+      "norm_label": "renderresearch()",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L13"
+    },
+    {
+      "id": "src_dashboard_static_research_researchbandrender",
+      "label": "researchBandRender()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "research.js",
+      "file_type": "code",
+      "norm_label": "researchbandrender()",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L10"
+    },
+    {
+      "id": "src_dashboard_static_research_researchcard",
+      "label": "researchCard()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "research.js",
+      "file_type": "code",
+      "norm_label": "researchcard()",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L8"
+    },
+    {
+      "id": "src_dashboard_static_research_researchcolor",
+      "label": "researchColor()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "research.js",
+      "file_type": "code",
+      "norm_label": "researchcolor()",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L6"
+    },
+    {
+      "id": "src_dashboard_static_research_researchempty",
+      "label": "researchEmpty()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "research.js",
+      "file_type": "code",
+      "norm_label": "researchempty()",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L7"
+    },
+    {
+      "id": "src_dashboard_static_research_researchheatmap",
+      "label": "researchHeatmap()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "research.js",
+      "file_type": "code",
+      "norm_label": "researchheatmap()",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L12"
+    },
+    {
+      "id": "src_dashboard_static_research_researchresults",
+      "label": "researchResults()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "research.js",
+      "file_type": "code",
+      "norm_label": "researchresults()",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L11"
+    },
+    {
+      "id": "src_dashboard_static_research_researchrows",
+      "label": "researchRows()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "research.js",
+      "file_type": "code",
+      "norm_label": "researchrows()",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L9"
+    },
+    {
+      "id": "src_dashboard_static_research_researchtext",
+      "label": "researchText()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "research.js",
+      "file_type": "code",
+      "norm_label": "researchtext()",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L5"
+    },
+    {
       "id": "tests_test_dashboard_dashboardtests_setup",
       "label": ".setUp()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "app.py",
+      "community": 32,
+      "community_name": "DashboardTests",
       "file_type": "code",
       "norm_label": ".setup()",
       "source_file": "tests/test_dashboard.py",
@@ -2886,8 +3042,8 @@
       "label": ".tearDown()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "app.py",
+      "community": 32,
+      "community_name": "DashboardTests",
       "file_type": "code",
       "norm_label": ".teardown()",
       "source_file": "tests/test_dashboard.py",
@@ -2898,8 +3054,8 @@
       "label": ".test_csv_is_downloadable_without_bot()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "app.py",
+      "community": 32,
+      "community_name": "DashboardTests",
       "file_type": "code",
       "norm_label": ".test_csv_is_downloadable_without_bot()",
       "source_file": "tests/test_dashboard.py",
@@ -2910,8 +3066,8 @@
       "label": ".test_dashboard_serves_local_assets_and_headers()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "app.py",
+      "community": 32,
+      "community_name": "DashboardTests",
       "file_type": "code",
       "norm_label": ".test_dashboard_serves_local_assets_and_headers()",
       "source_file": "tests/test_dashboard.py",
@@ -2922,8 +3078,8 @@
       "label": ".test_disconnected_terminal_is_explicit()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "app.py",
+      "community": 32,
+      "community_name": "DashboardTests",
       "file_type": "code",
       "norm_label": ".test_disconnected_terminal_is_explicit()",
       "source_file": "tests/test_dashboard.py",
@@ -2934,12 +3090,36 @@
       "label": ".test_export_neutralizes_formula_in_text_fields()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "app.py",
+      "community": 32,
+      "community_name": "DashboardTests",
       "file_type": "code",
       "norm_label": ".test_export_neutralizes_formula_in_text_fields()",
       "source_file": "tests/test_dashboard.py",
       "source_location": "L29"
+    },
+    {
+      "id": "tests_test_dashboard_dashboardtests_test_research_api_is_read_only_and_exposes_observer_snapshot",
+      "label": ".test_research_api_is_read_only_and_exposes_observer_snapshot()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 32,
+      "community_name": "DashboardTests",
+      "file_type": "code",
+      "norm_label": ".test_research_api_is_read_only_and_exposes_observer_snapshot()",
+      "source_file": "tests/test_dashboard.py",
+      "source_location": "L39"
+    },
+    {
+      "id": "tests_test_dashboard_dashboardtests_test_research_disconnected_is_explicit",
+      "label": ".test_research_disconnected_is_explicit()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 32,
+      "community_name": "DashboardTests",
+      "file_type": "code",
+      "norm_label": ".test_research_disconnected_is_explicit()",
+      "source_file": "tests/test_dashboard.py",
+      "source_location": "L34"
     },
     {
       "id": "src_risk_manager_riskmanager_can_trade",
@@ -3108,6 +3288,18 @@
       "norm_label": ".test_exact_limit_latches_across_restart_and_midnight()",
       "source_file": "tests/test_risk.py",
       "source_location": "L11"
+    },
+    {
+      "id": "tests_test_risk_risktests_test_ledger_idempotency_and_fee_totals",
+      "label": ".test_ledger_idempotency_and_fee_totals()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "RiskManager",
+      "file_type": "code",
+      "norm_label": ".test_ledger_idempotency_and_fee_totals()",
+      "source_file": "tests/test_risk.py",
+      "source_location": "L63"
     },
     {
       "id": "tests_test_risk_risktests_test_midnight_keeps_peak",
@@ -4033,6 +4225,17 @@
       "source_location": ""
     },
     {
+      "id": "path",
+      "label": "Path",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "Evaluator",
+      "file_type": "code",
+      "norm_label": "path",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "src_learning_evaluator",
       "label": "evaluator.py",
       "_origin": "ast",
@@ -4044,36 +4247,14 @@
       "source_location": "L1"
     },
     {
-      "id": "path",
-      "label": "Path",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": "path",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "scripts_monitor",
       "label": "monitor.py",
       "_origin": "ast",
       "community": 13,
-      "community_name": "FillLedger",
+      "community_name": "monitor.py",
       "file_type": "code",
       "norm_label": "monitor.py",
       "source_file": "scripts/monitor.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "scripts_snapshot_perf",
-      "label": "snapshot_perf.py",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": "snapshot_perf.py",
-      "source_file": "scripts/snapshot_perf.py",
       "source_location": "L1"
     },
     {
@@ -4081,7 +4262,7 @@
       "label": "timedelta",
       "_origin": "ast",
       "community": 13,
-      "community_name": "FillLedger",
+      "community_name": "monitor.py",
       "file_type": "code",
       "norm_label": "timedelta",
       "source_file": "",
@@ -4092,7 +4273,7 @@
       "label": "Parse recent log for signal/filter stats.",
       "_origin": "ast",
       "community": 13,
-      "community_name": "FillLedger",
+      "community_name": "monitor.py",
       "file_type": "rationale",
       "norm_label": "parse recent log for signal/filter stats.",
       "source_file": "scripts/monitor.py",
@@ -4103,7 +4284,7 @@
       "label": "Tail the log for key events.",
       "_origin": "ast",
       "community": 13,
-      "community_name": "FillLedger",
+      "community_name": "monitor.py",
       "file_type": "rationale",
       "norm_label": "tail the log for key events.",
       "source_file": "scripts/monitor.py",
@@ -4114,21 +4295,10 @@
       "label": "HL-Bot Performance Monitor Usage: python3 scripts/monitor.py # Full dashboard\u2026",
       "_origin": "ast",
       "community": 13,
-      "community_name": "FillLedger",
+      "community_name": "monitor.py",
       "file_type": "rationale",
       "norm_label": "hl-bot performance monitor usage: python3 scripts/monitor.py # full dashboard...",
       "source_file": "scripts/monitor.py",
-      "source_location": "L2"
-    },
-    {
-      "id": "scripts_snapshot_perf_rationale_2",
-      "label": "Append cost-inclusive exchange ledger and risk snapshots; safe for hourly cron.",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "FillLedger",
-      "file_type": "rationale",
-      "norm_label": "append cost-inclusive exchange ledger and risk snapshots; safe for hourly cron.",
-      "source_file": "scripts/snapshot_perf.py",
       "source_location": "L2"
     },
     {
@@ -4495,26 +4665,26 @@
       "source_location": "L1"
     },
     {
-      "id": "scripts_browser_check",
-      "label": "browser_check.py",
+      "id": "scripts_snapshot_perf",
+      "label": "snapshot_perf.py",
       "_origin": "ast",
       "community": 23,
-      "community_name": "browser_check.py",
+      "community_name": "FillLedger",
       "file_type": "code",
-      "norm_label": "browser_check.py",
-      "source_file": "scripts/browser_check.py",
+      "norm_label": "snapshot_perf.py",
+      "source_file": "scripts/snapshot_perf.py",
       "source_location": "L1"
     },
     {
-      "id": "scripts_browser_check_rationale_1",
-      "label": "Real Chromium checks against the running local dashboard.",
+      "id": "scripts_snapshot_perf_rationale_2",
+      "label": "Append cost-inclusive exchange ledger and risk snapshots; safe for hourly cron.",
       "_origin": "ast",
       "community": 23,
-      "community_name": "browser_check.py",
+      "community_name": "FillLedger",
       "file_type": "rationale",
-      "norm_label": "real chromium checks against the running local dashboard.",
-      "source_file": "scripts/browser_check.py",
-      "source_location": "L1"
+      "norm_label": "append cost-inclusive exchange ledger and risk snapshots; safe for hourly cron.",
+      "source_file": "scripts/snapshot_perf.py",
+      "source_location": "L2"
     },
     {
       "id": "scripts_git_push",
@@ -4660,17 +4830,6 @@
       "source_location": "L1"
     },
     {
-      "id": "tests_test_dashboard",
-      "label": "test_dashboard.py",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "app.py",
-      "file_type": "code",
-      "norm_label": "test_dashboard.py",
-      "source_file": "tests/test_dashboard.py",
-      "source_location": "L1"
-    },
-    {
       "id": "src_bot_py_hyperliquidclient",
       "label": "HyperliquidClient",
       "_origin": "ast",
@@ -4680,6 +4839,61 @@
       "norm_label": "hyperliquidclient",
       "source_file": "",
       "source_location": ""
+    },
+    {
+      "id": "src_dashboard_static_research",
+      "label": "research.js",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "research.js",
+      "file_type": "code",
+      "norm_label": "research.js",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_dashboard_static_research_researchnames",
+      "label": "researchNames",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "research.js",
+      "file_type": "code",
+      "norm_label": "researchnames",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "tests_test_dashboard",
+      "label": "test_dashboard.py",
+      "_origin": "ast",
+      "community": 32,
+      "community_name": "DashboardTests",
+      "file_type": "code",
+      "norm_label": "test_dashboard.py",
+      "source_file": "tests/test_dashboard.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "scripts_browser_check",
+      "label": "browser_check.py",
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "browser_check.py",
+      "file_type": "code",
+      "norm_label": "browser_check.py",
+      "source_file": "scripts/browser_check.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "scripts_browser_check_rationale_1",
+      "label": "Real Chromium checks against the running local dashboard.",
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "browser_check.py",
+      "file_type": "rationale",
+      "norm_label": "real chromium checks against the running local dashboard.",
+      "source_file": "scripts/browser_check.py",
+      "source_location": "L1"
     },
     {
       "id": "scripts_replay",
@@ -6216,6 +6430,162 @@
       "weight": 1.0
     },
     {
+      "source": "src_dashboard_static_research_renderresearch",
+      "target": "src_dashboard_static_research_researchbandrender",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research_renderresearch",
+      "target": "src_dashboard_static_research_researchcard",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research_renderresearch",
+      "target": "src_dashboard_static_research_researchcolor",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research_renderresearch",
+      "target": "src_dashboard_static_research_researchempty",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research_renderresearch",
+      "target": "src_dashboard_static_research_researchheatmap",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research_renderresearch",
+      "target": "src_dashboard_static_research_researchresults",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research_renderresearch",
+      "target": "src_dashboard_static_research_researchrows",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research_renderresearch",
+      "target": "src_dashboard_static_research_researchtext",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research_researchbandrender",
+      "target": "src_dashboard_static_research_researchtext",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research_researchheatmap",
+      "target": "src_dashboard_static_research_researchtext",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research_researchresults",
+      "target": "src_dashboard_static_research_researchempty",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research_researchresults",
+      "target": "src_dashboard_static_research_researchrows",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research_researchresults",
+      "target": "src_dashboard_static_research_researchtext",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
       "source": "src_dashboard_static_terminal_aggregate",
       "target": "src_dashboard_static_terminal_num",
       "relation": "calls",
@@ -7172,7 +7542,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/research/journal.py",
-      "source_location": "L42",
+      "source_location": "L43",
       "weight": 1.0
     },
     {
@@ -7184,7 +7554,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/research/journal.py",
-      "source_location": "L28",
+      "source_location": "L29",
       "weight": 1.0
     },
     {
@@ -7196,7 +7566,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/research/journal.py",
-      "source_location": "L35",
+      "source_location": "L36",
       "weight": 1.0
     },
     {
@@ -7208,7 +7578,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/research/journal.py",
-      "source_location": "L68",
+      "source_location": "L80",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_journal_researchjournal_wallet_changes",
+      "target": "src_research_journal_researchjournal_connect",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/journal.py",
+      "source_location": "L70",
       "weight": 1.0
     },
     {
@@ -7257,6 +7639,18 @@
       "context": "call",
       "source_file": "src/research/microstructure.py",
       "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_divergence",
+      "target": "src_research_microstructure_finite",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/service.py",
+      "source_location": "L27",
       "weight": 1.0
     },
     {
@@ -7340,7 +7734,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/research/service.py",
-      "source_location": "L226",
+      "source_location": "L227",
       "weight": 1.0
     },
     {
@@ -7364,7 +7758,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/research/service.py",
-      "source_location": "L248",
+      "source_location": "L254",
       "weight": 1.0
     },
     {
@@ -7376,7 +7770,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/research/service.py",
-      "source_location": "L189",
+      "source_location": "L190",
       "weight": 1.0
     },
     {
@@ -7388,7 +7782,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/research/service.py",
-      "source_location": "L190",
+      "source_location": "L191",
       "weight": 1.0
     },
     {
@@ -7400,7 +7794,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/research/service.py",
-      "source_location": "L215",
+      "source_location": "L216",
       "weight": 1.0
     },
     {
@@ -7880,7 +8274,31 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_research.py",
-      "source_location": "L124",
+      "source_location": "L131",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_coveragetests_test_malformed_comparison_does_not_break_research_snapshot",
+      "target": "src_research_service_researchservice",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L150",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_coveragetests_test_old_published_sentiment_is_stale_even_after_successful_fetch",
+      "target": "src_research_service_researchservice",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L168",
       "weight": 1.0
     },
     {
@@ -7892,7 +8310,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_research.py",
-      "source_location": "L115",
+      "source_location": "L122",
       "weight": 1.0
     },
     {
@@ -7904,7 +8322,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_research.py",
-      "source_location": "L117",
+      "source_location": "L124",
       "weight": 1.0
     },
     {
@@ -7916,7 +8334,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_research.py",
-      "source_location": "L134",
+      "source_location": "L141",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_coveragetests_test_wallet_size_changes_survive_restart_and_include_closed_positions",
+      "target": "src_research_journal_researchjournal",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L160",
       "weight": 1.0
     },
     {
@@ -7928,7 +8358,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_research.py",
-      "source_location": "L63",
+      "source_location": "L70",
       "weight": 1.0
     },
     {
@@ -7940,7 +8370,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_research.py",
-      "source_location": "L79",
+      "source_location": "L86",
       "weight": 1.0
     },
     {
@@ -7976,7 +8406,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_research.py",
-      "source_location": "L51",
+      "source_location": "L58",
       "weight": 1.0
     },
     {
@@ -7988,7 +8418,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_research.py",
-      "source_location": "L51",
+      "source_location": "L58",
       "weight": 1.0
     },
     {
@@ -8000,7 +8430,31 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_research.py",
-      "source_location": "L58",
+      "source_location": "L65",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_microstructuretests_test_persistence_resets_when_level_falls_below_wall_threshold",
+      "target": "src_research_microstructure_microstructure",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L51",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_microstructuretests_test_persistence_resets_when_level_falls_below_wall_threshold",
+      "target": "tests_test_research_book",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L52",
       "weight": 1.0
     },
     {
@@ -8084,7 +8538,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_research.py",
-      "source_location": "L93",
+      "source_location": "L100",
       "weight": 1.0
     },
     {
@@ -8096,7 +8550,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_research.py",
-      "source_location": "L99",
+      "source_location": "L106",
       "weight": 1.0
     },
     {
@@ -8108,7 +8562,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_research.py",
-      "source_location": "L109",
+      "source_location": "L116",
       "weight": 1.0
     },
     {
@@ -8810,6 +9264,18 @@
     {
       "source": "src_research_service",
       "target": "src_research_microstructure_active_blocks",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/research/service.py",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service",
+      "target": "src_research_microstructure_finite",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -10357,6 +10823,94 @@
       "weight": 1.0
     },
     {
+      "source": "src_dashboard_static_research",
+      "target": "src_dashboard_static_research_researchbandrender",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research",
+      "target": "src_dashboard_static_research_renderresearch",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research",
+      "target": "src_dashboard_static_research_researchnames",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research",
+      "target": "src_dashboard_static_research_researchtext",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research",
+      "target": "src_dashboard_static_research_researchcolor",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research",
+      "target": "src_dashboard_static_research_researchempty",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research",
+      "target": "src_dashboard_static_research_researchcard",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research",
+      "target": "src_dashboard_static_research_researchrows",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
       "source": "src_dashboard_static_terminal",
       "target": "src_dashboard_static_terminal_num",
       "relation": "contains",
@@ -10815,7 +11369,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_research.py",
-      "source_location": "L113",
+      "source_location": "L120",
       "weight": 1.0
     },
     {
@@ -10837,7 +11391,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_research.py",
-      "source_location": "L60",
+      "source_location": "L67",
       "weight": 1.0
     },
     {
@@ -10848,7 +11402,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_research.py",
-      "source_location": "L88",
+      "source_location": "L95",
       "weight": 1.0
     },
     {
@@ -12080,7 +12634,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/research/journal.py",
-      "source_location": "L21",
+      "source_location": "L22",
       "weight": 1.0
     },
     {
@@ -12091,7 +12645,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/research/journal.py",
-      "source_location": "L26",
+      "source_location": "L27",
       "weight": 1.0
     },
     {
@@ -12102,7 +12656,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/research/journal.py",
-      "source_location": "L32",
+      "source_location": "L33",
       "weight": 1.0
     },
     {
@@ -12113,7 +12667,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/research/journal.py",
-      "source_location": "L40",
+      "source_location": "L41",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_journal_researchjournal",
+      "target": "src_research_journal_researchjournal_wallet_changes",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/journal.py",
+      "source_location": "L68",
       "weight": 1.0
     },
     {
@@ -12124,7 +12689,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/research/journal.py",
-      "source_location": "L67",
+      "source_location": "L79",
       "weight": 1.0
     },
     {
@@ -12256,7 +12821,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/research/service.py",
-      "source_location": "L183",
+      "source_location": "L184",
       "weight": 1.0
     },
     {
@@ -12267,7 +12832,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/research/service.py",
-      "source_location": "L223",
+      "source_location": "L224",
       "weight": 1.0
     },
     {
@@ -12278,7 +12843,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/research/service.py",
-      "source_location": "L233",
+      "source_location": "L234",
       "weight": 1.0
     },
     {
@@ -12932,6 +13497,28 @@
     },
     {
       "source": "tests_test_dashboard_dashboardtests",
+      "target": "tests_test_dashboard_dashboardtests_test_research_disconnected_is_explicit",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_dashboard.py",
+      "source_location": "L34",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_dashboard_dashboardtests",
+      "target": "tests_test_dashboard_dashboardtests_test_research_api_is_read_only_and_exposes_observer_snapshot",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_dashboard.py",
+      "source_location": "L39",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_dashboard_dashboardtests",
       "target": "tests_test_dashboard_dashboardtests_setup",
       "relation": "method",
       "_origin": "ast",
@@ -13048,7 +13635,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_research.py",
-      "source_location": "L114",
+      "source_location": "L121",
       "weight": 1.0
     },
     {
@@ -13059,7 +13646,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_research.py",
-      "source_location": "L122",
+      "source_location": "L129",
       "weight": 1.0
     },
     {
@@ -13070,7 +13657,40 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_research.py",
-      "source_location": "L132",
+      "source_location": "L139",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_coveragetests",
+      "target": "tests_test_research_coveragetests_test_malformed_comparison_does_not_break_research_snapshot",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L148",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_coveragetests",
+      "target": "tests_test_research_coveragetests_test_wallet_size_changes_survive_restart_and_include_closed_positions",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L157",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_coveragetests",
+      "target": "tests_test_research_coveragetests_test_old_published_sentiment_is_stale_even_after_successful_fetch",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L166",
       "weight": 1.0
     },
     {
@@ -13081,7 +13701,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_research.py",
-      "source_location": "L61",
+      "source_location": "L68",
       "weight": 1.0
     },
     {
@@ -13092,7 +13712,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_research.py",
-      "source_location": "L77",
+      "source_location": "L84",
       "weight": 1.0
     },
     {
@@ -13141,7 +13761,7 @@
     },
     {
       "source": "tests_test_research_microstructuretests",
-      "target": "tests_test_research_microstructuretests_test_band_coverage_is_explicit",
+      "target": "tests_test_research_microstructuretests_test_persistence_resets_when_level_falls_below_wall_threshold",
       "relation": "method",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -13152,35 +13772,24 @@
     },
     {
       "source": "tests_test_research_microstructuretests",
+      "target": "tests_test_research_microstructuretests_test_band_coverage_is_explicit",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L57",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_microstructuretests",
       "target": "tests_test_research_microstructuretests_test_no_order_block_from_unclosed_candles",
       "relation": "method",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_research.py",
-      "source_location": "L56",
-      "weight": 1.0
-    },
-    {
-      "source": "tests_test_research_sourcetests",
-      "target": "tests_test_research_sourcetests_test_wallets_only_accept_bounded_explicit_addresses",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tests/test_research.py",
-      "source_location": "L107",
-      "weight": 1.0
-    },
-    {
-      "source": "tests_test_research_sourcetests",
-      "target": "tests_test_research_sourcetests_test_divergence_deducts_four_leg_costs_and_normalizes_fx",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tests/test_research.py",
-      "source_location": "L89",
+      "source_location": "L63",
       "weight": 1.0
     },
     {
@@ -13191,7 +13800,29 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_research.py",
-      "source_location": "L97",
+      "source_location": "L104",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_sourcetests",
+      "target": "tests_test_research_sourcetests_test_wallets_only_accept_bounded_explicit_addresses",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L114",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_sourcetests",
+      "target": "tests_test_research_sourcetests_test_divergence_deducts_four_leg_costs_and_normalizes_fx",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L96",
       "weight": 1.0
     },
     {
@@ -13581,6 +14212,42 @@
       "weight": 1.0
     },
     {
+      "source": "src_dashboard_static_research",
+      "target": "src_dashboard_static_research_researchheatmap",
+      "relation": "indirect_call",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "argument",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research",
+      "target": "src_dashboard_static_research_researchresults",
+      "relation": "indirect_call",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "argument",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_research_researchrows",
+      "target": "src_dashboard_static_terminal_row",
+      "relation": "indirect_call",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "argument",
+      "source_file": "src/dashboard/static/research.js",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
       "source": "src_dashboard_static_terminal",
       "target": "src_dashboard_static_terminal_chart",
       "relation": "indirect_call",
@@ -13823,7 +14490,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_research.py",
-      "source_location": "L115",
+      "source_location": "L122",
       "weight": 0.8
     },
     {
@@ -13834,7 +14501,18 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_research.py",
-      "source_location": "L124",
+      "source_location": "L131",
+      "weight": 0.8
+    },
+    {
+      "source": "tests_test_research_coveragetests",
+      "target": "src_research_journal_researchjournal",
+      "relation": "uses",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "tests/test_research.py",
+      "source_location": "L160",
       "weight": 0.8
     },
     {
@@ -13845,7 +14523,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_research.py",
-      "source_location": "L63",
+      "source_location": "L70",
       "weight": 0.8
     },
     {
@@ -13867,7 +14545,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_research.py",
-      "source_location": "L99",
+      "source_location": "L106",
       "weight": 0.8
     },
     {
@@ -14267,5 +14945,5 @@
       "source_file": "agents.md"
     }
   ],
-  "built_at_commit": "9563c8cebd4d74144df54d9bfca143c0c75f985e"
+  "built_at_commit": "7226b365ae1030ed0f38ad37bf21bd9d56fe5588"
 }

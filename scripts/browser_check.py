@@ -23,6 +23,16 @@ with sync_playwright() as p:
     page.on('pageerror',lambda e:errors.append(str(e)))
     page.goto('http://127.0.0.1:8080',wait_until='networkidle')
     page.wait_for_function("document.getElementById('equity').textContent !== '—'",timeout=20000)
+    page.wait_for_function("document.getElementById('research-health').textContent.includes('MAINNET')",timeout=20000)
+    assert page.locator('#research').is_visible()
+    assert 'OBSERVATION ONLY' in page.locator('#research').inner_text()
+    assert 'Mainnet public BTC data' in page.locator('#research').inner_text()
+    page.locator('[data-depth-band="25"]').click()
+    assert 'Truncated' in page.locator('#depth-coverage').inner_text() or 'Full' in page.locator('#depth-coverage').inner_text()
+    page.locator('#research-horizon').select_option('900')
+    page.locator('#research-horizon').select_option('60')
+    assert page.locator('#depth-heatmap').evaluate('(canvas) => canvas.width > 0 && canvas.height > 0')
+    page.evaluate('window.scrollTo(0,0)')
     page.screenshot(path=str(root/'artifacts/dashboard-desktop.png'),full_page=True)
     assert page.locator('#price-chart canvas').count()>0
     assert page.locator('#equity-chart canvas').count()>0
@@ -42,10 +52,19 @@ with sync_playwright() as p:
     page.set_viewport_size({'width':390,'height':844})
     page.locator('[data-tab="fills"]').click()
     assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
+    page.evaluate('window.scrollTo(0,0)')
     page.screenshot(path=str(root/'artifacts/dashboard-mobile.png'),full_page=True)
+    payload=requests.get('http://127.0.0.1:8080/api/terminal',timeout=15).json()
+    payload['research']['status']='stale'
+    page.route('**/api/terminal',lambda route:route.fulfill(status=200,content_type='application/json',body=json.dumps(payload)))
+    page.wait_for_function("document.getElementById('research-lean').textContent === 'Unavailable'",timeout=15000)
+    assert page.locator('#research-score').inner_text() == '—'
+    assert page.locator('#divergence-net').inner_text() == '—'
+    assert 'stale' in page.locator('#research-notice').inner_text()
+    page.unroute('**/api/terminal')
     page.route('**/api/terminal',lambda route:route.fulfill(status=503,body='offline'))
     page.wait_for_function("document.getElementById('connection').textContent.includes('Disconnected')",timeout=20000)
     assert 'stale' in page.locator('#notice').inner_text()
     assert not errors,errors
-    print(json.dumps({'browser':'Chromium','desktop':'1512x1100','mobile':'390x844','checks':['live data','candlestick and equity canvases','account tabs','search','timeframe','level toggle','fit view','CSV download','no horizontal page overflow','offline stale notice'],'page_errors':errors},indent=2))
+    print(json.dumps({'browser':'Chromium','desktop':'1512x1100','mobile':'390x844','checks':['live data','candlestick and equity canvases','account tabs','search','timeframe','level toggle','fit view','CSV download','no horizontal page overflow','offline stale notice','mainnet research separation','depth band controls','outcome horizon controls','liquidity canvas','stale research suppresses directional score and divergence'],'page_errors':errors},indent=2))
     browser.close()
