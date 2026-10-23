@@ -73,3 +73,7 @@ graphify export html
 ```
 
 `.graphifyignore` excludes secrets, account runtime data and vendored scripts. Extraction is local AST only; documentation relationships are not represented by this mode. See [AGENTS.md](AGENTS.md) for operating rules and [agents.md](agents.md) for module ownership and milestone history. Each major milestone updates documentation and graph, commits and pushes to the existing remote using credentials without printing them.
+
+## Market research (2026-10-23)
+
+A separate read-only observer now studies public **mainnet BTC** data while execution stays on testnet. It tracks sampled walls, symmetric depth, streamed aggressive flow, absorption hypotheses, closed-candle block confluence, large prints/public wallets, wallet-specific liquidations, funding, sentiment and indicative Kraken spot/perp divergence. A persistent journal measures prospective cost-adjusted 10s/1m/5m/15m markouts with unconditional controls. No research signal automatically places orders. See [research definitions and limitations](docs/RESEARCH.md). Dashboard integration follows this backend milestone.

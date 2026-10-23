@@ -10,6 +10,7 @@ from src.strategy.scalper import Scalper
 from src.risk.manager import RiskManager
 from src.learning.evaluator import Evaluator
 from src.learning.ledger import FillLedger
+from src.research.service import ResearchService
 from src.reconciler import PositionReconciler
 from src.dashboard.app import set_bot_reference, run_dashboard
 
@@ -43,6 +44,7 @@ class TradingBot:
         self.evaluator = Evaluator(trades_file=trades_file, performance_file=performance_file)
 
         self.ledger = FillLedger(Path(__file__).resolve().parents[1] / "data/ledger.sqlite")
+        self.research = ResearchService(Path(__file__).resolve().parents[1] / "data/research.sqlite")
         self.account_snapshot = {}
         self._halt_cleanup_at = 0.0
         self.halt_cleanup_status = "Not required"
@@ -91,6 +93,7 @@ class TradingBot:
             raise RuntimeError("Only testnet trading is authorized")
         self._init_exchange()
         self._subscribe_feeds()
+        self.research.start()
         self._start_dashboard()
 
         self.running = True
@@ -102,6 +105,7 @@ class TradingBot:
         except KeyboardInterrupt:
             log.info("Shutting down...")
         finally:
+            self.research.stop()
             self.running = False
 
     def _init_exchange(self):

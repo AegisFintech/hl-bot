@@ -221,9 +221,20 @@ def api_terminal():
                                target_status='Unverified research target', mode='Forward demo evaluation',
                                pending_signals=len(bot._pending_signals))
         out['levels'] = [{'price': l.price, 'kind': l.kind, 'score': l.score} for l in bot.sr_detector._levels]
+        try:
+            out['research'] = bot.research.snapshot()
+        except Exception:
+            log.exception('Research snapshot unavailable')
+            out['research'] = {'status':'unavailable','mode':'Observation only'}
         out['errors'] = errors
         _terminal_cache, _terminal_at = out, time.time()
         return jsonify(out)
+
+@app.route('/api/research')
+def api_research():
+    if not _bot_ref or not getattr(_bot_ref, 'research', None):
+        return jsonify({'status':'not_connected','mode':'Observation only'}), 503
+    return jsonify(_bot_ref.research.snapshot())
 
 @app.route('/api/export/fills.csv')
 def export_fills():

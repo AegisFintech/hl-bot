@@ -160,13 +160,26 @@
       "source_location": "L13"
     },
     {
+      "id": "src_learning_ledger_fillledger",
+      "label": "FillLedger",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": "fillledger",
+      "source_file": "src/learning/ledger.py",
+      "source_location": "L7"
+    },
+    {
       "id": "src_risk_manager_riskstate",
       "label": "RiskState",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 11,
-      "community_name": "Evaluator",
+      "community": 13,
+      "community_name": "FillLedger",
       "file_type": "code",
       "norm_label": "riskstate",
       "source_file": "src/risk/manager.py",
@@ -186,30 +199,95 @@
       "source_location": "L59"
     },
     {
-      "id": "src_learning_ledger_fillledger",
-      "label": "FillLedger",
+      "id": "src_research_journal_researchjournal",
+      "label": "ResearchJournal",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "FillLedger",
+      "community_name": "ResearchService",
       "file_type": "code",
-      "norm_label": "fillledger",
-      "source_file": "src/learning/ledger.py",
+      "norm_label": "researchjournal",
+      "source_file": "src/research/journal.py",
       "source_location": "L7"
     },
     {
-      "id": "scripts_replay_tape",
-      "label": "Tape",
+      "id": "src_research_microstructure_microstructure",
+      "label": "Microstructure",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 21,
-      "community_name": "Tape",
+      "community": 20,
+      "community_name": "ResearchService",
       "file_type": "code",
-      "norm_label": "tape",
-      "source_file": "scripts/replay.py",
-      "source_location": "L24"
+      "norm_label": "microstructure",
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L50"
+    },
+    {
+      "id": "src_research_service_researchservice",
+      "label": "ResearchService",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "researchservice",
+      "source_file": "src/research/service.py",
+      "source_location": "L45"
+    },
+    {
+      "id": "tests_test_research_coveragetests",
+      "label": "CoverageTests",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "coveragetests",
+      "source_file": "tests/test_research.py",
+      "source_location": "L113"
+    },
+    {
+      "id": "tests_test_research_journaltests",
+      "label": "JournalTests",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "journaltests",
+      "source_file": "tests/test_research.py",
+      "source_location": "L60"
+    },
+    {
+      "id": "tests_test_research_microstructuretests",
+      "label": "MicrostructureTests",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "microstructuretests",
+      "source_file": "tests/test_research.py",
+      "source_location": "L15"
+    },
+    {
+      "id": "tests_test_research_sourcetests",
+      "label": "SourceTests",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "sourcetests",
+      "source_file": "tests/test_research.py",
+      "source_location": "L88"
     },
     {
       "id": "src_reconciler_positionreconciler",
@@ -277,6 +355,19 @@
       "source_location": "L10"
     },
     {
+      "id": "scripts_replay_tape",
+      "label": "Tape",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "bot.py",
+      "file_type": "code",
+      "norm_label": "tape",
+      "source_file": "scripts/replay.py",
+      "source_location": "L24"
+    },
+    {
       "id": "tests_test_replay_fakescalper",
       "label": "FakeScalper",
       "_callable": true,
@@ -339,7 +430,7 @@
       "file_type": "code",
       "norm_label": "tradingbot",
       "source_file": "src/bot.py",
-      "source_location": "L19"
+      "source_location": "L20"
     },
     {
       "id": "tests_test_bot_emergencytests",
@@ -1219,36 +1310,12 @@
       "source_location": "L34"
     },
     {
-      "id": "src_risk_manager_riskmanager_init",
-      "label": ".__init__()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Evaluator",
-      "file_type": "code",
-      "norm_label": ".__init__()",
-      "source_file": "src/risk/manager.py",
-      "source_location": "L32"
-    },
-    {
-      "id": "src_risk_manager_riskstate_drawdown_pct",
-      "label": ".drawdown_pct()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Evaluator",
-      "file_type": "code",
-      "norm_label": ".drawdown_pct()",
-      "source_file": "src/risk/manager.py",
-      "source_location": "L28"
-    },
-    {
       "id": "scripts_monitor_bot_status",
       "label": "bot_status()",
       "_callable": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "monitor.py",
+      "community_name": "FillLedger",
       "file_type": "code",
       "norm_label": "bot_status()",
       "source_file": "scripts/monitor.py",
@@ -1260,7 +1327,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "monitor.py",
+      "community_name": "FillLedger",
       "file_type": "code",
       "norm_label": "live_tail()",
       "source_file": "scripts/monitor.py",
@@ -1272,7 +1339,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "monitor.py",
+      "community_name": "FillLedger",
       "file_type": "code",
       "norm_label": "load_json()",
       "source_file": "scripts/monitor.py",
@@ -1284,7 +1351,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "monitor.py",
+      "community_name": "FillLedger",
       "file_type": "code",
       "norm_label": "main()",
       "source_file": "scripts/monitor.py",
@@ -1296,7 +1363,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "monitor.py",
+      "community_name": "FillLedger",
       "file_type": "code",
       "norm_label": "parse_duration()",
       "source_file": "scripts/monitor.py",
@@ -1308,7 +1375,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "monitor.py",
+      "community_name": "FillLedger",
       "file_type": "code",
       "norm_label": "print_header()",
       "source_file": "scripts/monitor.py",
@@ -1320,7 +1387,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "monitor.py",
+      "community_name": "FillLedger",
       "file_type": "code",
       "norm_label": "print_overall_stats()",
       "source_file": "scripts/monitor.py",
@@ -1332,7 +1399,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "monitor.py",
+      "community_name": "FillLedger",
       "file_type": "code",
       "norm_label": "print_recent_trades()",
       "source_file": "scripts/monitor.py",
@@ -1344,11 +1411,155 @@
       "_callable": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "monitor.py",
+      "community_name": "FillLedger",
       "file_type": "code",
       "norm_label": "print_signal_stats()",
       "source_file": "scripts/monitor.py",
       "source_location": "L111"
+    },
+    {
+      "id": "scripts_snapshot_perf_main",
+      "label": "main()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": "main()",
+      "source_file": "scripts/snapshot_perf.py",
+      "source_location": "L12"
+    },
+    {
+      "id": "src_learning_ledger_fillledger_add",
+      "label": ".add()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": ".add()",
+      "source_file": "src/learning/ledger.py",
+      "source_location": "L22"
+    },
+    {
+      "id": "src_learning_ledger_fillledger_connect",
+      "label": ".connect()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": ".connect()",
+      "source_file": "src/learning/ledger.py",
+      "source_location": "L15"
+    },
+    {
+      "id": "src_learning_ledger_fillledger_equity",
+      "label": ".equity()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": ".equity()",
+      "source_file": "src/learning/ledger.py",
+      "source_location": "L37"
+    },
+    {
+      "id": "src_learning_ledger_fillledger_fills",
+      "label": ".fills()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": ".fills()",
+      "source_file": "src/learning/ledger.py",
+      "source_location": "L28"
+    },
+    {
+      "id": "src_learning_ledger_fillledger_identity",
+      "label": ".identity()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": ".identity()",
+      "source_file": "src/learning/ledger.py",
+      "source_location": "L19"
+    },
+    {
+      "id": "src_learning_ledger_fillledger_init",
+      "label": ".__init__()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": ".__init__()",
+      "source_file": "src/learning/ledger.py",
+      "source_location": "L8"
+    },
+    {
+      "id": "src_learning_ledger_fillledger_performance",
+      "label": ".performance()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": ".performance()",
+      "source_file": "src/learning/ledger.py",
+      "source_location": "L42"
+    },
+    {
+      "id": "src_learning_ledger_fillledger_sample_equity",
+      "label": ".sample_equity()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": ".sample_equity()",
+      "source_file": "src/learning/ledger.py",
+      "source_location": "L33"
+    },
+    {
+      "id": "src_risk_manager_riskmanager_init",
+      "label": ".__init__()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": ".__init__()",
+      "source_file": "src/risk/manager.py",
+      "source_location": "L32"
+    },
+    {
+      "id": "src_risk_manager_riskstate_drawdown_pct",
+      "label": ".drawdown_pct()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": ".drawdown_pct()",
+      "source_file": "src/risk/manager.py",
+      "source_location": "L28"
+    },
+    {
+      "id": "tests_test_risk_risktests_test_ledger_idempotency_and_fee_totals",
+      "label": ".test_ledger_idempotency_and_fee_totals()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": ".test_ledger_idempotency_and_fee_totals()",
+      "source_file": "tests/test_risk.py",
+      "source_location": "L63"
     },
     {
       "id": "src_agent_audit_append_audit",
@@ -1687,220 +1898,532 @@
       "source_location": "L20"
     },
     {
-      "id": "scripts_snapshot_perf_main",
-      "label": "main()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": "main()",
-      "source_file": "scripts/snapshot_perf.py",
-      "source_location": "L12"
-    },
-    {
-      "id": "src_learning_ledger_fillledger_add",
-      "label": ".add()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".add()",
-      "source_file": "src/learning/ledger.py",
-      "source_location": "L22"
-    },
-    {
-      "id": "src_learning_ledger_fillledger_connect",
+      "id": "src_research_journal_researchjournal_connect",
       "label": ".connect()",
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "FillLedger",
+      "community_name": "ResearchService",
       "file_type": "code",
       "norm_label": ".connect()",
-      "source_file": "src/learning/ledger.py",
-      "source_location": "L15"
+      "source_file": "src/research/journal.py",
+      "source_location": "L21"
     },
     {
-      "id": "src_learning_ledger_fillledger_equity",
-      "label": ".equity()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".equity()",
-      "source_file": "src/learning/ledger.py",
-      "source_location": "L37"
-    },
-    {
-      "id": "src_learning_ledger_fillledger_fills",
-      "label": ".fills()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".fills()",
-      "source_file": "src/learning/ledger.py",
-      "source_location": "L28"
-    },
-    {
-      "id": "src_learning_ledger_fillledger_identity",
-      "label": ".identity()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".identity()",
-      "source_file": "src/learning/ledger.py",
-      "source_location": "L19"
-    },
-    {
-      "id": "src_learning_ledger_fillledger_init",
+      "id": "src_research_journal_researchjournal_init",
       "label": ".__init__()",
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "FillLedger",
+      "community_name": "ResearchService",
       "file_type": "code",
       "norm_label": ".__init__()",
-      "source_file": "src/learning/ledger.py",
+      "source_file": "src/research/journal.py",
       "source_location": "L8"
     },
     {
-      "id": "src_learning_ledger_fillledger_performance",
-      "label": ".performance()",
+      "id": "src_research_journal_researchjournal_mark",
+      "label": ".mark()",
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "FillLedger",
+      "community_name": "ResearchService",
       "file_type": "code",
-      "norm_label": ".performance()",
-      "source_file": "src/learning/ledger.py",
-      "source_location": "L42"
+      "norm_label": ".mark()",
+      "source_file": "src/research/journal.py",
+      "source_location": "L40"
     },
     {
-      "id": "src_learning_ledger_fillledger_sample_equity",
-      "label": ".sample_equity()",
+      "id": "src_research_journal_researchjournal_observe",
+      "label": ".observe()",
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "FillLedger",
+      "community_name": "ResearchService",
       "file_type": "code",
-      "norm_label": ".sample_equity()",
-      "source_file": "src/learning/ledger.py",
-      "source_location": "L33"
-    },
-    {
-      "id": "tests_test_risk_risktests_test_ledger_idempotency_and_fee_totals",
-      "label": ".test_ledger_idempotency_and_fee_totals()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".test_ledger_idempotency_and_fee_totals()",
-      "source_file": "tests/test_risk.py",
-      "source_location": "L63"
-    },
-    {
-      "id": "scripts_replay_tape_bbo_age",
-      "label": ".bbo_age()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 21,
-      "community_name": "Tape",
-      "file_type": "code",
-      "norm_label": ".bbo_age()",
-      "source_file": "scripts/replay.py",
-      "source_location": "L31"
-    },
-    {
-      "id": "scripts_replay_tape_get_cached_bbo",
-      "label": ".get_cached_bbo()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 21,
-      "community_name": "Tape",
-      "file_type": "code",
-      "norm_label": ".get_cached_bbo()",
-      "source_file": "scripts/replay.py",
-      "source_location": "L29"
-    },
-    {
-      "id": "scripts_replay_tape_get_cached_candles",
-      "label": ".get_cached_candles()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 21,
-      "community_name": "Tape",
-      "file_type": "code",
-      "norm_label": ".get_cached_candles()",
-      "source_file": "scripts/replay.py",
+      "norm_label": ".observe()",
+      "source_file": "src/research/journal.py",
       "source_location": "L26"
     },
     {
-      "id": "scripts_replay_tape_get_candles",
-      "label": ".get_candles()",
+      "id": "src_research_journal_researchjournal_signal",
+      "label": ".signal()",
       "_callable": true,
       "_origin": "ast",
-      "community": 21,
-      "community_name": "Tape",
+      "community": 20,
+      "community_name": "ResearchService",
       "file_type": "code",
-      "norm_label": ".get_candles()",
-      "source_file": "scripts/replay.py",
-      "source_location": "L27"
-    },
-    {
-      "id": "scripts_replay_tape_get_mid_price",
-      "label": ".get_mid_price()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 21,
-      "community_name": "Tape",
-      "file_type": "code",
-      "norm_label": ".get_mid_price()",
-      "source_file": "scripts/replay.py",
-      "source_location": "L28"
-    },
-    {
-      "id": "scripts_replay_tape_init",
-      "label": ".__init__()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 21,
-      "community_name": "Tape",
-      "file_type": "code",
-      "norm_label": ".__init__()",
-      "source_file": "scripts/replay.py",
-      "source_location": "L25"
-    },
-    {
-      "id": "scripts_replay_tape_round_price",
-      "label": ".round_price()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 21,
-      "community_name": "Tape",
-      "file_type": "code",
-      "norm_label": ".round_price()",
-      "source_file": "scripts/replay.py",
+      "norm_label": ".signal()",
+      "source_file": "src/research/journal.py",
       "source_location": "L32"
     },
     {
-      "id": "scripts_replay_tape_round_size",
-      "label": ".round_size()",
+      "id": "src_research_journal_researchjournal_summary",
+      "label": ".summary()",
       "_callable": true,
       "_origin": "ast",
-      "community": 21,
-      "community_name": "Tape",
+      "community": 20,
+      "community_name": "ResearchService",
       "file_type": "code",
-      "norm_label": ".round_size()",
-      "source_file": "scripts/replay.py",
+      "norm_label": ".summary()",
+      "source_file": "src/research/journal.py",
+      "source_location": "L67"
+    },
+    {
+      "id": "src_research_microstructure_active_blocks",
+      "label": "active_blocks()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "active_blocks()",
+      "source_file": "src/research/microstructure.py",
       "source_location": "L33"
+    },
+    {
+      "id": "src_research_microstructure_finite",
+      "label": "finite()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "finite()",
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L8"
+    },
+    {
+      "id": "src_research_microstructure_microstructure_analyze",
+      "label": ".analyze()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".analyze()",
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L80"
+    },
+    {
+      "id": "src_research_microstructure_microstructure_ingest_trades",
+      "label": ".ingest_trades()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".ingest_trades()",
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L61"
+    },
+    {
+      "id": "src_research_microstructure_microstructure_init",
+      "label": ".__init__()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".__init__()",
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L51"
+    },
+    {
+      "id": "src_research_microstructure_normalize_book",
+      "label": "normalize_book()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "normalize_book()",
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L15"
+    },
+    {
+      "id": "src_research_service_divergence",
+      "label": "divergence()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "divergence()",
+      "source_file": "src/research/service.py",
+      "source_location": "L25"
+    },
+    {
+      "id": "src_research_service_researchservice_candles",
+      "label": "._candles()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "._candles()",
+      "source_file": "src/research/service.py",
+      "source_location": "L161"
+    },
+    {
+      "id": "src_research_service_researchservice_comparison",
+      "label": "._comparison()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "._comparison()",
+      "source_file": "src/research/service.py",
+      "source_location": "L129"
+    },
+    {
+      "id": "src_research_service_researchservice_context",
+      "label": "._context()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "._context()",
+      "source_file": "src/research/service.py",
+      "source_location": "L153"
+    },
+    {
+      "id": "src_research_service_researchservice_discover",
+      "label": "._discover()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "._discover()",
+      "source_file": "src/research/service.py",
+      "source_location": "L114"
+    },
+    {
+      "id": "src_research_service_researchservice_get",
+      "label": "._get()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "._get()",
+      "source_file": "src/research/service.py",
+      "source_location": "L71"
+    },
+    {
+      "id": "src_research_service_researchservice_info",
+      "label": "._info()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "._info()",
+      "source_file": "src/research/service.py",
+      "source_location": "L74"
+    },
+    {
+      "id": "src_research_service_researchservice_init",
+      "label": ".__init__()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".__init__()",
+      "source_file": "src/research/service.py",
+      "source_location": "L46"
+    },
+    {
+      "id": "src_research_service_researchservice_refresh",
+      "label": "._refresh()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "._refresh()",
+      "source_file": "src/research/service.py",
+      "source_location": "L135"
+    },
+    {
+      "id": "src_research_service_researchservice_run",
+      "label": "._run()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "._run()",
+      "source_file": "src/research/service.py",
+      "source_location": "L223"
+    },
+    {
+      "id": "src_research_service_researchservice_sentiment",
+      "label": "._sentiment()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "._sentiment()",
+      "source_file": "src/research/service.py",
+      "source_location": "L146"
+    },
+    {
+      "id": "src_research_service_researchservice_snapshot",
+      "label": ".snapshot()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".snapshot()",
+      "source_file": "src/research/service.py",
+      "source_location": "L233"
+    },
+    {
+      "id": "src_research_service_researchservice_start",
+      "label": ".start()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".start()",
+      "source_file": "src/research/service.py",
+      "source_location": "L77"
+    },
+    {
+      "id": "src_research_service_researchservice_step",
+      "label": ".step()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".step()",
+      "source_file": "src/research/service.py",
+      "source_location": "L183"
+    },
+    {
+      "id": "src_research_service_researchservice_stop",
+      "label": ".stop()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".stop()",
+      "source_file": "src/research/service.py",
+      "source_location": "L84"
+    },
+    {
+      "id": "src_research_service_researchservice_stream_loop",
+      "label": "._stream_loop()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "._stream_loop()",
+      "source_file": "src/research/service.py",
+      "source_location": "L88"
+    },
+    {
+      "id": "src_research_service_researchservice_wallets",
+      "label": "._wallets()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "._wallets()",
+      "source_file": "src/research/service.py",
+      "source_location": "L167"
+    },
+    {
+      "id": "tests_test_research_book",
+      "label": "book()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "book()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L10"
+    },
+    {
+      "id": "tests_test_research_coveragetests_test_auto_discovery_is_from_fresh_large_public_prints",
+      "label": ".test_auto_discovery_is_from_fresh_large_public_prints()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".test_auto_discovery_is_from_fresh_large_public_prints()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L122"
+    },
+    {
+      "id": "tests_test_research_coveragetests_test_partial_stream_cannot_create_trade_imbalance_or_absorption",
+      "label": ".test_partial_stream_cannot_create_trade_imbalance_or_absorption()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".test_partial_stream_cannot_create_trade_imbalance_or_absorption()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L114"
+    },
+    {
+      "id": "tests_test_research_coveragetests_test_secondary_source_failure_retains_timestamp_and_reports_error",
+      "label": ".test_secondary_source_failure_retains_timestamp_and_reports_error()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".test_secondary_source_failure_retains_timestamp_and_reports_error()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L132"
+    },
+    {
+      "id": "tests_test_research_journaltests_test_prospective_costs_baseline_and_idempotence",
+      "label": ".test_prospective_costs_baseline_and_idempotence()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".test_prospective_costs_baseline_and_idempotence()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L61"
+    },
+    {
+      "id": "tests_test_research_journaltests_test_restart_preserves_pending_events_and_long_short_controls",
+      "label": ".test_restart_preserves_pending_events_and_long_short_controls()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".test_restart_preserves_pending_events_and_long_short_controls()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L77"
+    },
+    {
+      "id": "tests_test_research_microstructuretests_test_absorption_requires_time_flow_and_persistent_wall",
+      "label": ".test_absorption_requires_time_flow_and_persistent_wall()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".test_absorption_requires_time_flow_and_persistent_wall()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L32"
+    },
+    {
+      "id": "tests_test_research_microstructuretests_test_band_coverage_is_explicit",
+      "label": ".test_band_coverage_is_explicit()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".test_band_coverage_is_explicit()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L50"
+    },
+    {
+      "id": "tests_test_research_microstructuretests_test_no_order_block_from_unclosed_candles",
+      "label": ".test_no_order_block_from_unclosed_candles()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".test_no_order_block_from_unclosed_candles()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L56"
+    },
+    {
+      "id": "tests_test_research_microstructuretests_test_stale_crossed_and_nonfinite_books_rejected",
+      "label": ".test_stale_crossed_and_nonfinite_books_rejected()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".test_stale_crossed_and_nonfinite_books_rejected()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L16"
+    },
+    {
+      "id": "tests_test_research_microstructuretests_test_trade_dedup_and_signed_execution",
+      "label": ".test_trade_dedup_and_signed_execution()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".test_trade_dedup_and_signed_execution()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L23"
+    },
+    {
+      "id": "tests_test_research_microstructuretests_test_walls_do_not_survive_observation_gaps",
+      "label": ".test_walls_do_not_survive_observation_gaps()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".test_walls_do_not_survive_observation_gaps()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L43"
+    },
+    {
+      "id": "tests_test_research_sourcetests_test_divergence_deducts_four_leg_costs_and_normalizes_fx",
+      "label": ".test_divergence_deducts_four_leg_costs_and_normalizes_fx()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".test_divergence_deducts_four_leg_costs_and_normalizes_fx()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L89"
+    },
+    {
+      "id": "tests_test_research_sourcetests_test_stale_snapshot_suppresses_direction",
+      "label": ".test_stale_snapshot_suppresses_direction()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".test_stale_snapshot_suppresses_direction()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L97"
+    },
+    {
+      "id": "tests_test_research_sourcetests_test_wallets_only_accept_bounded_explicit_addresses",
+      "label": ".test_wallets_only_accept_bounded_explicit_addresses()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": ".test_wallets_only_accept_bounded_explicit_addresses()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L107"
     },
     {
       "id": "scripts_healthcheck_main",
@@ -1924,7 +2447,7 @@
       "file_type": "code",
       "norm_label": ".__init__()",
       "source_file": "src/bot.py",
-      "source_location": "L21"
+      "source_location": "L22"
     },
     {
       "id": "src_reconciler_positionreconciler_backfill_missed_fills",
@@ -2116,7 +2639,7 @@
       "file_type": "code",
       "norm_label": "._start_dashboard()",
       "source_file": "src/bot.py",
-      "source_location": "L225"
+      "source_location": "L229"
     },
     {
       "id": "src_dashboard_app_api_account",
@@ -2191,6 +2714,18 @@
       "source_location": "L60"
     },
     {
+      "id": "src_dashboard_app_api_research",
+      "label": "api_research()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "app.py",
+      "file_type": "code",
+      "norm_label": "api_research()",
+      "source_file": "src/dashboard/app.py",
+      "source_location": "L234"
+    },
+    {
       "id": "src_dashboard_app_api_sr_levels",
       "label": "api_sr_levels()",
       "_callable": true,
@@ -2260,7 +2795,7 @@
       "file_type": "code",
       "norm_label": "export_fills()",
       "source_file": "src/dashboard/app.py",
-      "source_location": "L229"
+      "source_location": "L240"
     },
     {
       "id": "src_dashboard_app_favicon",
@@ -2308,7 +2843,7 @@
       "file_type": "code",
       "norm_label": "security_headers()",
       "source_file": "src/dashboard/app.py",
-      "source_location": "L239"
+      "source_location": "L250"
     },
     {
       "id": "src_dashboard_app_set_bot_reference",
@@ -2645,6 +3180,102 @@
       "norm_label": "replay()",
       "source_file": "scripts/replay.py",
       "source_location": "L36"
+    },
+    {
+      "id": "scripts_replay_tape_bbo_age",
+      "label": ".bbo_age()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "bot.py",
+      "file_type": "code",
+      "norm_label": ".bbo_age()",
+      "source_file": "scripts/replay.py",
+      "source_location": "L31"
+    },
+    {
+      "id": "scripts_replay_tape_get_cached_bbo",
+      "label": ".get_cached_bbo()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "bot.py",
+      "file_type": "code",
+      "norm_label": ".get_cached_bbo()",
+      "source_file": "scripts/replay.py",
+      "source_location": "L29"
+    },
+    {
+      "id": "scripts_replay_tape_get_cached_candles",
+      "label": ".get_cached_candles()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "bot.py",
+      "file_type": "code",
+      "norm_label": ".get_cached_candles()",
+      "source_file": "scripts/replay.py",
+      "source_location": "L26"
+    },
+    {
+      "id": "scripts_replay_tape_get_candles",
+      "label": ".get_candles()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "bot.py",
+      "file_type": "code",
+      "norm_label": ".get_candles()",
+      "source_file": "scripts/replay.py",
+      "source_location": "L27"
+    },
+    {
+      "id": "scripts_replay_tape_get_mid_price",
+      "label": ".get_mid_price()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "bot.py",
+      "file_type": "code",
+      "norm_label": ".get_mid_price()",
+      "source_file": "scripts/replay.py",
+      "source_location": "L28"
+    },
+    {
+      "id": "scripts_replay_tape_init",
+      "label": ".__init__()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "bot.py",
+      "file_type": "code",
+      "norm_label": ".__init__()",
+      "source_file": "scripts/replay.py",
+      "source_location": "L25"
+    },
+    {
+      "id": "scripts_replay_tape_round_price",
+      "label": ".round_price()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "bot.py",
+      "file_type": "code",
+      "norm_label": ".round_price()",
+      "source_file": "scripts/replay.py",
+      "source_location": "L32"
+    },
+    {
+      "id": "scripts_replay_tape_round_size",
+      "label": ".round_size()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "bot.py",
+      "file_type": "code",
+      "norm_label": ".round_size()",
+      "source_file": "scripts/replay.py",
+      "source_location": "L33"
     },
     {
       "id": "src_strategy_economics_atr",
@@ -2992,7 +3623,7 @@
       "file_type": "code",
       "norm_label": "._cancel_stale_entries()",
       "source_file": "src/bot.py",
-      "source_location": "L618"
+      "source_location": "L622"
     },
     {
       "id": "src_bot_tradingbot_check_tuning",
@@ -3004,7 +3635,7 @@
       "file_type": "code",
       "norm_label": "._check_tuning()",
       "source_file": "src/bot.py",
-      "source_location": "L622"
+      "source_location": "L626"
     },
     {
       "id": "src_bot_tradingbot_classify_exit",
@@ -3016,7 +3647,7 @@
       "file_type": "code",
       "norm_label": "._classify_exit()",
       "source_file": "src/bot.py",
-      "source_location": "L556"
+      "source_location": "L560"
     },
     {
       "id": "src_bot_tradingbot_emergency_flatten",
@@ -3028,7 +3659,7 @@
       "file_type": "code",
       "norm_label": "._emergency_flatten()",
       "source_file": "src/bot.py",
-      "source_location": "L257"
+      "source_location": "L261"
     },
     {
       "id": "src_bot_tradingbot_expire_entries",
@@ -3040,7 +3671,7 @@
       "file_type": "code",
       "norm_label": "._expire_entries()",
       "source_file": "src/bot.py",
-      "source_location": "L370"
+      "source_location": "L374"
     },
     {
       "id": "src_bot_tradingbot_flush_exit_buffers",
@@ -3052,7 +3683,7 @@
       "file_type": "code",
       "norm_label": "._flush_exit_buffers()",
       "source_file": "src/bot.py",
-      "source_location": "L569"
+      "source_location": "L573"
     },
     {
       "id": "src_bot_tradingbot_init_exchange",
@@ -3064,7 +3695,7 @@
       "file_type": "code",
       "norm_label": "._init_exchange()",
       "source_file": "src/bot.py",
-      "source_location": "L107"
+      "source_location": "L111"
     },
     {
       "id": "src_bot_tradingbot_match_active_signal",
@@ -3076,7 +3707,7 @@
       "file_type": "code",
       "norm_label": "._match_active_signal()",
       "source_file": "src/bot.py",
-      "source_location": "L504"
+      "source_location": "L508"
     },
     {
       "id": "src_bot_tradingbot_match_fill_to_signal",
@@ -3088,7 +3719,7 @@
       "file_type": "code",
       "norm_label": "._match_fill_to_signal()",
       "source_file": "src/bot.py",
-      "source_location": "L538"
+      "source_location": "L542"
     },
     {
       "id": "src_bot_tradingbot_on_fill",
@@ -3100,7 +3731,7 @@
       "file_type": "code",
       "norm_label": "._on_fill()",
       "source_file": "src/bot.py",
-      "source_location": "L392"
+      "source_location": "L396"
     },
     {
       "id": "src_bot_tradingbot_on_order_update",
@@ -3112,7 +3743,7 @@
       "file_type": "code",
       "norm_label": "._on_order_update()",
       "source_file": "src/bot.py",
-      "source_location": "L473"
+      "source_location": "L477"
     },
     {
       "id": "src_bot_tradingbot_on_ws_reconnect",
@@ -3124,7 +3755,7 @@
       "file_type": "code",
       "norm_label": "._on_ws_reconnect()",
       "source_file": "src/bot.py",
-      "source_location": "L489"
+      "source_location": "L493"
     },
     {
       "id": "src_bot_tradingbot_run_learning",
@@ -3136,7 +3767,7 @@
       "file_type": "code",
       "norm_label": "._run_learning()",
       "source_file": "src/bot.py",
-      "source_location": "L676"
+      "source_location": "L680"
     },
     {
       "id": "src_bot_tradingbot_run_loop",
@@ -3148,7 +3779,7 @@
       "file_type": "code",
       "norm_label": "._run_loop()",
       "source_file": "src/bot.py",
-      "source_location": "L230"
+      "source_location": "L234"
     },
     {
       "id": "src_bot_tradingbot_start",
@@ -3160,7 +3791,7 @@
       "file_type": "code",
       "norm_label": ".start()",
       "source_file": "src/bot.py",
-      "source_location": "L86"
+      "source_location": "L88"
     },
     {
       "id": "src_bot_tradingbot_subscribe_feeds",
@@ -3172,7 +3803,7 @@
       "file_type": "code",
       "norm_label": "._subscribe_feeds()",
       "source_file": "src/bot.py",
-      "source_location": "L207"
+      "source_location": "L211"
     },
     {
       "id": "src_bot_tradingbot_tick",
@@ -3184,7 +3815,7 @@
       "file_type": "code",
       "norm_label": "._tick()",
       "source_file": "src/bot.py",
-      "source_location": "L291"
+      "source_location": "L295"
     },
     {
       "id": "tests_test_bot_emergencytests_test_cancel_failure_still_closes_and_confirms",
@@ -3402,17 +4033,6 @@
       "source_location": ""
     },
     {
-      "id": "path",
-      "label": "Path",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Evaluator",
-      "file_type": "code",
-      "norm_label": "path",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "src_learning_evaluator",
       "label": "evaluator.py",
       "_origin": "ast",
@@ -3424,14 +4044,36 @@
       "source_location": "L1"
     },
     {
+      "id": "path",
+      "label": "Path",
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": "path",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "scripts_monitor",
       "label": "monitor.py",
       "_origin": "ast",
       "community": 13,
-      "community_name": "monitor.py",
+      "community_name": "FillLedger",
       "file_type": "code",
       "norm_label": "monitor.py",
       "source_file": "scripts/monitor.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "scripts_snapshot_perf",
+      "label": "snapshot_perf.py",
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "FillLedger",
+      "file_type": "code",
+      "norm_label": "snapshot_perf.py",
+      "source_file": "scripts/snapshot_perf.py",
       "source_location": "L1"
     },
     {
@@ -3439,7 +4081,7 @@
       "label": "timedelta",
       "_origin": "ast",
       "community": 13,
-      "community_name": "monitor.py",
+      "community_name": "FillLedger",
       "file_type": "code",
       "norm_label": "timedelta",
       "source_file": "",
@@ -3450,7 +4092,7 @@
       "label": "Parse recent log for signal/filter stats.",
       "_origin": "ast",
       "community": 13,
-      "community_name": "monitor.py",
+      "community_name": "FillLedger",
       "file_type": "rationale",
       "norm_label": "parse recent log for signal/filter stats.",
       "source_file": "scripts/monitor.py",
@@ -3461,7 +4103,7 @@
       "label": "Tail the log for key events.",
       "_origin": "ast",
       "community": 13,
-      "community_name": "monitor.py",
+      "community_name": "FillLedger",
       "file_type": "rationale",
       "norm_label": "tail the log for key events.",
       "source_file": "scripts/monitor.py",
@@ -3472,10 +4114,21 @@
       "label": "HL-Bot Performance Monitor Usage: python3 scripts/monitor.py # Full dashboard\u2026",
       "_origin": "ast",
       "community": 13,
-      "community_name": "monitor.py",
+      "community_name": "FillLedger",
       "file_type": "rationale",
       "norm_label": "hl-bot performance monitor usage: python3 scripts/monitor.py # full dashboard...",
       "source_file": "scripts/monitor.py",
+      "source_location": "L2"
+    },
+    {
+      "id": "scripts_snapshot_perf_rationale_2",
+      "label": "Append cost-inclusive exchange ledger and risk snapshots; safe for hourly cron.",
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "FillLedger",
+      "file_type": "rationale",
+      "norm_label": "append cost-inclusive exchange ledger and risk snapshots; safe for hourly cron.",
+      "source_file": "scripts/snapshot_perf.py",
       "source_location": "L2"
     },
     {
@@ -3710,26 +4363,114 @@
       "source_location": "L89"
     },
     {
-      "id": "scripts_snapshot_perf",
-      "label": "snapshot_perf.py",
+      "id": "src_research_journal",
+      "label": "journal.py",
       "_origin": "ast",
       "community": 20,
-      "community_name": "FillLedger",
+      "community_name": "ResearchService",
       "file_type": "code",
-      "norm_label": "snapshot_perf.py",
-      "source_file": "scripts/snapshot_perf.py",
+      "norm_label": "journal.py",
+      "source_file": "src/research/journal.py",
       "source_location": "L1"
     },
     {
-      "id": "scripts_snapshot_perf_rationale_2",
-      "label": "Append cost-inclusive exchange ledger and risk snapshots; safe for hourly cron.",
+      "id": "src_research_microstructure",
+      "label": "microstructure.py",
       "_origin": "ast",
       "community": 20,
-      "community_name": "FillLedger",
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "microstructure.py",
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_research_service",
+      "label": "service.py",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "service.py",
+      "source_file": "src/research/service.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_test_research",
+      "label": "test_research.py",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "test_research.py",
+      "source_file": "tests/test_research.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_research_journal_rationale_1",
+      "label": "Persistent prospective markouts. These are quote-based research, not filled\u2026",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
       "file_type": "rationale",
-      "norm_label": "append cost-inclusive exchange ledger and risk snapshots; safe for hourly cron.",
-      "source_file": "scripts/snapshot_perf.py",
-      "source_location": "L2"
+      "norm_label": "persistent prospective markouts. these are quote-based research, not filled...",
+      "source_file": "src/research/journal.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_research_microstructure_rationale_1",
+      "label": "Sampled L2/trade hypotheses. Scores are heuristics, never probabilities.",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "rationale",
+      "norm_label": "sampled l2/trade hypotheses. scores are heuristics, never probabilities.",
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_research_service_rationale_1",
+      "label": "Public read-only collectors on a daemon thread, isolated from demo execution.\u2026",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "rationale",
+      "norm_label": "public read-only collectors on a daemon thread, isolated from demo execution....",
+      "source_file": "src/research/service.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_research_service_rationale_26",
+      "label": "Indicative two-venue, four-leg roundtrip economics; no claim of executability.",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ResearchService",
+      "file_type": "rationale",
+      "norm_label": "indicative two-venue, four-leg roundtrip economics; no claim of executability.",
+      "source_file": "src/research/service.py",
+      "source_location": "L26"
+    },
+    {
+      "id": "src_research_init",
+      "label": "research/__init__.py",
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "research/__init__.py",
+      "file_type": "code",
+      "norm_label": "research/__init__.py",
+      "source_file": "src/research/__init__.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_research_init_rationale_1",
+      "label": "Read-only public market research; never imports the trading exchange client.",
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "research/__init__.py",
+      "file_type": "rationale",
+      "norm_label": "read-only public market research; never imports the trading exchange client.",
+      "source_file": "src/research/__init__.py",
+      "source_location": "L1"
     },
     {
       "id": "scripts_healthcheck",
@@ -4194,7 +4935,7 @@
       "source_location": "L1"
     },
     {
-      "id": "src_bot_rationale_505",
+      "id": "src_bot_rationale_509",
       "label": "Match fill to active signal without removing it (partial fills reuse the\u2026",
       "_origin": "ast",
       "community": 7,
@@ -4202,7 +4943,7 @@
       "file_type": "rationale",
       "norm_label": "match fill to active signal without removing it (partial fills reuse the...",
       "source_file": "src/bot.py",
-      "source_location": "L505"
+      "source_location": "L509"
     },
     {
       "id": "src_reconciler_py_hyperliquidclient",
@@ -5171,7 +5912,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L595",
+      "source_location": "L599",
       "weight": 1.0
     },
     {
@@ -5183,7 +5924,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L37",
+      "source_location": "L38",
       "weight": 1.0
     },
     {
@@ -5195,7 +5936,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L43",
+      "source_location": "L44",
       "weight": 1.0
     },
     {
@@ -5207,7 +5948,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L45",
+      "source_location": "L46",
+      "weight": 1.0
+    },
+    {
+      "source": "src_bot_tradingbot_init",
+      "target": "src_research_service_researchservice",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/bot.py",
+      "source_location": "L47",
       "weight": 1.0
     },
     {
@@ -5219,7 +5972,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L53",
+      "source_location": "L55",
       "weight": 1.0
     },
     {
@@ -5231,7 +5984,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L54",
+      "source_location": "L56",
       "weight": 1.0
     },
     {
@@ -5243,7 +5996,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L58",
+      "source_location": "L60",
       "weight": 1.0
     },
     {
@@ -5255,7 +6008,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L178",
+      "source_location": "L182",
       "weight": 1.0
     },
     {
@@ -5267,7 +6020,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L190",
+      "source_location": "L194",
       "weight": 1.0
     },
     {
@@ -5279,7 +6032,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L416",
+      "source_location": "L420",
       "weight": 1.0
     },
     {
@@ -5291,7 +6044,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L437",
+      "source_location": "L441",
       "weight": 1.0
     },
     {
@@ -5303,7 +6056,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L449",
+      "source_location": "L453",
       "weight": 1.0
     },
     {
@@ -5315,7 +6068,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L496",
+      "source_location": "L500",
       "weight": 1.0
     },
     {
@@ -5327,7 +6080,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L252",
+      "source_location": "L256",
       "weight": 1.0
     },
     {
@@ -5339,7 +6092,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L101",
+      "source_location": "L104",
       "weight": 1.0
     },
     {
@@ -5351,7 +6104,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L92",
+      "source_location": "L94",
       "weight": 1.0
     },
     {
@@ -5363,7 +6116,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L93",
+      "source_location": "L95",
       "weight": 1.0
     },
     {
@@ -5375,7 +6128,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L94",
+      "source_location": "L97",
       "weight": 1.0
     },
     {
@@ -5387,7 +6140,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L226",
+      "source_location": "L230",
       "weight": 1.0
     },
     {
@@ -5399,7 +6152,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L293",
+      "source_location": "L297",
       "weight": 1.0
     },
     {
@@ -5411,7 +6164,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L304",
+      "source_location": "L308",
       "weight": 1.0
     },
     {
@@ -5423,7 +6176,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L349",
+      "source_location": "L353",
       "weight": 1.0
     },
     {
@@ -5435,7 +6188,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L363",
+      "source_location": "L367",
       "weight": 1.0
     },
     {
@@ -6399,6 +7152,270 @@
       "weight": 1.0
     },
     {
+      "source": "src_research_journal_researchjournal_init",
+      "target": "src_research_journal_researchjournal_connect",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/journal.py",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_journal_researchjournal_mark",
+      "target": "src_research_journal_researchjournal_connect",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/journal.py",
+      "source_location": "L42",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_journal_researchjournal_observe",
+      "target": "src_research_journal_researchjournal_connect",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/journal.py",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_journal_researchjournal_signal",
+      "target": "src_research_journal_researchjournal_connect",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/journal.py",
+      "source_location": "L35",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_journal_researchjournal_summary",
+      "target": "src_research_journal_researchjournal_connect",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/journal.py",
+      "source_location": "L68",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_microstructure_active_blocks",
+      "target": "src_strategy_sr_detector_srdetector",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L35",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_microstructure_microstructure_analyze",
+      "target": "src_research_microstructure_normalize_book",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L81",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_microstructure_microstructure_ingest_trades",
+      "target": "src_research_microstructure_finite",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L63",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_microstructure_normalize_book",
+      "target": "src_research_microstructure_finite",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice_candles",
+      "target": "src_research_service_researchservice_info",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/service.py",
+      "source_location": "L163",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice_candles",
+      "target": "src_research_microstructure_active_blocks",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/service.py",
+      "source_location": "L164",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice_comparison",
+      "target": "src_research_service_researchservice_get",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/service.py",
+      "source_location": "L130",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice_context",
+      "target": "src_research_service_researchservice_info",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/service.py",
+      "source_location": "L154",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice_init",
+      "target": "src_research_journal_researchjournal",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/service.py",
+      "source_location": "L48",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice_init",
+      "target": "src_research_microstructure_microstructure",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/service.py",
+      "source_location": "L49",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice_run",
+      "target": "src_research_service_researchservice_step",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/service.py",
+      "source_location": "L226",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice_sentiment",
+      "target": "src_research_service_researchservice_get",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/service.py",
+      "source_location": "L147",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice_snapshot",
+      "target": "src_research_service_divergence",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/service.py",
+      "source_location": "L248",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice_step",
+      "target": "src_research_service_researchservice_discover",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/service.py",
+      "source_location": "L189",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice_step",
+      "target": "src_research_service_researchservice_info",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/service.py",
+      "source_location": "L190",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice_step",
+      "target": "src_research_service_researchservice_refresh",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/service.py",
+      "source_location": "L215",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice_wallets",
+      "target": "src_research_service_researchservice_info",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/research/service.py",
+      "source_location": "L170",
+      "weight": 1.0
+    },
+    {
       "source": "src_risk_manager_riskmanager_check_daily_reset",
       "target": "src_risk_manager_riskmanager_reset_daily",
       "relation": "calls",
@@ -6855,6 +7872,246 @@
       "weight": 1.0
     },
     {
+      "source": "tests_test_research_coveragetests_test_auto_discovery_is_from_fresh_large_public_prints",
+      "target": "src_research_service_researchservice",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L124",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_coveragetests_test_partial_stream_cannot_create_trade_imbalance_or_absorption",
+      "target": "src_research_microstructure_microstructure",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L115",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_coveragetests_test_partial_stream_cannot_create_trade_imbalance_or_absorption",
+      "target": "tests_test_research_book",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L117",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_coveragetests_test_secondary_source_failure_retains_timestamp_and_reports_error",
+      "target": "src_research_service_researchservice",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L134",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_journaltests_test_prospective_costs_baseline_and_idempotence",
+      "target": "src_research_journal_researchjournal",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L63",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_journaltests_test_restart_preserves_pending_events_and_long_short_controls",
+      "target": "src_research_journal_researchjournal",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L79",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_microstructuretests_test_absorption_requires_time_flow_and_persistent_wall",
+      "target": "src_research_microstructure_microstructure",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L33",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_microstructuretests_test_absorption_requires_time_flow_and_persistent_wall",
+      "target": "tests_test_research_book",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L34",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_microstructuretests_test_band_coverage_is_explicit",
+      "target": "src_research_microstructure_microstructure",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L51",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_microstructuretests_test_band_coverage_is_explicit",
+      "target": "tests_test_research_book",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L51",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_microstructuretests_test_no_order_block_from_unclosed_candles",
+      "target": "src_research_microstructure_active_blocks",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L58",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_microstructuretests_test_stale_crossed_and_nonfinite_books_rejected",
+      "target": "src_research_microstructure_normalize_book",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_microstructuretests_test_stale_crossed_and_nonfinite_books_rejected",
+      "target": "tests_test_research_book",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_microstructuretests_test_trade_dedup_and_signed_execution",
+      "target": "src_research_microstructure_microstructure",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_microstructuretests_test_trade_dedup_and_signed_execution",
+      "target": "tests_test_research_book",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_microstructuretests_test_walls_do_not_survive_observation_gaps",
+      "target": "src_research_microstructure_microstructure",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L44",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_microstructuretests_test_walls_do_not_survive_observation_gaps",
+      "target": "tests_test_research_book",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L45",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_sourcetests_test_divergence_deducts_four_leg_costs_and_normalizes_fx",
+      "target": "src_research_service_divergence",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L93",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_sourcetests_test_stale_snapshot_suppresses_direction",
+      "target": "src_research_service_researchservice",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L99",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_sourcetests_test_wallets_only_accept_bounded_explicit_addresses",
+      "target": "src_research_service_researchservice",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_research.py",
+      "source_location": "L109",
+      "weight": 1.0
+    },
+    {
       "source": "tests_test_risk_risktests_test_corrupt_state_fails_closed",
       "target": "src_risk_manager_riskmanager",
       "relation": "calls",
@@ -7131,6 +8388,18 @@
       "weight": 1.0
     },
     {
+      "source": "src_dashboard_app_api_research",
+      "target": "route",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "decorator",
+      "source_file": "src/dashboard/app.py",
+      "source_location": "L233",
+      "weight": 1.0
+    },
+    {
       "source": "src_dashboard_app_api_sr_levels",
       "target": "route",
       "relation": "references",
@@ -7199,7 +8468,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "src/dashboard/app.py",
-      "source_location": "L228",
+      "source_location": "L239",
       "weight": 1.0
     },
     {
@@ -7235,7 +8504,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "src/dashboard/app.py",
-      "source_location": "L238",
+      "source_location": "L249",
       "weight": 1.0
     },
     {
@@ -7491,6 +8760,42 @@
       "weight": 1.0
     },
     {
+      "source": "src_bot",
+      "target": "src_research_service_researchservice",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/bot.py",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "src_bot",
+      "target": "src_dashboard_app_run_dashboard",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/bot.py",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "src_bot",
+      "target": "src_dashboard_app_set_bot_reference",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/bot.py",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
       "source": "src_reconciler",
       "target": "src_strategy_economics_bracket_distances",
       "relation": "imports",
@@ -7500,6 +8805,42 @@
       "context": "import",
       "source_file": "src/reconciler.py",
       "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service",
+      "target": "src_research_microstructure_active_blocks",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/research/service.py",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service",
+      "target": "src_research_microstructure_microstructure",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/research/service.py",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service",
+      "target": "src_research_journal_researchjournal",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/research/service.py",
+      "source_location": "L18",
       "weight": 1.0
     },
     {
@@ -7560,6 +8901,78 @@
       "context": "import",
       "source_file": "tests/test_replay.py",
       "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research",
+      "target": "src_research_microstructure_active_blocks",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/test_research.py",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research",
+      "target": "src_research_microstructure_microstructure",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/test_research.py",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research",
+      "target": "src_research_microstructure_normalize_book",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/test_research.py",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research",
+      "target": "src_research_journal_researchjournal",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/test_research.py",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research",
+      "target": "src_research_service_divergence",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/test_research.py",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research",
+      "target": "src_research_service_researchservice",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/test_research.py",
+      "source_location": "L7",
       "weight": 1.0
     },
     {
@@ -7816,7 +9229,7 @@
     },
     {
       "source": "src_bot",
-      "target": "src_reconciler",
+      "target": "src_research_service",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -7828,7 +9241,7 @@
     },
     {
       "source": "src_bot",
-      "target": "src_dashboard_app",
+      "target": "src_reconciler",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -7836,6 +9249,18 @@
       "context": "import",
       "source_file": "src/bot.py",
       "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "src_bot",
+      "target": "src_dashboard_app",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/bot.py",
+      "source_location": "L15",
       "weight": 1.0
     },
     {
@@ -7883,7 +9308,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/dashboard/app.py",
-      "source_location": "L248",
+      "source_location": "L259",
       "weight": 1.0
     },
     {
@@ -7920,6 +9345,42 @@
       "context": "import",
       "source_file": "src/reconciler.py",
       "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_microstructure",
+      "target": "src_strategy_sr_detector",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service",
+      "target": "src_research_microstructure",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/research/service.py",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service",
+      "target": "src_research_journal",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/research/service.py",
+      "source_location": "L18",
       "weight": 1.0
     },
     {
@@ -8007,6 +9468,42 @@
       "weight": 1.0
     },
     {
+      "source": "tests_test_research",
+      "target": "src_research_microstructure",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/test_research.py",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research",
+      "target": "src_research_journal",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/test_research.py",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research",
+      "target": "src_research_service",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/test_research.py",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
       "source": "tests_test_risk",
       "target": "src_risk_manager",
       "relation": "imports_from",
@@ -8075,7 +9572,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "src/bot.py",
-      "source_location": "L21",
+      "source_location": "L22",
       "weight": 1.0
     },
     {
@@ -8647,7 +10144,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L19",
+      "source_location": "L20",
       "weight": 1.0
     },
     {
@@ -8740,13 +10237,24 @@
     },
     {
       "source": "src_dashboard_app",
+      "target": "src_dashboard_app_api_research",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/dashboard/app.py",
+      "source_location": "L234",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_app",
       "target": "src_dashboard_app_export_fills",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/dashboard/app.py",
-      "source_location": "L229",
+      "source_location": "L240",
       "weight": 1.0
     },
     {
@@ -8757,7 +10265,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/dashboard/app.py",
-      "source_location": "L239",
+      "source_location": "L250",
       "weight": 1.0
     },
     {
@@ -9047,6 +10555,83 @@
       "weight": 1.0
     },
     {
+      "source": "src_research_journal",
+      "target": "src_research_journal_researchjournal",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/journal.py",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_microstructure",
+      "target": "src_research_microstructure_normalize_book",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_microstructure",
+      "target": "src_research_microstructure_active_blocks",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L33",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_microstructure",
+      "target": "src_research_microstructure_microstructure",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L50",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_microstructure",
+      "target": "src_research_microstructure_finite",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service",
+      "target": "src_research_service_divergence",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/service.py",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service",
+      "target": "src_research_service_researchservice",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/service.py",
+      "source_location": "L45",
+      "weight": 1.0
+    },
+    {
       "source": "src_risk_manager",
       "target": "src_risk_manager_riskstate",
       "relation": "contains",
@@ -9212,6 +10797,61 @@
       "weight": 1.0
     },
     {
+      "source": "tests_test_research",
+      "target": "tests_test_research_book",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research",
+      "target": "tests_test_research_coveragetests",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L113",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research",
+      "target": "tests_test_research_microstructuretests",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research",
+      "target": "tests_test_research_journaltests",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L60",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research",
+      "target": "tests_test_research_sourcetests",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L88",
+      "weight": 1.0
+    },
+    {
       "source": "tests_test_risk",
       "target": "tests_test_risk_risktests",
       "relation": "contains",
@@ -9373,7 +11013,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L107",
+      "source_location": "L111",
       "weight": 1.0
     },
     {
@@ -9384,7 +11024,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L207",
+      "source_location": "L211",
       "weight": 1.0
     },
     {
@@ -9395,7 +11035,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L21",
+      "source_location": "L22",
       "weight": 1.0
     },
     {
@@ -9406,7 +11046,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L225",
+      "source_location": "L229",
       "weight": 1.0
     },
     {
@@ -9417,7 +11057,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L230",
+      "source_location": "L234",
       "weight": 1.0
     },
     {
@@ -9428,7 +11068,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L257",
+      "source_location": "L261",
       "weight": 1.0
     },
     {
@@ -9439,7 +11079,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L291",
+      "source_location": "L295",
       "weight": 1.0
     },
     {
@@ -9450,7 +11090,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L370",
+      "source_location": "L374",
       "weight": 1.0
     },
     {
@@ -9461,7 +11101,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L392",
+      "source_location": "L396",
       "weight": 1.0
     },
     {
@@ -9472,7 +11112,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L473",
+      "source_location": "L477",
       "weight": 1.0
     },
     {
@@ -9483,7 +11123,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L489",
+      "source_location": "L493",
       "weight": 1.0
     },
     {
@@ -9494,7 +11134,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L504",
+      "source_location": "L508",
       "weight": 1.0
     },
     {
@@ -9505,7 +11145,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L538",
+      "source_location": "L542",
       "weight": 1.0
     },
     {
@@ -9516,7 +11156,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L556",
+      "source_location": "L560",
       "weight": 1.0
     },
     {
@@ -9527,7 +11167,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L569",
+      "source_location": "L573",
       "weight": 1.0
     },
     {
@@ -9538,7 +11178,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L618",
+      "source_location": "L622",
       "weight": 1.0
     },
     {
@@ -9549,7 +11189,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L622",
+      "source_location": "L626",
       "weight": 1.0
     },
     {
@@ -9560,7 +11200,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L676",
+      "source_location": "L680",
       "weight": 1.0
     },
     {
@@ -9571,7 +11211,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L86",
+      "source_location": "L88",
       "weight": 1.0
     },
     {
@@ -10433,6 +12073,281 @@
       "weight": 1.0
     },
     {
+      "source": "src_research_journal_researchjournal",
+      "target": "src_research_journal_researchjournal_connect",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/journal.py",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_journal_researchjournal",
+      "target": "src_research_journal_researchjournal_observe",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/journal.py",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_journal_researchjournal",
+      "target": "src_research_journal_researchjournal_signal",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/journal.py",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_journal_researchjournal",
+      "target": "src_research_journal_researchjournal_mark",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/journal.py",
+      "source_location": "L40",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_journal_researchjournal",
+      "target": "src_research_journal_researchjournal_summary",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/journal.py",
+      "source_location": "L67",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_journal_researchjournal",
+      "target": "src_research_journal_researchjournal_init",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/journal.py",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_microstructure_microstructure",
+      "target": "src_research_microstructure_microstructure_init",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L51",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_microstructure_microstructure",
+      "target": "src_research_microstructure_microstructure_ingest_trades",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L61",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_microstructure_microstructure",
+      "target": "src_research_microstructure_microstructure_analyze",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L80",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice",
+      "target": "src_research_service_researchservice_discover",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/service.py",
+      "source_location": "L114",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice",
+      "target": "src_research_service_researchservice_comparison",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/service.py",
+      "source_location": "L129",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice",
+      "target": "src_research_service_researchservice_refresh",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/service.py",
+      "source_location": "L135",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice",
+      "target": "src_research_service_researchservice_sentiment",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/service.py",
+      "source_location": "L146",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice",
+      "target": "src_research_service_researchservice_context",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/service.py",
+      "source_location": "L153",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice",
+      "target": "src_research_service_researchservice_candles",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/service.py",
+      "source_location": "L161",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice",
+      "target": "src_research_service_researchservice_wallets",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/service.py",
+      "source_location": "L167",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice",
+      "target": "src_research_service_researchservice_step",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/service.py",
+      "source_location": "L183",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice",
+      "target": "src_research_service_researchservice_run",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/service.py",
+      "source_location": "L223",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice",
+      "target": "src_research_service_researchservice_snapshot",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/service.py",
+      "source_location": "L233",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice",
+      "target": "src_research_service_researchservice_init",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/service.py",
+      "source_location": "L46",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice",
+      "target": "src_research_service_researchservice_get",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/service.py",
+      "source_location": "L71",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice",
+      "target": "src_research_service_researchservice_info",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/service.py",
+      "source_location": "L74",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice",
+      "target": "src_research_service_researchservice_start",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/service.py",
+      "source_location": "L77",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice",
+      "target": "src_research_service_researchservice_stop",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/service.py",
+      "source_location": "L84",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_researchservice",
+      "target": "src_research_service_researchservice_stream_loop",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/service.py",
+      "source_location": "L88",
+      "weight": 1.0
+    },
+    {
       "source": "src_risk_manager_riskmanager",
       "target": "src_risk_manager_riskmanager_compute_position_size",
       "relation": "method",
@@ -11126,6 +13041,160 @@
       "weight": 1.0
     },
     {
+      "source": "tests_test_research_coveragetests",
+      "target": "tests_test_research_coveragetests_test_partial_stream_cannot_create_trade_imbalance_or_absorption",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L114",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_coveragetests",
+      "target": "tests_test_research_coveragetests_test_auto_discovery_is_from_fresh_large_public_prints",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L122",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_coveragetests",
+      "target": "tests_test_research_coveragetests_test_secondary_source_failure_retains_timestamp_and_reports_error",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L132",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_journaltests",
+      "target": "tests_test_research_journaltests_test_prospective_costs_baseline_and_idempotence",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L61",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_journaltests",
+      "target": "tests_test_research_journaltests_test_restart_preserves_pending_events_and_long_short_controls",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L77",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_microstructuretests",
+      "target": "tests_test_research_microstructuretests_test_stale_crossed_and_nonfinite_books_rejected",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_microstructuretests",
+      "target": "tests_test_research_microstructuretests_test_trade_dedup_and_signed_execution",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_microstructuretests",
+      "target": "tests_test_research_microstructuretests_test_absorption_requires_time_flow_and_persistent_wall",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_microstructuretests",
+      "target": "tests_test_research_microstructuretests_test_walls_do_not_survive_observation_gaps",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L43",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_microstructuretests",
+      "target": "tests_test_research_microstructuretests_test_band_coverage_is_explicit",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L50",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_microstructuretests",
+      "target": "tests_test_research_microstructuretests_test_no_order_block_from_unclosed_candles",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L56",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_sourcetests",
+      "target": "tests_test_research_sourcetests_test_wallets_only_accept_bounded_explicit_addresses",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L107",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_sourcetests",
+      "target": "tests_test_research_sourcetests_test_divergence_deducts_four_leg_costs_and_normalizes_fx",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L89",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_research_sourcetests",
+      "target": "tests_test_research_sourcetests_test_stale_snapshot_suppresses_direction",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_research.py",
+      "source_location": "L97",
+      "weight": 1.0
+    },
+    {
       "source": "tests_test_risk_risktests",
       "target": "tests_test_risk_risktests_test_exact_limit_latches_across_restart_and_midnight",
       "relation": "method",
@@ -11390,14 +13459,14 @@
       "weight": 1.0
     },
     {
-      "source": "src_bot_rationale_505",
+      "source": "src_bot_rationale_509",
       "target": "src_bot_tradingbot_match_active_signal",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L505",
+      "source_location": "L509",
       "weight": 1.0
     },
     {
@@ -11420,6 +13489,61 @@
       "confidence_score": 1.0,
       "source_file": "src/reconciler.py",
       "source_location": "L176",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_init_rationale_1",
+      "target": "src_research_init",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/__init__.py",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_journal_rationale_1",
+      "target": "src_research_journal",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/journal.py",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_microstructure_rationale_1",
+      "target": "src_research_microstructure",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_rationale_1",
+      "target": "src_research_service",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/service.py",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "src_research_service_rationale_26",
+      "target": "src_research_service_divergence",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/research/service.py",
+      "source_location": "L26",
       "weight": 1.0
     },
     {
@@ -11453,7 +13577,7 @@
       "confidence_score": 0.85,
       "context": "argument",
       "source_file": "src/bot.py",
-      "source_location": "L227",
+      "source_location": "L231",
       "weight": 1.0
     },
     {
@@ -11637,6 +13761,39 @@
       "weight": 1.0
     },
     {
+      "source": "src_bot_tradingbot",
+      "target": "src_research_service_researchservice",
+      "relation": "uses",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "src/bot.py",
+      "source_location": "L47",
+      "weight": 0.8
+    },
+    {
+      "source": "src_research_service_researchservice",
+      "target": "src_research_journal_researchjournal",
+      "relation": "uses",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "src/research/service.py",
+      "source_location": "L48",
+      "weight": 0.8
+    },
+    {
+      "source": "src_research_service_researchservice",
+      "target": "src_research_microstructure_microstructure",
+      "relation": "uses",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "src/research/service.py",
+      "source_location": "L49",
+      "weight": 0.8
+    },
+    {
       "source": "tests_test_bot_emergencytests",
       "target": "src_bot_tradingbot",
       "relation": "uses",
@@ -11656,6 +13813,61 @@
       "confidence_score": 0.95,
       "source_file": "tests/test_exchange.py",
       "source_location": "L35",
+      "weight": 0.8
+    },
+    {
+      "source": "tests_test_research_coveragetests",
+      "target": "src_research_microstructure_microstructure",
+      "relation": "uses",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "tests/test_research.py",
+      "source_location": "L115",
+      "weight": 0.8
+    },
+    {
+      "source": "tests_test_research_coveragetests",
+      "target": "src_research_service_researchservice",
+      "relation": "uses",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "tests/test_research.py",
+      "source_location": "L124",
+      "weight": 0.8
+    },
+    {
+      "source": "tests_test_research_journaltests",
+      "target": "src_research_journal_researchjournal",
+      "relation": "uses",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "tests/test_research.py",
+      "source_location": "L63",
+      "weight": 0.8
+    },
+    {
+      "source": "tests_test_research_microstructuretests",
+      "target": "src_research_microstructure_microstructure",
+      "relation": "uses",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "tests/test_research.py",
+      "source_location": "L24",
+      "weight": 0.8
+    },
+    {
+      "source": "tests_test_research_sourcetests",
+      "target": "src_research_service_researchservice",
+      "relation": "uses",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "tests/test_research.py",
+      "source_location": "L99",
       "weight": 0.8
     },
     {
@@ -12055,5 +14267,5 @@
       "source_file": "agents.md"
     }
   ],
-  "built_at_commit": "6ad733534e2e7a11c1468d747e379b55b0d45ccf"
+  "built_at_commit": "9563c8cebd4d74144df54d9bfca143c0c75f985e"
 }
