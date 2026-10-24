@@ -19,3 +19,4 @@ gh.sh
 data/
 artifacts/
 bot.log.*
+bot.log-*
