@@ -7,6 +7,27 @@ LEGACY_HORIZONS = (10, 60, 300, 900)
 HORIZONS = LEGACY_HORIZONS + (1800, 3600, 14400)
 
 
+def compact_observation(snapshot):
+    """Diagnostic minute sample; event evidence lives in signals/outcomes."""
+    keys = (
+        "sampled_at",
+        "source_time",
+        "bid",
+        "ask",
+        "mid",
+        "spread_bps",
+        "score",
+        "lean",
+        "depth_imbalance",
+        "symmetric_depth_bps",
+        "absorption",
+        "change_60s_bps",
+        "flow",
+        "trade_stream",
+    )
+    return {key: snapshot[key] for key in keys if key in snapshot}
+
+
 class ResearchJournal:
     def __init__(self, path):
         self.path = str(path)
@@ -36,11 +57,11 @@ class ResearchJournal:
         return transaction(self.path, rows=True)
 
     def observe(self, snapshot):
-        trimmed = {k: v for k, v in snapshot.items() if k not in ("heatmap",)}
+        trimmed = compact_observation(snapshot)
         with self.connect() as db:
             db.execute(
                 "INSERT OR IGNORE INTO observations VALUES (?,?)",
-                (int(snapshot["sampled_at"] // 15) * 15, json.dumps(trimmed)),
+                (int(snapshot["sampled_at"] // 60) * 60, json.dumps(trimmed)),
             )
             db.execute(
                 "DELETE FROM observations WHERE time < ?",

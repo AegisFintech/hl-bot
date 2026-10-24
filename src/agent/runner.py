@@ -18,6 +18,7 @@ from src.agent.tools import (
     update_tuning, edit_source_file, restart_bot, read_source_file,
     reset_run_limits,
 )
+from src.logging_setup import file_handler
 from src.agent.audit import append_audit
 
 LOG_FILE = Path("/root/hl-bot/data/agent.log")
@@ -27,7 +28,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(levelname)s %(message)s",
     handlers=[
-        logging.FileHandler(LOG_FILE),
+        file_handler(LOG_FILE),
         logging.StreamHandler(),
     ],
 )

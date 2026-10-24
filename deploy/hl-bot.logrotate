@@ -1,0 +1,12 @@
+/root/hl-bot/bot.log /root/hl-bot/data/agent.log {
+    weekly 7
+    rotate 4
+    missingok
+    notifempty
+    compress
+    delaycompress
+    dateext
+    dateformat -%Y%m%d
+    create 0600 root root
+    su root root
+}

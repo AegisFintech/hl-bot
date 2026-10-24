@@ -9,6 +9,7 @@ from pathlib import Path
 
 class FillLedger:
     def __init__(self, path):
+        self._last_retention = None
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with self.connect() as db:
@@ -18,6 +19,8 @@ class FillLedger:
             db.execute(
                 "CREATE TABLE IF NOT EXISTS equity (time INTEGER PRIMARY KEY, value REAL, peak REAL)"
             )
+
+            db.execute("CREATE INDEX IF NOT EXISTS fills_time ON fills(time)")
 
     def connect(self):
         return transaction(self.path, timeout=10)
@@ -42,10 +45,35 @@ class FillLedger:
         return [json.loads(r[0]) for r in rows]
 
     def sample_equity(self, value, peak):
+        now = int(time.time())
         with self.connect() as db:
             db.execute(
                 "INSERT OR REPLACE INTO equity VALUES (?, ?, ?)",
-                (int(time.time()), value, peak),
+                (now, value, peak),
+            )
+
+        if self._last_retention is None or now - self._last_retention >= 86400:
+            self.compact_equity(now)
+            self._last_retention = now
+
+    def compact_equity(self, now):
+        """Keep 30 days dense, then hourly min/max equity, max peak and last.
+
+        Risk enforcement uses separate persistent state, never this chart history.
+        """
+        with self.connect() as db:
+            db.execute(
+                """DELETE FROM equity WHERE time IN (
+                SELECT time FROM (
+                    SELECT time,
+                    ROW_NUMBER() OVER (PARTITION BY time/3600 ORDER BY value,time) lo,
+                    ROW_NUMBER() OVER (PARTITION BY time/3600 ORDER BY value DESC,time DESC) hi,
+                    ROW_NUMBER() OVER (PARTITION BY time/3600 ORDER BY peak DESC,time DESC) pk,
+                    ROW_NUMBER() OVER (PARTITION BY time/3600 ORDER BY time DESC) last
+                    FROM equity WHERE time < ?
+                ) WHERE lo>1 AND hi>1 AND pk>1 AND last>1
+            )""",
+                (now - 30 * 86400,),
             )
 
     def equity(self, limit=3000):

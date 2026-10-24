@@ -1,4 +1,6 @@
 import logging
+from pathlib import Path
+from src.logging_setup import file_handler
 
 import config
 from src.exchange.hyperliquid import HyperliquidClient
@@ -6,6 +8,7 @@ from src.bot import TradingBot
 
 logging.basicConfig(
     level=logging.INFO,
+    handlers=[file_handler(Path(__file__).resolve().parent / "bot.log"), logging.StreamHandler()],
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
 )

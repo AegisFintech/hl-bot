@@ -44,3 +44,7 @@ Current baseline: **53 regressions**. Fixed experiment definitions and unimpleme
 ## Experiment dashboard milestone — 2026-10-24
 
 Current baseline: **57 regressions**. Verify nine expandable experiment cards, explicit unavailable-data prerequisites, 4h horizon, matched-control missing states and complete-trade accounting in desktop/mobile browser checks. Matched comparisons may reuse same-hour control pools and include later observations; they are descriptive, not a tradable input or causal proof. Six experiments and wall-consumption mode are blocked pending the documented data. Failed research cycles/comparison sources must suppress cached candidates even while the last quote is recent.
+
+## Storage retention milestone — 2026-10-24
+
+Current baseline: **60 regressions**. Preserve fills, signals/outcomes, missed horizons, source times, wallet baselines and agent audit history. Only diagnostic observations expire after seven days and equity older than 30 days is compacted to hourly minimum/maximum equity, maximum peak and last sample. Never use chart compaction to alter risk state. Offline migration must stop the bot, back up databases and check integrity. Weekly log rotation requires installed logrotate, its enabled timer and the checked-in journald service override to prevent duplicate file writes; retain four archives. Watched handlers must reopen renamed logs.

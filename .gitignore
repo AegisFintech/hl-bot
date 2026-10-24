@@ -18,3 +18,4 @@ gh.sh
 .venv/
 data/
 artifacts/
+bot.log.*
