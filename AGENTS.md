@@ -36,3 +36,7 @@ graphify export html
 ```
 
 `.graphifyignore` excludes credentials, runtime data and vendored scripts. Track graphify-out/graph.json, graph.html and GRAPH_REPORT.md explicitly; caches remain ignored. Confirm remote HEAD/CI after pushing. Full research definitions and operational limitations are in docs/RESEARCH.md; initial overhaul findings are in docs/OVERHAUL.md.
+
+## Experiment backend milestone — 2026-10-24
+
+Current baseline: **53 regressions**. Fixed experiment definitions and unimplemented data dependencies are in docs/EXPERIMENTS.md. New signals have 30m/1h/4h outcomes; preserve legacy per-signal horizon sets. Non-overlapping windows remain dependent; unconditional baseline differences are not matched-regime alpha. Flat-to-flat execution episodes require position continuity and USDC fees and exclude funding. No detector submits orders or promotes itself.
