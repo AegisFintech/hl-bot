@@ -26,6 +26,10 @@ class ResearchJournal:
                 db.execute(
                     "ALTER TABLE signals ADD COLUMN horizons TEXT DEFAULT '[10,60,300,900]'"
                 )
+            if "regime" not in columns:
+                db.execute(
+                    "ALTER TABLE signals ADD COLUMN regime TEXT DEFAULT 'legacy'"
+                )
             db.execute("CREATE INDEX IF NOT EXISTS signals_time ON signals(time)")
 
     def connect(self):
@@ -48,7 +52,7 @@ class ResearchJournal:
         fingerprint = f"{kind}:{direction}:{int(now//60)}"
         with self.connect() as db:
             cursor = db.execute(
-                "INSERT OR IGNORE INTO signals(fingerprint,time,kind,direction,bid,ask,mid,funding,reason,horizons) VALUES (?,?,?,?,?,?,?,?,?,?)",
+                "INSERT OR IGNORE INTO signals(fingerprint,time,kind,direction,bid,ask,mid,funding,reason,horizons,regime) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
                 (
                     fingerprint,
                     now,
@@ -60,9 +64,24 @@ class ResearchJournal:
                     funding,
                     reason,
                     json.dumps(HORIZONS),
+                    self.regime(snapshot, funding),
                 ),
             )
             return cursor.rowcount == 1
+
+    @staticmethod
+    def regime(snapshot, funding):
+        change = snapshot.get("change_60s_bps")
+        if change is None or funding is None:
+            return "unknown"
+        trend = "up" if change >= 2 else "down" if change <= -2 else "flat"
+        volatility = "fast" if abs(change) >= 10 else "quiet"
+        carry = (
+            "positive"
+            if funding >= 0.0001
+            else "negative" if funding <= -0.0001 else "normal"
+        )
+        return f"{trend}:{volatility}:{carry}"
 
     def mark(self, snapshot):
         now = snapshot["sampled_at"]
@@ -172,7 +191,7 @@ class ResearchJournal:
                 GROUP BY s.kind,s.direction,o.horizon ORDER BY s.kind,s.direction,o.horizon"""
             ).fetchall()
             episode_rows = db.execute(
-                """SELECT s.kind,s.direction,o.horizon,s.time,o.net_bps
+                """SELECT s.kind,s.direction,o.horizon,s.time,s.regime,o.net_bps
                 FROM outcomes o JOIN signals s ON s.id=o.signal_id
                 WHERE o.status='complete' ORDER BY s.time,s.id"""
             ).fetchall()
@@ -195,6 +214,20 @@ class ResearchJournal:
                 or outcome["time"] >= selected[-1]["time"] + outcome["horizon"]
             ):
                 selected.append(dict(outcome))
+        # Same UTC hour, predeclared trailing-move/funding regime and direction.
+        controls = {}
+        for observation in episode_rows:
+            if observation["kind"] == "baseline" and observation["regime"] not in (
+                "legacy",
+                "unknown",
+            ):
+                match = (
+                    int(observation["time"] // 3600),
+                    observation["regime"],
+                    observation["direction"],
+                    observation["horizon"],
+                )
+                controls.setdefault(match, []).append(observation["net_bps"])
         results = []
         by_key = {(r["kind"], r["direction"], r["horizon"]): dict(r) for r in rows}
         for key, row in by_key.items():
@@ -208,6 +241,21 @@ class ResearchJournal:
                 (row["mean_net_bps"] - baseline["mean_net_bps"])
                 if baseline and row["kind"] != "baseline"
                 else None
+            )
+            differences = []
+            for observation in selected:
+                match = (
+                    int(observation["time"] // 3600),
+                    observation["regime"],
+                    observation["direction"],
+                    observation["horizon"],
+                )
+                pool = controls.get(match, [])
+                if pool and row["kind"] != "baseline":
+                    differences.append(observation["net_bps"] - sum(pool) / len(pool))
+            row["matched_n"] = len(differences)
+            row["matched_delta_bps"] = (
+                sum(differences) / len(differences) if differences else None
             )
             row["review_status"] = (
                 "insufficient evidence"
@@ -236,6 +284,6 @@ class ResearchJournal:
             ],
             horizons_s=HORIZONS,
             model="Quote-based markouts: bid/ask spread + 9bps fees + 4bps slippage + frozen hourly funding debit stress when available. Not fills or realized P&L.",
-            baseline_note="Unconditional delta is an unmatched same-direction drift diagnostic, not causal alpha. Non-overlap windows remain dependent across regimes.",
+            baseline_note="Unconditional delta is unmatched drift. Matched delta uses non-overlapping candidates against same-UTC-hour, direction and trailing-move/funding regime controls; pools can be reused and include later controls. Descriptive, not causal alpha or a tradable input. Legacy/unknown regimes excluded. Non-overlap does not imply independence.",
             limitations="Signals overlap and are correlated. MFE/MAE are sampled mid-price changes, not intrabar extremes. No calibrated probability or profitability claim.",
         )

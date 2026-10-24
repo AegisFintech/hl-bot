@@ -40,3 +40,7 @@ graphify export html
 ## Experiment backend milestone — 2026-10-24
 
 Current baseline: **53 regressions**. Fixed experiment definitions and unimplemented data dependencies are in docs/EXPERIMENTS.md. New signals have 30m/1h/4h outcomes; preserve legacy per-signal horizon sets. Non-overlapping windows remain dependent; unconditional baseline differences are not matched-regime alpha. Flat-to-flat execution episodes require position continuity and USDC fees and exclude funding. No detector submits orders or promotes itself.
+
+## Experiment dashboard milestone — 2026-10-24
+
+Current baseline: **57 regressions**. Verify nine expandable experiment cards, explicit unavailable-data prerequisites, 4h horizon, matched-control missing states and complete-trade accounting in desktop/mobile browser checks. Matched comparisons may reuse same-hour control pools and include later observations; they are descriptive, not a tradable input or causal proof. Six experiments and wall-consumption mode are blocked pending the documented data. Failed research cycles/comparison sources must suppress cached candidates even while the last quote is recent.

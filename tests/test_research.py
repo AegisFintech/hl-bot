@@ -169,3 +169,24 @@ class CoverageTests(unittest.TestCase):
             service._state['sources']={'sentiment':{'value':{'published_at':1,'value':50},'updated_at':200000}}
             with patch('time.time',return_value=200001):result=service.snapshot()
             self.assertTrue(result['sources']['sentiment']['stale'])
+
+
+class FailureSuppressionTests(unittest.TestCase):
+    def test_failed_cycle_suppresses_recent_lean_and_comparison(self):
+        with tempfile.TemporaryDirectory() as d:
+            service = ResearchService(Path(d)/'r.sqlite', wallets=[])
+            service._state.update(status='unavailable', market=dict(source_time=1000, score=90, lean='bullish', bid=100, ask=100.02))
+            service._state['sources'] = {'comparison': {'updated_at': 1000, 'value': {'spot': {'bids': [['100','1']], 'asks': [['101','1']]}}}}
+            with patch('time.time', return_value=1001):
+                result = service.snapshot()
+            self.assertIsNone(result['market']['score'])
+            self.assertNotIn('divergence', result)
+
+    def test_failed_comparison_suppresses_cached_candidate(self):
+        with tempfile.TemporaryDirectory() as d:
+            service = ResearchService(Path(d)/'r.sqlite', wallets=[])
+            service._state.update(status='observing', market=dict(source_time=1000, score=0, lean='neutral', bid=100, ask=100.02))
+            service._state['sources'] = {'comparison': {'updated_at': 1000, 'error': 'retry', 'value': {'spot': {'bids': [['100','1']], 'asks': [['101','1']]}}}}
+            with patch('time.time', return_value=1001):
+                result = service.snapshot()
+            self.assertNotIn('divergence', result)

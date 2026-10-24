@@ -425,7 +425,10 @@ class ResearchService:
         market = result.get("market", {})
         age = now - market.get("source_time", 0)
         result.update(mode="Observation only", age_s=age if market else None)
-        if market and age > 15:
+        valid_market = bool(
+            market and -2 <= age <= 15 and result.get("status") != "unavailable"
+        )
+        if market and not valid_market:
             result["status"] = "stale"
             market.update(score=None, lean="unavailable")
         sources = result.get("sources", {})
@@ -449,9 +452,10 @@ class ResearchService:
         comparison = sources.get("comparison", {})
         if (
             market
-            and age <= 15
+            and valid_market
             and comparison.get("value")
             and not comparison.get("stale")
+            and not comparison.get("error")
         ):
             try:
                 result["divergence"] = divergence(market, **comparison["value"])

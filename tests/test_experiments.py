@@ -157,6 +157,33 @@ class JournalUpgradeTests(unittest.TestCase):
             self.assertEqual(row["review_status"], "insufficient evidence")
             self.assertIsNone(row["unconditional_delta_bps"])
 
+    def test_matched_comparison_requires_same_hour_regime_and_direction(self):
+        with tempfile.TemporaryDirectory() as directory:
+            journal = ResearchJournal(Path(directory) / "research.sqlite")
+            sample = market(1000, change_60s_bps=3)
+            journal.signal("baseline", 1, sample, "control", funding=0.0002)
+            journal.signal("book_flow", 1, sample, "candidate", funding=0.0002)
+            journal.signal("wall_defense", -1, sample, "opposite", funding=0.0002)
+            journal.mark(market(1010, 100.1))
+            results = journal.summary()["results"]
+            candidate = next(r for r in results if r["kind"] == "book_flow")
+            self.assertEqual(candidate["matched_n"], 1)
+            self.assertAlmostEqual(candidate["matched_delta_bps"], 0)
+            opposite = next(r for r in results if r["kind"] == "wall_defense")
+            self.assertEqual(opposite["matched_n"], 0)
+            self.assertIsNone(opposite["matched_delta_bps"])
+
+    def test_nonoverlapping_count_does_not_count_every_signal(self):
+        with tempfile.TemporaryDirectory() as directory:
+            journal = ResearchJournal(Path(directory) / "research.sqlite")
+            journal.signal("book_flow", 1, market(1000), "one")
+            journal.signal("book_flow", 1, market(1060), "two")
+            journal.mark(market(1300))
+            journal.mark(market(1360))
+            row = next(r for r in journal.summary()["results"] if r["horizon"] == 300)
+            self.assertEqual(row["n"], 2)
+            self.assertEqual(row["nonoverlap_n"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

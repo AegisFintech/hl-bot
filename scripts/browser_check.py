@@ -29,6 +29,13 @@ with sync_playwright() as p:
     assert 'Mainnet public BTC data' in page.locator('#research').inner_text()
     page.locator('[data-depth-band="25"]').click()
     assert 'Truncated' in page.locator('#depth-coverage').inner_text() or 'Full' in page.locator('#depth-coverage').inner_text()
+    assert page.locator('.experiment-card').count()==9
+    page.locator('.experiment-card summary').first.click()
+    assert 'Rule:' in page.locator('.experiment-card').first.inner_text()
+    assert 'DATA REQUIRED' in page.locator('#experiment-catalog').inner_text()
+    page.locator('#research-horizon').select_option('14400')
+    assert 'No measured outcomes' in page.locator('#research-results').inner_text() or page.locator('#research-results tr').count()>0
+    assert page.locator('#complete-count').inner_text()!='—'
     page.locator('#research-horizon').select_option('900')
     page.locator('#research-horizon').select_option('60')
     assert page.locator('#depth-heatmap').evaluate('(canvas) => canvas.width > 0 && canvas.height > 0')
@@ -66,5 +73,5 @@ with sync_playwright() as p:
     page.wait_for_function("document.getElementById('connection').textContent.includes('Disconnected')",timeout=20000)
     assert 'stale' in page.locator('#notice').inner_text()
     assert not errors,errors
-    print(json.dumps({'browser':'Chromium','desktop':'1512x1100','mobile':'390x844','checks':['live data','candlestick and equity canvases','account tabs','search','timeframe','level toggle','fit view','CSV download','no horizontal page overflow','offline stale notice','mainnet research separation','depth band controls','outcome horizon controls','liquidity canvas','stale research suppresses directional score and divergence'],'page_errors':errors},indent=2))
+    print(json.dumps({'browser':'Chromium','desktop':'1512x1100','mobile':'390x844','checks':['live data','candlestick and equity canvases','account tabs','search','timeframe','level toggle','fit view','CSV download','no horizontal page overflow','offline stale notice','mainnet research separation','depth band controls','outcome horizon controls','liquidity canvas','experiment catalog and prerequisites','4h horizon','complete trade accounting','stale research suppresses directional score and divergence'],'page_errors':errors},indent=2))
     browser.close()
