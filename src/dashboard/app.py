@@ -204,6 +204,11 @@ def api_terminal():
         if time.time() - bot.account_snapshot.get('timestamp', 0) > 30:
             errors.append('Account equity is stale; new entries blocked')
         out['performance'] = bot.ledger.performance()
+        try:
+            out['quality'] = bot.quality.summary(bot.ledger.fills(1000000))
+        except Exception:
+            log.exception('Quality audit unavailable')
+            out['quality'] = {'status': 'unavailable'}
         out['equity'] = bot.ledger.equity()
         out['fills'] = bot.ledger.fills(200)
         candles = bot.client.get_cached_candles(bot.coin)

@@ -184,6 +184,11 @@ class HyperliquidClient:
     def get_account_value(self) -> float:
         return self.get_account_snapshot()['equity']
 
+    def get_audit_bbo(self, coin):
+        """Atomic quote and local receipt time; no network reads."""
+        with self._lock:
+            return self._bbo.get(coin), self._bbo_times.get(coin, 0)
+
     def bbo_age(self, coin):
         return time.time() - self._bbo_times.get(coin, 0)
 

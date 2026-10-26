@@ -68,7 +68,7 @@ class ResearchJournal:
                 (snapshot["sampled_at"] - 7 * 86400,),
             )
 
-    def signal(self, kind, direction, snapshot, reason, funding=None):
+    def signal(self, kind, direction, snapshot, reason, funding=None, *, regime=None):
         now = snapshot["sampled_at"]
         fingerprint = f"{kind}:{direction}:{int(now//60)}"
         with self.connect() as db:
@@ -85,7 +85,7 @@ class ResearchJournal:
                     funding,
                     reason,
                     json.dumps(HORIZONS),
-                    self.regime(snapshot, funding),
+                    regime if regime is not None else self.regime(snapshot, funding),
                 ),
             )
             return cursor.rowcount == 1

@@ -36,6 +36,11 @@ with sync_playwright() as p:
     page.locator('#research-horizon').select_option('14400')
     assert 'No measured outcomes' in page.locator('#research-results').inner_text() or page.locator('#research-results tr').count()>0
     assert page.locator('#complete-count').inner_text()!='—'
+    page.wait_for_function("document.getElementById('quality-decisions').textContent !== '—'",timeout=20000)
+    assert 'TESTNET ONLY' in page.locator('#quality').inner_text()
+    assert 'unknown' in page.locator('#quality-attribution').inner_text()
+    page.locator('#quality-horizon').select_option('14400')
+    page.locator('#quality-horizon').select_option('3600')
     page.locator('#research-horizon').select_option('900')
     page.locator('#research-horizon').select_option('60')
     assert page.locator('#depth-heatmap').evaluate('(canvas) => canvas.width > 0 && canvas.height > 0')
@@ -62,6 +67,17 @@ with sync_playwright() as p:
     page.evaluate('window.scrollTo(0,0)')
     page.screenshot(path=str(root/'artifacts/dashboard-mobile.png'),full_page=True)
     payload=requests.get('http://127.0.0.1:8080/api/terminal',timeout=15).json()
+    payload['quality']['markouts']=[dict(role='entry',horizon=60,n=2,missed=1,mean_bps=-3.25)]
+    payload['quality']['challenger']['results']=[dict(kind='shadow_trend_v1',direction=1,horizon=3600,n=4,nonoverlap_n=1,mean_net_bps=-5,nonoverlap_mean_net_bps=-6,review_status='insufficient evidence')]
+    payload['quality']['recent_decisions']=[dict(time=payload['timestamp'],side='long',regime='range',reason='<img src=x onerror=alert(1)>')]
+    payload['quality']['recent']=[dict(closed_at=payload['timestamp']*1000,regime='unknown',net_pnl=-.1,funding_usdc=None,net_after_funding=None)]
+    page.route('**/api/terminal',lambda route:route.fulfill(status=200,content_type='application/json',body=json.dumps(payload)))
+    page.wait_for_function("document.getElementById('quality-markouts').textContent.includes('-3.25')",timeout=15000)
+    assert 'Trend continuation v1' in page.locator('#quality-challengers').inner_text()
+    page.locator('#quality details').last.locator('summary').click()
+    assert '—' in page.locator('#quality-episodes').inner_text()
+    assert page.locator('#quality-reasons img').count()==0
+    page.unroute('**/api/terminal')
     payload['research']['status']='stale'
     page.route('**/api/terminal',lambda route:route.fulfill(status=200,content_type='application/json',body=json.dumps(payload)))
     page.wait_for_function("document.getElementById('research-lean').textContent === 'Unavailable'",timeout=15000)
@@ -72,6 +88,7 @@ with sync_playwright() as p:
     page.route('**/api/terminal',lambda route:route.fulfill(status=503,body='offline'))
     page.wait_for_function("document.getElementById('connection').textContent.includes('Disconnected')",timeout=20000)
     assert 'stale' in page.locator('#notice').inner_text()
+    page.wait_for_function("document.getElementById('quality-status').textContent.includes('STALE')",timeout=10000)
     assert not errors,errors
-    print(json.dumps({'browser':'Chromium','desktop':'1512x1100','mobile':'390x844','checks':['live data','candlestick and equity canvases','account tabs','search','timeframe','level toggle','fit view','CSV download','no horizontal page overflow','offline stale notice','mainnet research separation','depth band controls','outcome horizon controls','liquidity canvas','experiment catalog and prerequisites','4h horizon','complete trade accounting','stale research suppresses directional score and divergence'],'page_errors':errors},indent=2))
+    print(json.dumps({'browser':'Chromium','desktop':'1512x1100','mobile':'390x844','checks':['live data','candlestick and equity canvases','account tabs','search','timeframe','level toggle','fit view','CSV download','no horizontal page overflow','offline stale notice','mainnet research separation','depth band controls','outcome horizon controls','liquidity canvas','experiment catalog and prerequisites','4h horizon','complete trade accounting','testnet quality attribution and horizon controls','quality outcome fixtures and missing funding','safe text rendering','quality stale handling','stale research suppresses directional score and divergence'],'page_errors':errors},indent=2))
     browser.close()

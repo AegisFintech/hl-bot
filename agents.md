@@ -42,3 +42,9 @@ Every major milestone must update README.md, AGENTS.md, this file and Graphify, 
 ## Storage retention milestone — 2026-10-24
 
 `src/research/journal.py` stores compact seven-day minute diagnostics; event evidence remains durable. `src/learning/ledger.py` compacts equity older than 30 days to hourly min/max, peak and last observations without touching risk state or fills. `src/logging_setup.py` supplies watched handlers; `deploy/` contains weekly four-archive logrotate and journald service configuration. `scripts/compact_storage.py` performs offline backup/compaction/integrity validation. Baseline: 60 regressions. Keep one-time private migration backups ignored; retain agent audit and full research/accounting records.
+
+## Trade-quality milestone — 2026-10-26
+
+`src/learning/quality.py` owns closed-candle regimes, frozen v1 quote challengers, decision/order-ID attribution, prospective fill markouts and execution/funding display accounting. `src/learning/funding.py` reads only testnet public funding on an independent daemon, validates/paginates/deduplicates rows and persists coverage. `src/bot.py` captures candidate decisions/results and new fills and feeds a separate observer thread through atomic cached BBO snapshots. `src/dashboard/static/quality.js` renders the testnet-only audit. Definitions and limitations: docs/TRADE_QUALITY.md. Runtime evidence is private `data/quality.sqlite`; historical contexts remain unknown, no fitted parameters or promotion.
+
+Trade-quality validation: **73 regression tests**, Python compilation, desktop/mobile Chromium with audit fixtures, missing funding, shadow horizon controls and stale/disconnected handling. `python3 scripts/quality_report.py --since EPOCH --until EPOCH` exports a read-only UTC calendar-week report; outcomes observed after the cutoff are excluded. Reports/screenshots stay private under artifacts/.

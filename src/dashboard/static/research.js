@@ -260,7 +260,8 @@ function renderResearch(payload) {
     researchBandRender();
     researchResults();
     researchHeatmap();
-    renderExperiments(r, data?.performance?.complete_trades)
+    renderExperiments(r, data?.performance?.complete_trades);
+    renderQuality(data?.quality, Date.now()/1000 - data?.timestamp > 20);
 }
 document.querySelectorAll('[data-depth-band]').forEach(button => button.addEventListener('click', () => {
     researchBand = Number(button.dataset.depthBand);
@@ -271,7 +272,7 @@ document.getElementById('research-horizon').addEventListener('change', researchR
 new ResizeObserver(researchHeatmap).observe(document.getElementById('depth-heatmap'));
 setInterval(() => {
     if (typeof data === 'undefined' || !data) return;
-    const key = JSON.stringify(data.research || {}) + ':' + (Date.now() / 1000 - data.timestamp > 20);
+    const key = JSON.stringify([data.research || {}, data.quality || {}]) + ':' + (Date.now() / 1000 - data.timestamp > 20);
     if (key !== researchLast) {
         researchLast = key;
         renderResearch(data.research)

@@ -10,6 +10,8 @@ from src.strategy.scalper import Scalper
 from src.risk.manager import RiskManager
 from src.learning.evaluator import Evaluator
 from src.learning.ledger import FillLedger
+from src.learning.quality import QualityAudit, candle_context
+from src.learning.funding import FundingSync
 from src.research.service import ResearchService
 from src.reconciler import PositionReconciler
 from src.dashboard.app import set_bot_reference, run_dashboard
@@ -45,6 +47,10 @@ class TradingBot:
 
         self.ledger = FillLedger(Path(__file__).resolve().parents[1] / "data/ledger.sqlite")
         self.research = ResearchService(Path(__file__).resolve().parents[1] / "data/research.sqlite")
+        self.quality = QualityAudit(Path(__file__).resolve().parents[1] / "data/quality.sqlite")
+        self.funding_sync = None
+        self._audit_thread = None
+        self._audit_stop = threading.Event()
         self.account_snapshot = {}
         self._halt_cleanup_at = 0.0
         self.halt_cleanup_status = "Not required"
@@ -94,6 +100,11 @@ class TradingBot:
         self._init_exchange()
         self._subscribe_feeds()
         self.research.start()
+        first = self.ledger.performance().get('first_time') or int(time.time()*1000)
+        self.funding_sync = FundingSync(self.quality.path, self.client.address, first)
+        self.funding_sync.start()
+        self._audit_thread = threading.Thread(target=self._audit_loop, name='testnet-quality', daemon=True)
+        self._audit_thread.start()
         self._start_dashboard()
 
         self.running = True
@@ -105,6 +116,9 @@ class TradingBot:
         except KeyboardInterrupt:
             log.info("Shutting down...")
         finally:
+            self._audit_stop.set()
+            if self.funding_sync:
+                self.funding_sync.stop_event.set()
             self.research.stop()
             self.running = False
 
@@ -207,6 +221,22 @@ class TradingBot:
         log.info("Leverage set:       %s", sorted(self._leverage_set))
         trading_enabled = equity > 0 and bool(self._leverage_set)
         log.info("Trading:            %s", "ENABLED" if trading_enabled else "DISABLED")
+
+    def _audit_quote(self, coin):
+        bbo, received_at = self.client.get_audit_bbo(coin)
+        now = time.time()
+        return self.quality.quote(bbo, now-received_at, now)
+
+    def _audit_loop(self):
+        while not self._audit_stop.is_set():
+            try:
+                quote = self._audit_quote(self.coin)
+                self.quality.tick(quote, self.client.get_cached_candles(self.coin), self.coin)
+            except (ValueError, TypeError, KeyError):
+                pass  # Missing data is never replaced with invented observations.
+            except Exception:
+                log.exception('Observation-only quality audit failed')
+            self._audit_stop.wait(1)
 
     def _subscribe_feeds(self):
         for c in self.coins:
@@ -360,7 +390,25 @@ class TradingBot:
                 with self._pending_signals_lock:
                     if signal.entry_price in self._pending_signals:
                         continue
+                audit_id = None
+                try:
+                    quote = self._audit_quote(scalper.coin)
+                    try:
+                        context = candle_context(self.client.get_cached_candles(scalper.coin), time.time())
+                    except (ValueError, KeyError, TypeError):
+                        context = {'regime': 'unknown'}
+                    audit_id = self.quality.decision(signal_dict, context, quote, scalper.diagnostics)
+                    self.quality.journal.signal('incumbent_candidate_v1', 1 if signal.side == 'long' else -1,
+                                                quote, 'Actual candidate before execution admission; unequal selection versus five-minute challengers',
+                                                regime=context['regime'])
+                except Exception:
+                    log.exception('Could not persist candidate audit')
                 result = scalper.execute_signal(signal)
+                if audit_id:
+                    try:
+                        self.quality.result(audit_id, result, scalper.diagnostics.get('reason', 'unknown'))
+                    except Exception:
+                        log.exception('Could not persist candidate result')
                 if result:
                     with self._pending_signals_lock:
                         self._pending_signals[signal.entry_price] = signal_dict
@@ -400,6 +448,10 @@ class TradingBot:
                 continue
             if not self.ledger.add(fill):
                 continue
+            try:
+                quote = self._audit_quote(fill.get('coin'))
+            except Exception:
+                quote = None
             self._processed_fill_ids.add(fid)
             if len(self._processed_fill_ids) > 1000:
                 self._processed_fill_ids = set(list(self._processed_fill_ids)[-500:])
@@ -412,6 +464,10 @@ class TradingBot:
 
             is_close = "Close" in fill.get("dir", "") or closed_pnl != 0
             self.risk_manager.record_fill(closed_pnl - float(fill.get("fee", 0)))
+            try:
+                self.quality.fill(fill, quote)
+            except Exception:
+                log.exception('Could not persist prospective fill audit')
             if is_close:
                 exit_price = float(fill["px"])
                 fill_size = float(fill["sz"])
