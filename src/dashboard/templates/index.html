@@ -54,6 +54,12 @@
 <p class="scope" id="ops-data">Waiting for validated observations.</p>
 <details><summary>Incident timeline · UTC</summary><div class="research-table-scroll"><table><thead><tr><th>Started</th><th>Ended</th><th>Observed seconds</th><th>Type</th><th>Reason</th></tr></thead><tbody id="ops-incidents"></tbody></table></div></details>
 </section>
+<section class="panel quality-panel" id="account-audit" aria-label="Order lifecycle and equity reconciliation">
+<div class="panel-heading"><div><h2>Order lifecycle &amp; equity reconciliation</h2><small>Prospective actual account evidence · unsupported movements remain unknown</small></div><span id="bridge-status" class="badge muted">WARMING UP</span></div>
+<div class="complete-trade-cards"><div><small>Unresolved submissions</small><strong id="audit-unresolved">—</strong></div><div><small>Observed equity change</small><strong id="bridge-change">—</strong></div><div><small>Explained change</small><strong id="bridge-explained">—</strong></div><div><small>Unexplained residual</small><strong id="bridge-residual">—</strong></div></div>
+<p id="bridge-scope" class="scope">Waiting for covered prospective account samples.</p>
+<details><summary>Order requests and exchange events</summary><div class="research-table-scroll"><table><thead><tr><th>Time UTC</th><th>Instrument</th><th>Action / status</th><th>Outcome / exchange ID</th></tr></thead><tbody id="audit-orders"></tbody></table></div></details>
+</section>
 <section class="panel quality-panel" id="quality" aria-label="Testnet trade quality audit">
 <div class="panel-heading"><div><h2>Trade quality &amp; shadow challengers</h2><small>TESTNET ONLY · fixed rules · no challenger orders or automatic tuning</small></div><span id="quality-status" class="badge muted">WARMING UP</span></div>
 <div class="complete-trade-cards"><div><small>Audited decisions / accepted</small><strong id="quality-decisions">—</strong></div><div><small>Parents with any fill</small><strong id="quality-fills">—</strong></div><div><small>Entry cost vs decision mid</small><strong id="quality-cost">—</strong></div><div><small>Recorded funding cash flow</small><strong id="quality-funding">—</strong></div></div>

@@ -62,3 +62,7 @@ Current baseline: **84 regressions**. Operational `execution_paused` is distinct
 ## Roadmap M1/M2 foundation — 2026-10-27
 
 Baseline **91 regressions**. Preserve docs/DEVELOPMENT_PLAN.md implementation/evidence statuses. Never synthesize missing candles. Closed bars must be finite, valid OHLC and minute-aligned; deduplicate/sort late updates. REST repairs only merge bars closed when the request began. Malformed updates require repair before eligibility. Background repair is bounded/backed off and must not submit orders. Retain incident boundaries; heartbeat singleton must distinguish a stalled loop from HTTP availability. No restart/midnight risk release. Browser covers operations panel, data degradation and disconnected state.
+
+## Roadmap M3 accounting foundation — 2026-10-27
+
+Baseline **99 regressions**. Preserve `data/execution.sqlite` intent/results/events, account baseline and retrieved coverage. Never resend ambiguous orders automatically or infer order roles from price. Entry intent persistence is required; audit failure must not prevent cancellation/flatten attempts. An unresolved intent is not proof of an open order. Bridge `within_tolerance` is provisional arithmetic, not an audited completeness guarantee; unsupported account event types/fees remain unknown. Retain explicit (baseline,end] boundary limitations and source coverage. Seven-day minute samples must never alter risk state. Historical features and quotes remain unknown.

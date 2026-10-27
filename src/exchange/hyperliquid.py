@@ -43,6 +43,7 @@ class HyperliquidClient:
         self._abstraction = None
         self._bbo_times = {}
         self._candle_health = {}
+        self.execution_journal = None
 
     def audit_urls(self) -> dict:
         info_url = self.info.base_url
@@ -203,17 +204,48 @@ class HyperliquidClient:
 
     # -- Trading --
 
+    def _submit_audited(self, kind, coin, request, action, roles=(), entry=False):
+        journal = getattr(self, 'execution_journal', None)
+        ident = None
+        if journal:
+            try:
+                ident = journal.begin(kind, coin, request)
+            except Exception:
+                if entry:
+                    raise  # No new exposure without durable submission intent.
+                log.exception('Exit/cancel audit unavailable; exposure reduction still attempted')
+        try:
+            result = action()
+        except Exception as exc:
+            if ident:
+                try:
+                    journal.fail(ident, exc)
+                except Exception:
+                    log.exception('Unable to persist ambiguous submission outcome')
+            raise
+        if ident:
+            try:
+                journal.finish(ident, coin, result, roles)
+            except Exception:
+                log.exception('Exchange response could not be persisted; intent remains unresolved')
+                if entry:
+                    raise
+        return result
+
     def place_maker_order(self, coin: str, is_buy: bool, size: float, price: float) -> dict:
         size = self.round_size(coin, size)
-        return self.exchange.order(coin, is_buy, size, price, {"limit": {"tif": "Alo"}})
+        return self._submit_audited('maker_entry', coin, dict(is_buy=is_buy,size=size,price=price),
+                                    lambda: self.exchange.order(coin,is_buy,size,price,{'limit':{'tif':'Alo'}}), ('entry',), entry=True)
 
     def place_limit_order(self, coin: str, is_buy: bool, size: float, price: float) -> dict:
         size = self.round_size(coin, size)
-        return self.exchange.order(coin, is_buy, size, price, {"limit": {"tif": "Gtc"}})
+        return self._submit_audited('limit_entry', coin, dict(is_buy=is_buy,size=size,price=price),
+                                    lambda: self.exchange.order(coin,is_buy,size,price,{'limit':{'tif':'Gtc'}}), ('entry',), entry=True)
 
     def place_market_order(self, coin: str, is_buy: bool, size: float, slippage: float = 0.01) -> dict:
         size = self.round_size(coin, size)
-        return self.exchange.market_open(coin, is_buy, size, None, slippage)
+        return self._submit_audited('market_entry', coin, dict(is_buy=is_buy,size=size,slippage=slippage),
+                                    lambda: self.exchange.market_open(coin,is_buy,size,None,slippage), ('entry',), entry=True)
 
     def place_order_with_tpsl(self, coin: str, is_buy: bool, size: float, entry_price: float,
                                tp_price: float, sl_price: float, tif: str = "Gtc") -> dict:
@@ -240,10 +272,12 @@ class HyperliquidClient:
                 "reduce_only": True,
             },
         ]
-        return self.exchange.bulk_orders(orders, grouping="normalTpsl")
+        return self._submit_audited('entry_bracket', coin, {'orders': orders},
+                                    lambda: self.exchange.bulk_orders(orders, grouping="normalTpsl"),
+                                    ('entry', 'take_profit_order', 'stop_loss_order'), entry=True)
 
     def cancel_order(self, coin: str, oid: int) -> dict:
-        return self.exchange.cancel(coin, oid)
+        return self._submit_audited('cancel', coin, {'oid': oid}, lambda: self.exchange.cancel(coin, oid))
 
     def cancel_all_orders(self, coin: str) -> list:
         orders = [o for o in self.get_open_orders() if o["coin"] == coin]
@@ -252,11 +286,11 @@ class HyperliquidClient:
         cancel_requests = [{"coin": coin, "oid": o["oid"]} for o in orders]
         for i in range(0, len(cancel_requests), 50):
             batch = cancel_requests[i:i + 50]
-            self.exchange.bulk_cancel(batch)
+            self._submit_audited('bulk_cancel', coin, {'orders': batch}, lambda: self.exchange.bulk_cancel(batch))
         return [{"status": "bulk_cancelled", "count": len(cancel_requests)}]
 
     def close_position(self, coin: str) -> dict:
-        return self.exchange.market_close(coin)
+        return self._submit_audited('emergency_close', coin, {}, lambda: self.exchange.market_close(coin), ('emergency_close_order',))
 
     def place_trigger_orders(self, coin: str, is_buy: bool, size: float,
                              tp_price: float, sl_price: float) -> dict:
@@ -278,7 +312,9 @@ class HyperliquidClient:
                 "reduce_only": True,
             },
         ]
-        return self.exchange.bulk_orders(orders, grouping="na")
+        return self._submit_audited('recovery_bracket', coin, {'orders': orders},
+                                    lambda: self.exchange.bulk_orders(orders, grouping="na"),
+                                    ('recovery_take_profit_order', 'recovery_stop_loss_order'))
 
     def set_leverage(self, coin: str, leverage: int, cross: bool = True) -> dict:
         return self.exchange.update_leverage(leverage, coin, is_cross=cross)

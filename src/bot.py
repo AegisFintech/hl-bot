@@ -15,6 +15,8 @@ from src.learning.funding import FundingSync
 from src.research.service import ResearchService
 from src.reconciler import PositionReconciler
 from src.operations import Operations
+from src.learning.execution import ExecutionJournal
+from src.learning.accounting import AccountAudit
 from src.dashboard.app import set_bot_reference, run_dashboard
 
 log = logging.getLogger(__name__)
@@ -49,6 +51,9 @@ class TradingBot:
         self.ledger = FillLedger(Path(__file__).resolve().parents[1] / "data/ledger.sqlite")
         self.research = ResearchService(Path(__file__).resolve().parents[1] / "data/research.sqlite")
         self.quality = QualityAudit(Path(__file__).resolve().parents[1] / "data/quality.sqlite")
+        self.execution = ExecutionJournal(Path(__file__).resolve().parents[1] / "data/execution.sqlite")
+        self.client.execution_journal = self.execution
+        self.account_audit = AccountAudit(self.execution.path, self.ledger, self.quality.path, self.client.address)
         self.operations = Operations(Path(__file__).resolve().parents[1] / "data/operations.sqlite")
         self._data_repair_requested = threading.Event()
         self._data_thread = None
@@ -109,6 +114,7 @@ class TradingBot:
         first = self.ledger.performance().get('first_time') or int(time.time()*1000)
         self.funding_sync = FundingSync(self.quality.path, self.client.address, first)
         self.funding_sync.start()
+        self.account_audit.start()
         self._audit_thread = threading.Thread(target=self._audit_loop, name='testnet-quality', daemon=True)
         self._audit_thread.start()
         self._start_dashboard()
@@ -123,6 +129,7 @@ class TradingBot:
             log.info("Shutting down...")
         finally:
             self._audit_stop.set()
+            self.account_audit.stop_event.set()
             if self.funding_sync:
                 self.funding_sync.stop_event.set()
             self.research.stop()
@@ -185,6 +192,7 @@ class TradingBot:
         self.risk_manager.update_equity(equity)
         self.risk_manager.check_daily_reset()
         self.ledger.sample_equity(equity, self.risk_manager.state.peak_equity)
+        self.account_audit.sample(self.account_snapshot)
         for fill in self.client.get_fills(2000):
             self.ledger.add(fill)
         self._processed_fill_ids = {self.ledger.identity(f) for f in self.ledger.fills(2000)}
@@ -369,6 +377,11 @@ class TradingBot:
             self.account_snapshot = self.client.get_account_snapshot()
             self.risk_manager.update_equity(self.account_snapshot['equity'])
             self.ledger.sample_equity(self.risk_manager.state.current_equity, self.risk_manager.state.peak_equity)
+            if getattr(self, 'account_audit', None):
+                try:
+                    self.account_audit.sample(self.account_snapshot)
+                except Exception:
+                    log.exception('Equity bridge sample unavailable')
             # Three independent successful checks, at least 15s apart, while flat.
             healthy = (flat and clear and all(0 <= self.client.bbo_age(c) <= 10 for c in self.coins)
                        and self.account_snapshot['equity'] > 0)
@@ -419,6 +432,7 @@ class TradingBot:
                 equity = self.account_snapshot["equity"]
                 self.risk_manager.update_equity(equity)
                 self.ledger.sample_equity(equity, self.risk_manager.state.peak_equity)
+                self.account_audit.sample(self.account_snapshot)
                 self._last_equity_fetch = now
             except Exception as e:
                 log.warning("Equity fetch failed: %s", e)
@@ -604,11 +618,16 @@ class TradingBot:
 
     def _on_order_update(self, updates: list):
         for update in updates:
+            try:
+                self.execution.event(update)
+            except Exception:
+                log.exception('Order lifecycle event could not be persisted')
+            order = update.get('order', update)
             status = update.get("status")
             if status in ("canceled", "rejected"):
-                log.info("Order %s: %s %s oid=%s", status, update.get("coin"),
-                         update.get("side"), update.get("oid"))
-                update_coin = update.get("coin")
+                log.info("Order %s: %s %s oid=%s", status, order.get("coin"),
+                         order.get("side"), order.get("oid"))
+                update_coin = order.get("coin")
                 for rec in self._reconcilers:
                     if rec.coin == update_coin:
                         try:

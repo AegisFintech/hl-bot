@@ -205,10 +205,16 @@ def api_terminal():
             errors.append('Account equity is stale; new entries blocked')
         out['performance'] = bot.ledger.performance()
         try:
-            out['quality'] = bot.quality.summary(bot.ledger.fills(1000000))
+            out['quality'] = bot.quality.summary(bot.ledger.fills(1000000), bot.execution.links())
         except Exception:
             log.exception('Quality audit unavailable')
             out['quality'] = {'status': 'unavailable'}
+        out['execution_audit'] = bot.execution.summary()
+        try:
+            out['equity_bridge'] = bot.account_audit.summary()
+        except Exception:
+            log.exception('Equity reconciliation unavailable')
+            out['equity_bridge'] = {'status':'unavailable'}
         out['operations'] = bot.operations.summary()
         out['market_data'] = bot.client.candle_health(bot.coin)
         out['equity'] = bot.ledger.equity()

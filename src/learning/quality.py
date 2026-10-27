@@ -281,7 +281,7 @@ class QualityAudit:
             ids.append(str(value["oid"]) if "oid" in value else None)
         return ids
 
-    def summary(self, ledger_fills):
+    def summary(self, ledger_fills, order_links=()):
         with self.connect() as db:
             decisions = [
                 dict(r) for r in db.execute("SELECT * FROM decisions ORDER BY time")
@@ -323,10 +323,14 @@ class QualityAudit:
                 admitted += 1
                 for index, oid in enumerate(ids):
                     if oid:
-                        by_order[oid] = (
+                        by_order[(decision["coin"], oid)] = (
                             decision,
                             ("entry", "take_profit_order", "stop_loss_order")[index],
                         )
+        # Recovered/emergency exits have their own exact returned IDs; never infer a parent.
+        for link in order_links:
+            by_order.setdefault((link['coin'], str(link['oid'])),
+                                ({'raw': {'signal': {}, 'context': {}}}, link['role']))
         # Every fill joins by exchange order ID; never nearest price or inferred exit geometry.
         grouped = {}
         recent = []
@@ -344,8 +348,8 @@ class QualityAudit:
                 )
             ]
             first, last = fills[0], fills[-1]
-            match = by_order.get(str(first.get("oid")))
-            exit_match = by_order.get(str(last.get("oid")))
+            match = by_order.get((first["coin"], str(first.get("oid"))))
+            exit_match = by_order.get((last["coin"], str(last.get("oid"))))
             context = (match[0]["raw"].get("context") or {}) if match else {}
             regime = context.get("regime", "unknown")
             setup = (
@@ -414,7 +418,7 @@ class QualityAudit:
                     if mark["horizon"] != horizon:
                         continue
                     fill = json.loads(fill_rows[mark["fill_id"]]["raw"])
-                    link = by_order.get(str(fill.get("oid")))
+                    link = by_order.get((fill["coin"], str(fill.get("oid"))))
                     actual_role = (
                         ("entry" if link[1] == "entry" else "exit")
                         if link
@@ -437,11 +441,13 @@ class QualityAudit:
                 )
         execution = []
         for fill in ledger_fills:
-            match = by_order.get(str(fill.get("oid")))
+            match = by_order.get((fill["coin"], str(fill.get("oid"))))
             if not match or match[1] != "entry":
                 continue
             decision = match[0]["raw"]
-            quote = decision["quote"]
+            quote = decision.get("quote")
+            if not quote:
+                continue
             if quote["sampled_at"] * 1000 > int(fill["time"]):
                 continue
             direction = 1 if fill["side"] == "B" else -1

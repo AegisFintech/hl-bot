@@ -147,19 +147,6 @@
       "source_location": "L11"
     },
     {
-      "id": "tests_test_trade_episodes_tradeepisodetests",
-      "label": "TradeEpisodeTests",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": "tradeepisodetests",
-      "source_file": "tests/test_trade_episodes.py",
-      "source_location": "L21"
-    },
-    {
       "id": "src_agent_guardrails_runlimits",
       "label": "RunLimits",
       "_callable": true,
@@ -199,26 +186,13 @@
       "source_location": "L30"
     },
     {
-      "id": "tests_test_experiments_journalupgradetests",
-      "label": "JournalUpgradeTests",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "ExperimentEngine",
-      "file_type": "code",
-      "norm_label": "journalupgradetests",
-      "source_file": "tests/test_experiments.py",
-      "source_location": "L112"
-    },
-    {
       "id": "src_operations_operations",
       "label": "Operations",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": "operations",
       "source_file": "src/operations.py",
@@ -231,11 +205,76 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": "continuitytests",
       "source_file": "tests/test_continuity.py",
       "source_location": "L15"
+    },
+    {
+      "id": "src_learning_accounting_accountaudit",
+      "label": "AccountAudit",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": "accountaudit",
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L12"
+    },
+    {
+      "id": "src_learning_execution_executionjournal",
+      "label": "ExecutionJournal",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": "executionjournal",
+      "source_file": "src/learning/execution.py",
+      "source_location": "L10"
+    },
+    {
+      "id": "src_learning_funding_fundingsync",
+      "label": "FundingSync",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": "fundingsync",
+      "source_file": "src/learning/funding.py",
+      "source_location": "L11"
+    },
+    {
+      "id": "tests_test_account_audit_accountaudittests",
+      "label": "AccountAuditTests",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": "accountaudittests",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L14"
+    },
+    {
+      "id": "tests_test_quality_fundingtests",
+      "label": "FundingTests",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": "fundingtests",
+      "source_file": "tests/test_quality.py",
+      "source_location": "L215"
     },
     {
       "id": "tests_test_dashboard_dashboardtests",
@@ -249,19 +288,6 @@
       "norm_label": "dashboardtests",
       "source_file": "tests/test_dashboard.py",
       "source_location": "L5"
-    },
-    {
-      "id": "src_learning_funding_fundingsync",
-      "label": "FundingSync",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "QualityAudit",
-      "file_type": "code",
-      "norm_label": "fundingsync",
-      "source_file": "src/learning/funding.py",
-      "source_location": "L11"
     },
     {
       "id": "src_learning_quality_qualityaudit",
@@ -288,19 +314,6 @@
       "norm_label": "chronologicalreporttests",
       "source_file": "tests/test_quality.py",
       "source_location": "L275"
-    },
-    {
-      "id": "tests_test_quality_fundingtests",
-      "label": "FundingTests",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "QualityAudit",
-      "file_type": "code",
-      "norm_label": "fundingtests",
-      "source_file": "tests/test_quality.py",
-      "source_location": "L215"
     },
     {
       "id": "tests_test_quality_qualitytests",
@@ -355,17 +368,17 @@
       "source_location": "L174"
     },
     {
-      "id": "tests_test_research_sourcetests",
-      "label": "SourceTests",
+      "id": "tests_test_research_journaltests",
+      "label": "JournalTests",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 34,
-      "community_name": "ResearchService",
+      "community": 35,
+      "community_name": "test_research.py",
       "file_type": "code",
-      "norm_label": "sourcetests",
+      "norm_label": "journaltests",
       "source_file": "tests/test_research.py",
-      "source_location": "L95"
+      "source_location": "L67"
     },
     {
       "id": "src_research_microstructure_microstructure",
@@ -407,17 +420,17 @@
       "source_location": "L31"
     },
     {
-      "id": "tests_test_research_journaltests",
-      "label": "JournalTests",
+      "id": "tests_test_experiments_journalupgradetests",
+      "label": "JournalUpgradeTests",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 39,
       "community_name": "ResearchJournal",
       "file_type": "code",
-      "norm_label": "journaltests",
-      "source_file": "tests/test_research.py",
-      "source_location": "L67"
+      "norm_label": "journalupgradetests",
+      "source_file": "tests/test_experiments.py",
+      "source_location": "L112"
     },
     {
       "id": "src_reconciler_positionreconciler",
@@ -444,6 +457,19 @@
       "norm_label": "riskmanager",
       "source_file": "src/risk/manager.py",
       "source_location": "L35"
+    },
+    {
+      "id": "src_risk_manager_riskstate",
+      "label": "RiskState",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "RiskManager",
+      "file_type": "code",
+      "norm_label": "riskstate",
+      "source_file": "src/risk/manager.py",
+      "source_location": "L14"
     },
     {
       "id": "tests_test_exchange_exchangetests",
@@ -485,6 +511,32 @@
       "source_location": "L10"
     },
     {
+      "id": "tests_test_trade_episodes_tradeepisodetests",
+      "label": "TradeEpisodeTests",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 43,
+      "community_name": "complete_trades",
+      "file_type": "code",
+      "norm_label": "tradeepisodetests",
+      "source_file": "tests/test_trade_episodes.py",
+      "source_location": "L21"
+    },
+    {
+      "id": "tests_test_research_sourcetests",
+      "label": "SourceTests",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 44,
+      "community_name": "divergence",
+      "file_type": "code",
+      "norm_label": "sourcetests",
+      "source_file": "tests/test_research.py",
+      "source_location": "L95"
+    },
+    {
       "id": "scripts_replay_tape",
       "label": "Tape",
       "_callable": true,
@@ -496,19 +548,6 @@
       "norm_label": "tape",
       "source_file": "scripts/replay.py",
       "source_location": "L24"
-    },
-    {
-      "id": "src_risk_manager_riskstate",
-      "label": "RiskState",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "bot.py",
-      "file_type": "code",
-      "norm_label": "riskstate",
-      "source_file": "src/risk/manager.py",
-      "source_location": "L14"
     },
     {
       "id": "src_strategy_sr_detector_orderblock",
@@ -586,7 +625,7 @@
       "file_type": "code",
       "norm_label": "tradingbot",
       "source_file": "src/bot.py",
-      "source_location": "L23"
+      "source_location": "L25"
     },
     {
       "id": "tests_test_bot_emergencytests",
@@ -637,7 +676,7 @@
       "file_type": "code",
       "norm_label": ".audit_urls()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L47"
+      "source_location": "L48"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_bbo_age",
@@ -649,7 +688,7 @@
       "file_type": "code",
       "norm_label": ".bbo_age()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L198"
+      "source_location": "L199"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_cancel_all_orders",
@@ -661,7 +700,7 @@
       "file_type": "code",
       "norm_label": ".cancel_all_orders()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L248"
+      "source_location": "L282"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_cancel_order",
@@ -673,7 +712,7 @@
       "file_type": "code",
       "norm_label": ".cancel_order()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L245"
+      "source_location": "L279"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_close_position",
@@ -685,7 +724,7 @@
       "file_type": "code",
       "norm_label": ".close_position()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L258"
+      "source_location": "L292"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_account_snapshot",
@@ -697,7 +736,7 @@
       "file_type": "code",
       "norm_label": ".get_account_snapshot()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L170"
+      "source_location": "L171"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_account_value",
@@ -709,7 +748,7 @@
       "file_type": "code",
       "norm_label": ".get_account_value()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L190"
+      "source_location": "L191"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_audit_bbo",
@@ -721,7 +760,7 @@
       "file_type": "code",
       "norm_label": ".get_audit_bbo()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L193"
+      "source_location": "L194"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_available_to_trade",
@@ -733,7 +772,7 @@
       "file_type": "code",
       "norm_label": ".get_available_to_trade()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L163"
+      "source_location": "L164"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_cached_bbo",
@@ -745,7 +784,7 @@
       "file_type": "code",
       "norm_label": ".get_cached_bbo()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L437"
+      "source_location": "L473"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_cached_candles",
@@ -757,7 +796,7 @@
       "file_type": "code",
       "norm_label": ".get_cached_candles()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L445"
+      "source_location": "L481"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_cached_fills",
@@ -769,7 +808,7 @@
       "file_type": "code",
       "norm_label": ".get_cached_fills()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L453"
+      "source_location": "L489"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_cached_orderbook",
@@ -781,7 +820,7 @@
       "file_type": "code",
       "norm_label": ".get_cached_orderbook()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L441"
+      "source_location": "L477"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_cached_trades",
@@ -793,7 +832,7 @@
       "file_type": "code",
       "norm_label": ".get_cached_trades()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L449"
+      "source_location": "L485"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_candles",
@@ -805,7 +844,7 @@
       "file_type": "code",
       "norm_label": ".get_candles()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L131"
+      "source_location": "L132"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_fills",
@@ -817,7 +856,7 @@
       "file_type": "code",
       "norm_label": ".get_fills()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L156"
+      "source_location": "L157"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_l2_snapshot",
@@ -829,7 +868,7 @@
       "file_type": "code",
       "norm_label": ".get_l2_snapshot()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L128"
+      "source_location": "L129"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_meta",
@@ -841,7 +880,7 @@
       "file_type": "code",
       "norm_label": ".get_meta()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L82"
+      "source_location": "L83"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_mid_price",
@@ -853,7 +892,7 @@
       "file_type": "code",
       "norm_label": ".get_mid_price()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L119"
+      "source_location": "L120"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_open_orders",
@@ -865,7 +904,7 @@
       "file_type": "code",
       "norm_label": ".get_open_orders()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L153"
+      "source_location": "L154"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_perps_account_value",
@@ -877,7 +916,7 @@
       "file_type": "code",
       "norm_label": ".get_perps_account_value()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L159"
+      "source_location": "L160"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_positions",
@@ -889,7 +928,7 @@
       "file_type": "code",
       "norm_label": ".get_positions()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L149"
+      "source_location": "L150"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_spot_usdc_balance",
@@ -901,7 +940,7 @@
       "file_type": "code",
       "norm_label": ".get_spot_usdc_balance()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L142"
+      "source_location": "L143"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_spot_user_state",
@@ -913,7 +952,7 @@
       "file_type": "code",
       "norm_label": ".get_spot_user_state()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L139"
+      "source_location": "L140"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_sz_decimals",
@@ -925,7 +964,7 @@
       "file_type": "code",
       "norm_label": ".get_sz_decimals()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L88"
+      "source_location": "L89"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_tick_size",
@@ -937,7 +976,7 @@
       "file_type": "code",
       "norm_label": ".get_tick_size()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L106"
+      "source_location": "L107"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_user_state",
@@ -949,7 +988,7 @@
       "file_type": "code",
       "norm_label": ".get_user_state()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L136"
+      "source_location": "L137"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_get_ws_info",
@@ -961,7 +1000,7 @@
       "file_type": "code",
       "norm_label": "._get_ws_info()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L288"
+      "source_location": "L324"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_init",
@@ -985,7 +1024,7 @@
       "file_type": "code",
       "norm_label": ".place_limit_order()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L210"
+      "source_location": "L240"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_place_maker_order",
@@ -997,7 +1036,7 @@
       "file_type": "code",
       "norm_label": ".place_maker_order()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L206"
+      "source_location": "L235"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_place_market_order",
@@ -1009,7 +1048,7 @@
       "file_type": "code",
       "norm_label": ".place_market_order()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L214"
+      "source_location": "L245"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_place_order_with_tpsl",
@@ -1021,7 +1060,7 @@
       "file_type": "code",
       "norm_label": ".place_order_with_tpsl()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L218"
+      "source_location": "L250"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_place_trigger_orders",
@@ -1033,7 +1072,7 @@
       "file_type": "code",
       "norm_label": ".place_trigger_orders()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L261"
+      "source_location": "L295"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_preflight_check_agent",
@@ -1045,7 +1084,7 @@
       "file_type": "code",
       "norm_label": ".preflight_check_agent()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L66"
+      "source_location": "L67"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_reconnect_ws",
@@ -1057,7 +1096,7 @@
       "file_type": "code",
       "norm_label": "._reconnect_ws()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L312"
+      "source_location": "L348"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_round_price",
@@ -1069,7 +1108,7 @@
       "file_type": "code",
       "norm_label": ".round_price()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L102"
+      "source_location": "L103"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_round_size",
@@ -1081,7 +1120,7 @@
       "file_type": "code",
       "norm_label": ".round_size()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L95"
+      "source_location": "L96"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_set_leverage",
@@ -1093,7 +1132,7 @@
       "file_type": "code",
       "norm_label": ".set_leverage()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L283"
+      "source_location": "L319"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_set_reconnect_callback",
@@ -1105,7 +1144,7 @@
       "file_type": "code",
       "norm_label": ".set_reconnect_callback()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L333"
+      "source_location": "L369"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_start_ws_monitor",
@@ -1117,7 +1156,19 @@
       "file_type": "code",
       "norm_label": "._start_ws_monitor()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L294"
+      "source_location": "L330"
+    },
+    {
+      "id": "src_exchange_hyperliquid_hyperliquidclient_submit_audited",
+      "label": "._submit_audited()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "HyperliquidClient",
+      "file_type": "code",
+      "norm_label": "._submit_audited()",
+      "source_file": "src/exchange/hyperliquid.py",
+      "source_location": "L207"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_subscribe_bbo",
@@ -1129,7 +1180,7 @@
       "file_type": "code",
       "norm_label": ".subscribe_bbo()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L336"
+      "source_location": "L372"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_subscribe_candles",
@@ -1141,7 +1192,7 @@
       "file_type": "code",
       "norm_label": ".subscribe_candles()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L401"
+      "source_location": "L437"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_subscribe_fills",
@@ -1153,7 +1204,7 @@
       "file_type": "code",
       "norm_label": ".subscribe_fills()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L411"
+      "source_location": "L447"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_subscribe_l2",
@@ -1165,7 +1216,7 @@
       "file_type": "code",
       "norm_label": ".subscribe_l2()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L353"
+      "source_location": "L389"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_subscribe_order_updates",
@@ -1177,7 +1228,7 @@
       "file_type": "code",
       "norm_label": ".subscribe_order_updates()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L427"
+      "source_location": "L463"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_subscribe_trades",
@@ -1189,7 +1240,7 @@
       "file_type": "code",
       "norm_label": ".subscribe_trades()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L363"
+      "source_location": "L399"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_transfer_spot_to_perps",
@@ -1201,7 +1252,7 @@
       "file_type": "code",
       "norm_label": ".transfer_spot_to_perps()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L201"
+      "source_location": "L202"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_ws_monitor_loop",
@@ -1213,19 +1264,7 @@
       "file_type": "code",
       "norm_label": "._ws_monitor_loop()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L300"
-    },
-    {
-      "id": "src_bot_tradingbot_init",
-      "label": ".__init__()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 10,
-      "community_name": "Evaluator",
-      "file_type": "code",
-      "norm_label": ".__init__()",
-      "source_file": "src/bot.py",
-      "source_location": "L25"
+      "source_location": "L336"
     },
     {
       "id": "src_learning_evaluator_evaluator_analyze_sr_patterns",
@@ -1384,18 +1423,6 @@
       "source_location": "L18"
     },
     {
-      "id": "scripts_compact_storage_compact",
-      "label": "compact()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": "compact()",
-      "source_file": "scripts/compact_storage.py",
-      "source_location": "L15"
-    },
-    {
       "id": "scripts_snapshot_perf_main",
       "label": "main()",
       "_callable": true,
@@ -1516,18 +1543,6 @@
       "source_location": "L47"
     },
     {
-      "id": "src_learning_trades_complete_trades",
-      "label": "complete_trades()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": "complete_trades()",
-      "source_file": "src/learning/trades.py",
-      "source_location": "L6"
-    },
-    {
       "id": "src_logging_setup_file_handler",
       "label": "file_handler()",
       "_callable": true,
@@ -1538,30 +1553,6 @@
       "norm_label": "file_handler()",
       "source_file": "src/logging_setup.py",
       "source_location": "L8"
-    },
-    {
-      "id": "src_research_journal_compact_observation",
-      "label": "compact_observation()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": "compact_observation()",
-      "source_file": "src/research/journal.py",
-      "source_location": "L10"
-    },
-    {
-      "id": "tests_test_risk_risktests_test_ledger_idempotency_and_fee_totals",
-      "label": ".test_ledger_idempotency_and_fee_totals()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".test_ledger_idempotency_and_fee_totals()",
-      "source_file": "tests/test_risk.py",
-      "source_location": "L63"
     },
     {
       "id": "tests_test_storage_retention_retentiontests_test_equity_keeps_extremes_peak_last_recent_and_fills",
@@ -1598,66 +1589,6 @@
       "norm_label": ".test_observations_bounded_compact_and_learning_untouched()",
       "source_file": "tests/test_storage_retention.py",
       "source_location": "L41"
-    },
-    {
-      "id": "tests_test_trade_episodes_fill",
-      "label": "fill()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": "fill()",
-      "source_file": "tests/test_trade_episodes.py",
-      "source_location": "L5"
-    },
-    {
-      "id": "tests_test_trade_episodes_tradeepisodetests_test_nonfinite_or_non_usdc_fees_break_continuity",
-      "label": ".test_nonfinite_or_non_usdc_fees_break_continuity()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".test_nonfinite_or_non_usdc_fees_break_continuity()",
-      "source_file": "tests/test_trade_episodes.py",
-      "source_location": "L49"
-    },
-    {
-      "id": "tests_test_trade_episodes_tradeepisodetests_test_partial_fills_form_one_trade_with_all_entry_exit_fees",
-      "label": ".test_partial_fills_form_one_trade_with_all_entry_exit_fees()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".test_partial_fills_form_one_trade_with_all_entry_exit_fees()",
-      "source_file": "tests/test_trade_episodes.py",
-      "source_location": "L22"
-    },
-    {
-      "id": "tests_test_trade_episodes_tradeepisodetests_test_reversal_splits_fee_and_starts_a_new_episode",
-      "label": ".test_reversal_splits_fee_and_starts_a_new_episode()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".test_reversal_splits_fee_and_starts_a_new_episode()",
-      "source_file": "tests/test_trade_episodes.py",
-      "source_location": "L38"
-    },
-    {
-      "id": "tests_test_trade_episodes_tradeepisodetests_test_unknown_initial_position_and_gaps_are_excluded",
-      "label": ".test_unknown_initial_position_and_gaps_are_excluded()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": ".test_unknown_initial_position_and_gaps_are_excluded()",
-      "source_file": "tests/test_trade_episodes.py",
-      "source_location": "L34"
     },
     {
       "id": "scripts_monitor_bot_status",
@@ -2140,18 +2071,6 @@
       "source_location": "L93"
     },
     {
-      "id": "src_research_service_researchservice_init",
-      "label": ".__init__()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "ExperimentEngine",
-      "file_type": "code",
-      "norm_label": ".__init__()",
-      "source_file": "src/research/service.py",
-      "source_location": "L64"
-    },
-    {
       "id": "tests_test_experiments_experimenttests_test_catalog_discloses_unavailable_dependencies",
       "label": ".test_catalog_discloses_unavailable_dependencies()",
       "_callable": true,
@@ -2224,54 +2143,6 @@
       "source_location": "L59"
     },
     {
-      "id": "tests_test_experiments_journalupgradetests_test_cost_attribution_nonoverlap_and_no_automatic_promotion",
-      "label": ".test_cost_attribution_nonoverlap_and_no_automatic_promotion()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "ExperimentEngine",
-      "file_type": "code",
-      "norm_label": ".test_cost_attribution_nonoverlap_and_no_automatic_promotion()",
-      "source_file": "tests/test_experiments.py",
-      "source_location": "L146"
-    },
-    {
-      "id": "tests_test_experiments_journalupgradetests_test_legacy_horizons_preserved_and_new_events_get_long_horizons",
-      "label": ".test_legacy_horizons_preserved_and_new_events_get_long_horizons()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "ExperimentEngine",
-      "file_type": "code",
-      "norm_label": ".test_legacy_horizons_preserved_and_new_events_get_long_horizons()",
-      "source_file": "tests/test_experiments.py",
-      "source_location": "L113"
-    },
-    {
-      "id": "tests_test_experiments_journalupgradetests_test_matched_comparison_requires_same_hour_regime_and_direction",
-      "label": ".test_matched_comparison_requires_same_hour_regime_and_direction()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "ExperimentEngine",
-      "file_type": "code",
-      "norm_label": ".test_matched_comparison_requires_same_hour_regime_and_direction()",
-      "source_file": "tests/test_experiments.py",
-      "source_location": "L160"
-    },
-    {
-      "id": "tests_test_experiments_journalupgradetests_test_nonoverlapping_count_does_not_count_every_signal",
-      "label": ".test_nonoverlapping_count_does_not_count_every_signal()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "ExperimentEngine",
-      "file_type": "code",
-      "norm_label": ".test_nonoverlapping_count_does_not_count_every_signal()",
-      "source_file": "tests/test_experiments.py",
-      "source_location": "L176"
-    },
-    {
       "id": "tests_test_experiments_market",
       "label": "market()",
       "_callable": true,
@@ -2284,16 +2155,28 @@
       "source_location": "L13"
     },
     {
+      "id": "src_bot_tradingbot_init",
+      "label": ".__init__()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 22,
+      "community_name": ".__init__",
+      "file_type": "code",
+      "norm_label": ".__init__()",
+      "source_file": "src/bot.py",
+      "source_location": "L27"
+    },
+    {
       "id": "src_exchange_hyperliquid_hyperliquidclient_candle_health",
       "label": ".candle_health()",
       "_callable": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": ".candle_health()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L392"
+      "source_location": "L428"
     },
     {
       "id": "src_exchange_hyperliquid_hyperliquidclient_merge_candles",
@@ -2301,11 +2184,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": ".merge_candles()",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L373"
+      "source_location": "L409"
     },
     {
       "id": "src_market_candles_coverage",
@@ -2313,7 +2196,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": "coverage()",
       "source_file": "src/market/candles.py",
@@ -2325,7 +2208,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": "merge_bars()",
       "source_file": "src/market/candles.py",
@@ -2337,7 +2220,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": "valid_bar()",
       "source_file": "src/market/candles.py",
@@ -2349,7 +2232,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": ".__init__()",
       "source_file": "src/operations.py",
@@ -2361,7 +2244,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": ".record()",
       "source_file": "src/operations.py",
@@ -2373,7 +2256,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": ".summary()",
       "source_file": "src/operations.py",
@@ -2385,7 +2268,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": "bars()",
       "source_file": "tests/test_continuity.py",
@@ -2397,7 +2280,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": ".client()",
       "source_file": "tests/test_continuity.py",
@@ -2409,7 +2292,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": ".test_bounded_and_no_synthetic_bars()",
       "source_file": "tests/test_continuity.py",
@@ -2421,7 +2304,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": ".test_gap_staleness_and_invalid_ohlc_fail_closed()",
       "source_file": "tests/test_continuity.py",
@@ -2433,7 +2316,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": ".test_heartbeat_incident_boundaries_and_stalled_detection()",
       "source_file": "tests/test_continuity.py",
@@ -2445,7 +2328,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": ".test_late_updates_merge_without_duplicate_or_reordering()",
       "source_file": "tests/test_continuity.py",
@@ -2457,7 +2340,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": ".test_rejected_update_requires_repair_before_eligibility()",
       "source_file": "tests/test_continuity.py",
@@ -2469,7 +2352,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": ".test_rest_cannot_overwrite_newer_forming_websocket_candle()",
       "source_file": "tests/test_continuity.py",
@@ -2481,191 +2364,407 @@
       "_callable": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": ".test_restart_retains_incident_and_marks_observation_gap()",
       "source_file": "tests/test_continuity.py",
       "source_location": "L74"
     },
     {
-      "id": "src_dashboard_static_terminal_aggregate",
-      "label": "aggregate()",
+      "id": "src_learning_accounting_accountaudit_cash_amount",
+      "label": ".cash_amount()",
       "_callable": true,
       "_origin": "ast",
       "community": 23,
-      "community_name": "terminal.js",
+      "community_name": "transaction",
       "file_type": "code",
-      "norm_label": "aggregate()",
-      "source_file": "src/dashboard/static/terminal.js",
-      "source_location": "L21"
+      "norm_label": ".cash_amount()",
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L43"
     },
     {
-      "id": "src_dashboard_static_terminal_book",
-      "label": "book()",
+      "id": "src_learning_accounting_accountaudit_init",
+      "label": ".__init__()",
       "_callable": true,
       "_origin": "ast",
       "community": 23,
-      "community_name": "terminal.js",
+      "community_name": "transaction",
       "file_type": "code",
-      "norm_label": "book()",
-      "source_file": "src/dashboard/static/terminal.js",
+      "norm_label": ".__init__()",
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L13"
+    },
+    {
+      "id": "src_learning_accounting_accountaudit_run",
+      "label": "._run()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": "._run()",
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L134"
+    },
+    {
+      "id": "src_learning_accounting_accountaudit_sample",
+      "label": ".sample()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": ".sample()",
+      "source_file": "src/learning/accounting.py",
       "source_location": "L25"
     },
     {
-      "id": "src_dashboard_static_terminal_chart",
-      "label": "chart()",
+      "id": "src_learning_accounting_accountaudit_start",
+      "label": ".start()",
       "_callable": true,
       "_origin": "ast",
       "community": 23,
-      "community_name": "terminal.js",
+      "community_name": "transaction",
       "file_type": "code",
-      "norm_label": "chart()",
-      "source_file": "src/dashboard/static/terminal.js",
-      "source_location": "L22"
+      "norm_label": ".start()",
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L131"
     },
     {
-      "id": "src_dashboard_static_terminal_fmt",
-      "label": "fmt()",
+      "id": "src_learning_accounting_accountaudit_step",
+      "label": ".step()",
       "_callable": true,
       "_origin": "ast",
       "community": 23,
-      "community_name": "terminal.js",
+      "community_name": "transaction",
       "file_type": "code",
-      "norm_label": "fmt()",
-      "source_file": "src/dashboard/static/terminal.js",
-      "source_location": "L3"
+      "norm_label": ".step()",
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L53"
     },
     {
-      "id": "src_dashboard_static_terminal_num",
-      "label": "num()",
+      "id": "src_learning_accounting_accountaudit_summary",
+      "label": ".summary()",
       "_callable": true,
       "_origin": "ast",
       "community": 23,
-      "community_name": "terminal.js",
+      "community_name": "transaction",
       "file_type": "code",
-      "norm_label": "num()",
-      "source_file": "src/dashboard/static/terminal.js",
-      "source_location": "L2"
+      "norm_label": ".summary()",
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L92"
     },
     {
-      "id": "src_dashboard_static_terminal_pnl",
-      "label": "pnl()",
+      "id": "src_learning_execution_executionjournal_begin",
+      "label": ".begin()",
       "_callable": true,
       "_origin": "ast",
       "community": 23,
-      "community_name": "terminal.js",
+      "community_name": "transaction",
       "file_type": "code",
-      "norm_label": "pnl()",
-      "source_file": "src/dashboard/static/terminal.js",
-      "source_location": "L7"
-    },
-    {
-      "id": "src_dashboard_static_terminal_refresh",
-      "label": "refresh()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "terminal.js",
-      "file_type": "code",
-      "norm_label": "refresh()",
-      "source_file": "src/dashboard/static/terminal.js",
-      "source_location": "L27"
-    },
-    {
-      "id": "src_dashboard_static_terminal_render",
-      "label": "render()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "terminal.js",
-      "file_type": "code",
-      "norm_label": "render()",
-      "source_file": "src/dashboard/static/terminal.js",
-      "source_location": "L26"
-    },
-    {
-      "id": "src_dashboard_static_terminal_renderoperations",
-      "label": "renderOperations()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "terminal.js",
-      "file_type": "code",
-      "norm_label": "renderoperations()",
-      "source_file": "src/dashboard/static/terminal.js",
-      "source_location": "L33"
-    },
-    {
-      "id": "src_dashboard_static_terminal_rendertable",
-      "label": "renderTable()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "terminal.js",
-      "file_type": "code",
-      "norm_label": "rendertable()",
-      "source_file": "src/dashboard/static/terminal.js",
-      "source_location": "L24"
-    },
-    {
-      "id": "src_dashboard_static_terminal_row",
-      "label": "row()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "terminal.js",
-      "file_type": "code",
-      "norm_label": "row()",
-      "source_file": "src/dashboard/static/terminal.js",
+      "norm_label": ".begin()",
+      "source_file": "src/learning/execution.py",
       "source_location": "L23"
     },
     {
-      "id": "src_dashboard_static_terminal_signed",
-      "label": "signed()",
+      "id": "src_learning_execution_executionjournal_event",
+      "label": ".event()",
       "_callable": true,
       "_origin": "ast",
       "community": 23,
-      "community_name": "terminal.js",
+      "community_name": "transaction",
       "file_type": "code",
-      "norm_label": "signed()",
-      "source_file": "src/dashboard/static/terminal.js",
-      "source_location": "L4"
+      "norm_label": ".event()",
+      "source_file": "src/learning/execution.py",
+      "source_location": "L46"
     },
     {
-      "id": "src_dashboard_static_terminal_stamp",
-      "label": "stamp()",
+      "id": "src_learning_execution_executionjournal_fail",
+      "label": ".fail()",
       "_callable": true,
       "_origin": "ast",
       "community": 23,
-      "community_name": "terminal.js",
+      "community_name": "transaction",
       "file_type": "code",
-      "norm_label": "stamp()",
-      "source_file": "src/dashboard/static/terminal.js",
-      "source_location": "L5"
+      "norm_label": ".fail()",
+      "source_file": "src/learning/execution.py",
+      "source_location": "L42"
     },
     {
-      "id": "src_dashboard_static_terminal_text",
-      "label": "text()",
+      "id": "src_learning_execution_executionjournal_finish",
+      "label": ".finish()",
       "_callable": true,
       "_origin": "ast",
       "community": 23,
-      "community_name": "terminal.js",
+      "community_name": "transaction",
       "file_type": "code",
-      "norm_label": "text()",
-      "source_file": "src/dashboard/static/terminal.js",
-      "source_location": "L6"
+      "norm_label": ".finish()",
+      "source_file": "src/learning/execution.py",
+      "source_location": "L30"
     },
     {
-      "id": "src_dashboard_static_terminal_usd",
-      "label": "usd()",
+      "id": "src_learning_execution_executionjournal_init",
+      "label": ".__init__()",
       "_callable": true,
       "_origin": "ast",
       "community": 23,
-      "community_name": "terminal.js",
+      "community_name": "transaction",
       "file_type": "code",
-      "norm_label": "usd()",
-      "source_file": "src/dashboard/static/terminal.js",
-      "source_location": "L4"
+      "norm_label": ".__init__()",
+      "source_file": "src/learning/execution.py",
+      "source_location": "L11"
+    },
+    {
+      "id": "src_learning_execution_executionjournal_links",
+      "label": ".links()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": ".links()",
+      "source_file": "src/learning/execution.py",
+      "source_location": "L59"
+    },
+    {
+      "id": "src_learning_execution_executionjournal_summary",
+      "label": ".summary()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": ".summary()",
+      "source_file": "src/learning/execution.py",
+      "source_location": "L63"
+    },
+    {
+      "id": "src_learning_funding_fundingsync_init",
+      "label": ".__init__()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": ".__init__()",
+      "source_file": "src/learning/funding.py",
+      "source_location": "L12"
+    },
+    {
+      "id": "src_learning_funding_fundingsync_run",
+      "label": "._run()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": "._run()",
+      "source_file": "src/learning/funding.py",
+      "source_location": "L79"
+    },
+    {
+      "id": "src_learning_funding_fundingsync_start",
+      "label": ".start()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": ".start()",
+      "source_file": "src/learning/funding.py",
+      "source_location": "L74"
+    },
+    {
+      "id": "src_learning_funding_fundingsync_step",
+      "label": ".step()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": ".step()",
+      "source_file": "src/learning/funding.py",
+      "source_location": "L25"
+    },
+    {
+      "id": "src_storage_transaction",
+      "label": "transaction()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": "transaction()",
+      "source_file": "src/storage.py",
+      "source_location": "L8"
+    },
+    {
+      "id": "tests_test_account_audit_accountaudittests_sample",
+      "label": ".sample()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": ".sample()",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L57"
+    },
+    {
+      "id": "tests_test_account_audit_accountaudittests_setup",
+      "label": ".setUp()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": ".setup()",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L15"
+    },
+    {
+      "id": "tests_test_account_audit_accountaudittests_teardown",
+      "label": ".tearDown()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": ".teardown()",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L21"
+    },
+    {
+      "id": "tests_test_account_audit_accountaudittests_test_ambiguous_submission_never_retries",
+      "label": ".test_ambiguous_submission_never_retries()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": ".test_ambiguous_submission_never_retries()",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L33"
+    },
+    {
+      "id": "tests_test_account_audit_accountaudittests_test_capped_or_malformed_history_does_not_advance_coverage",
+      "label": ".test_capped_or_malformed_history_does_not_advance_coverage()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": ".test_capped_or_malformed_history_does_not_advance_coverage()",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L87"
+    },
+    {
+      "id": "tests_test_account_audit_accountaudittests_test_equity_bridge_components_and_baseline_survive_restart",
+      "label": ".test_equity_bridge_components_and_baseline_survive_restart()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": ".test_equity_bridge_components_and_baseline_survive_restart()",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L60"
+    },
+    {
+      "id": "tests_test_account_audit_accountaudittests_test_failed_intent_blocks_entry_but_never_blocks_close",
+      "label": ".test_failed_intent_blocks_entry_but_never_blocks_close()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": ".test_failed_intent_blocks_entry_but_never_blocks_close()",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L41"
+    },
+    {
+      "id": "tests_test_account_audit_accountaudittests_test_intent_is_durable_before_submission_and_roles_use_exact_ids",
+      "label": ".test_intent_is_durable_before_submission_and_roles_use_exact_ids()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": ".test_intent_is_durable_before_submission_and_roles_use_exact_ids()",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L23"
+    },
+    {
+      "id": "tests_test_account_audit_accountaudittests_test_nested_order_updates_are_idempotent_and_preserved",
+      "label": ".test_nested_order_updates_are_idempotent_and_preserved()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": ".test_nested_order_updates_are_idempotent_and_preserved()",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L51"
+    },
+    {
+      "id": "tests_test_account_audit_accountaudittests_test_recovery_exit_attribution_does_not_invent_entry_context",
+      "label": ".test_recovery_exit_attribution_does_not_invent_entry_context()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": ".test_recovery_exit_attribution_does_not_invent_entry_context()",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L94"
+    },
+    {
+      "id": "tests_test_account_audit_accountaudittests_test_unknown_movement_and_missing_funding_never_assumed_zero",
+      "label": ".test_unknown_movement_and_missing_funding_never_assumed_zero()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": ".test_unknown_movement_and_missing_funding_never_assumed_zero()",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L78"
+    },
+    {
+      "id": "tests_test_quality_fundingtests_test_capped_windows_split_without_timestamp_skips",
+      "label": ".test_capped_windows_split_without_timestamp_skips()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": ".test_capped_windows_split_without_timestamp_skips()",
+      "source_file": "tests/test_quality.py",
+      "source_location": "L256"
+    },
+    {
+      "id": "tests_test_quality_fundingtests_test_idempotent_funding_and_persistent_coverage",
+      "label": ".test_idempotent_funding_and_persistent_coverage()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": ".test_idempotent_funding_and_persistent_coverage()",
+      "source_file": "tests/test_quality.py",
+      "source_location": "L216"
+    },
+    {
+      "id": "tests_test_quality_fundingtests_test_malformed_funding_does_not_advance_coverage",
+      "label": ".test_malformed_funding_does_not_advance_coverage()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": ".test_malformed_funding_does_not_advance_coverage()",
+      "source_file": "tests/test_quality.py",
+      "source_location": "L238"
     },
     {
       "id": "src_bot_tradingbot_start_dashboard",
@@ -2677,7 +2776,7 @@
       "file_type": "code",
       "norm_label": "._start_dashboard()",
       "source_file": "src/bot.py",
-      "source_location": "L300"
+      "source_location": "L308"
     },
     {
       "id": "src_dashboard_app_api_account",
@@ -2761,7 +2860,7 @@
       "file_type": "code",
       "norm_label": "api_research()",
       "source_file": "src/dashboard/app.py",
-      "source_location": "L241"
+      "source_location": "L247"
     },
     {
       "id": "src_dashboard_app_api_sr_levels",
@@ -2833,7 +2932,7 @@
       "file_type": "code",
       "norm_label": "export_fills()",
       "source_file": "src/dashboard/app.py",
-      "source_location": "L247"
+      "source_location": "L253"
     },
     {
       "id": "src_dashboard_app_favicon",
@@ -2881,7 +2980,7 @@
       "file_type": "code",
       "norm_label": "security_headers()",
       "source_file": "src/dashboard/app.py",
-      "source_location": "L257"
+      "source_location": "L263"
     },
     {
       "id": "src_dashboard_app_set_bot_reference",
@@ -3016,54 +3115,6 @@
       "source_location": "L13"
     },
     {
-      "id": "src_learning_funding_fundingsync_init",
-      "label": ".__init__()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "QualityAudit",
-      "file_type": "code",
-      "norm_label": ".__init__()",
-      "source_file": "src/learning/funding.py",
-      "source_location": "L12"
-    },
-    {
-      "id": "src_learning_funding_fundingsync_run",
-      "label": "._run()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "QualityAudit",
-      "file_type": "code",
-      "norm_label": "._run()",
-      "source_file": "src/learning/funding.py",
-      "source_location": "L79"
-    },
-    {
-      "id": "src_learning_funding_fundingsync_start",
-      "label": ".start()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "QualityAudit",
-      "file_type": "code",
-      "norm_label": ".start()",
-      "source_file": "src/learning/funding.py",
-      "source_location": "L74"
-    },
-    {
-      "id": "src_learning_funding_fundingsync_step",
-      "label": ".step()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "QualityAudit",
-      "file_type": "code",
-      "norm_label": ".step()",
-      "source_file": "src/learning/funding.py",
-      "source_location": "L25"
-    },
-    {
       "id": "src_learning_quality_candle_context",
       "label": "candle_context()",
       "_callable": true,
@@ -3196,18 +3247,6 @@
       "source_location": "L186"
     },
     {
-      "id": "src_storage_transaction",
-      "label": "transaction()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "QualityAudit",
-      "file_type": "code",
-      "norm_label": "transaction()",
-      "source_file": "src/storage.py",
-      "source_location": "L8"
-    },
-    {
       "id": "tests_test_quality_bars",
       "label": "bars()",
       "_callable": true,
@@ -3242,42 +3281,6 @@
       "norm_label": "fill()",
       "source_file": "tests/test_quality.py",
       "source_location": "L34"
-    },
-    {
-      "id": "tests_test_quality_fundingtests_test_capped_windows_split_without_timestamp_skips",
-      "label": ".test_capped_windows_split_without_timestamp_skips()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "QualityAudit",
-      "file_type": "code",
-      "norm_label": ".test_capped_windows_split_without_timestamp_skips()",
-      "source_file": "tests/test_quality.py",
-      "source_location": "L256"
-    },
-    {
-      "id": "tests_test_quality_fundingtests_test_idempotent_funding_and_persistent_coverage",
-      "label": ".test_idempotent_funding_and_persistent_coverage()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "QualityAudit",
-      "file_type": "code",
-      "norm_label": ".test_idempotent_funding_and_persistent_coverage()",
-      "source_file": "tests/test_quality.py",
-      "source_location": "L216"
-    },
-    {
-      "id": "tests_test_quality_fundingtests_test_malformed_funding_does_not_advance_coverage",
-      "label": ".test_malformed_funding_does_not_advance_coverage()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "QualityAudit",
-      "file_type": "code",
-      "norm_label": ".test_malformed_funding_does_not_advance_coverage()",
-      "source_file": "tests/test_quality.py",
-      "source_location": "L238"
     },
     {
       "id": "tests_test_quality_qualitytests_test_cached_quote_cannot_complete_future_fill_horizon_and_late_is_missed",
@@ -3520,6 +3523,30 @@
       "source_location": "L3"
     },
     {
+      "id": "src_research_microstructure_active_blocks",
+      "label": "active_blocks()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "active_blocks()",
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L34"
+    },
+    {
+      "id": "src_research_service_researchservice_candles",
+      "label": "._candles()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "._candles()",
+      "source_file": "src/research/service.py",
+      "source_location": "L253"
+    },
+    {
       "id": "src_research_service_researchservice_comparison",
       "label": "._comparison()",
       "_callable": true,
@@ -3530,6 +3557,18 @@
       "norm_label": "._comparison()",
       "source_file": "src/research/service.py",
       "source_location": "L204"
+    },
+    {
+      "id": "src_research_service_researchservice_context",
+      "label": "._context()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "ResearchService",
+      "file_type": "code",
+      "norm_label": "._context()",
+      "source_file": "src/research/service.py",
+      "source_location": "L239"
     },
     {
       "id": "src_research_service_researchservice_discover",
@@ -3724,18 +3763,6 @@
       "source_location": "L139"
     },
     {
-      "id": "tests_test_research_coveragetests_test_wallet_size_changes_survive_restart_and_include_closed_positions",
-      "label": ".test_wallet_size_changes_survive_restart_and_include_closed_positions()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "ResearchService",
-      "file_type": "code",
-      "norm_label": ".test_wallet_size_changes_survive_restart_and_include_closed_positions()",
-      "source_file": "tests/test_research.py",
-      "source_location": "L157"
-    },
-    {
       "id": "tests_test_research_failuresuppressiontests_test_failed_comparison_suppresses_cached_candidate",
       "label": ".test_failed_comparison_suppresses_cached_candidate()",
       "_callable": true,
@@ -3760,124 +3787,64 @@
       "source_location": "L175"
     },
     {
-      "id": "tests_test_research_sourcetests_test_stale_snapshot_suppresses_direction",
-      "label": ".test_stale_snapshot_suppresses_direction()",
+      "id": "tests_test_research_microstructuretests_test_no_order_block_from_unclosed_candles",
+      "label": ".test_no_order_block_from_unclosed_candles()",
       "_callable": true,
       "_origin": "ast",
       "community": 34,
       "community_name": "ResearchService",
       "file_type": "code",
-      "norm_label": ".test_stale_snapshot_suppresses_direction()",
+      "norm_label": ".test_no_order_block_from_unclosed_candles()",
       "source_file": "tests/test_research.py",
-      "source_location": "L104"
+      "source_location": "L63"
     },
     {
-      "id": "tests_test_research_sourcetests_test_wallets_only_accept_bounded_explicit_addresses",
-      "label": ".test_wallets_only_accept_bounded_explicit_addresses()",
+      "id": "scripts_compact_storage_compact",
+      "label": "compact()",
       "_callable": true,
       "_origin": "ast",
-      "community": 34,
-      "community_name": "ResearchService",
+      "community": 35,
+      "community_name": "test_research.py",
       "file_type": "code",
-      "norm_label": ".test_wallets_only_accept_bounded_explicit_addresses()",
+      "norm_label": "compact()",
+      "source_file": "scripts/compact_storage.py",
+      "source_location": "L15"
+    },
+    {
+      "id": "src_research_journal_compact_observation",
+      "label": "compact_observation()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "test_research.py",
+      "file_type": "code",
+      "norm_label": "compact_observation()",
+      "source_file": "src/research/journal.py",
+      "source_location": "L10"
+    },
+    {
+      "id": "tests_test_research_journaltests_test_prospective_costs_baseline_and_idempotence",
+      "label": ".test_prospective_costs_baseline_and_idempotence()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "test_research.py",
+      "file_type": "code",
+      "norm_label": ".test_prospective_costs_baseline_and_idempotence()",
       "source_file": "tests/test_research.py",
-      "source_location": "L114"
+      "source_location": "L68"
     },
     {
-      "id": "src_research_microstructure_finite",
-      "label": "finite()",
+      "id": "tests_test_research_journaltests_test_restart_preserves_pending_events_and_long_short_controls",
+      "label": ".test_restart_preserves_pending_events_and_long_short_controls()",
       "_callable": true,
       "_origin": "ast",
       "community": 35,
       "community_name": "test_research.py",
       "file_type": "code",
-      "norm_label": "finite()",
-      "source_file": "src/research/microstructure.py",
-      "source_location": "L9"
-    },
-    {
-      "id": "src_research_microstructure_microstructure_analyze",
-      "label": ".analyze()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "test_research.py",
-      "file_type": "code",
-      "norm_label": ".analyze()",
-      "source_file": "src/research/microstructure.py",
-      "source_location": "L98"
-    },
-    {
-      "id": "src_research_microstructure_microstructure_ingest_trades",
-      "label": ".ingest_trades()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "test_research.py",
-      "file_type": "code",
-      "norm_label": ".ingest_trades()",
-      "source_file": "src/research/microstructure.py",
-      "source_location": "L75"
-    },
-    {
-      "id": "src_research_microstructure_normalize_book",
-      "label": "normalize_book()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "test_research.py",
-      "file_type": "code",
-      "norm_label": "normalize_book()",
-      "source_file": "src/research/microstructure.py",
-      "source_location": "L16"
-    },
-    {
-      "id": "src_research_service_divergence",
-      "label": "divergence()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "test_research.py",
-      "file_type": "code",
-      "norm_label": "divergence()",
-      "source_file": "src/research/service.py",
-      "source_location": "L27"
-    },
-    {
-      "id": "src_research_service_researchservice_context",
-      "label": "._context()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "test_research.py",
-      "file_type": "code",
-      "norm_label": "._context()",
-      "source_file": "src/research/service.py",
-      "source_location": "L239"
-    },
-    {
-      "id": "src_research_service_researchservice_snapshot",
-      "label": ".snapshot()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "test_research.py",
-      "file_type": "code",
-      "norm_label": ".snapshot()",
-      "source_file": "src/research/service.py",
-      "source_location": "L421"
-    },
-    {
-      "id": "tests_test_research_sourcetests_test_divergence_deducts_four_leg_costs_and_normalizes_fx",
-      "label": ".test_divergence_deducts_four_leg_costs_and_normalizes_fx()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "test_research.py",
-      "file_type": "code",
-      "norm_label": ".test_divergence_deducts_four_leg_costs_and_normalizes_fx()",
+      "norm_label": ".test_restart_preserves_pending_events_and_long_short_controls()",
       "source_file": "tests/test_research.py",
-      "source_location": "L96"
+      "source_location": "L84"
     },
     {
       "id": "src_dashboard_static_quality_qualityrows",
@@ -3904,16 +3871,40 @@
       "source_location": "L17"
     },
     {
-      "id": "src_research_microstructure_active_blocks",
-      "label": "active_blocks()",
+      "id": "src_research_microstructure_finite",
+      "label": "finite()",
       "_callable": true,
       "_origin": "ast",
       "community": 37,
       "community_name": "Microstructure",
       "file_type": "code",
-      "norm_label": "active_blocks()",
+      "norm_label": "finite()",
       "source_file": "src/research/microstructure.py",
-      "source_location": "L34"
+      "source_location": "L9"
+    },
+    {
+      "id": "src_research_microstructure_microstructure_analyze",
+      "label": ".analyze()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 37,
+      "community_name": "Microstructure",
+      "file_type": "code",
+      "norm_label": ".analyze()",
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L98"
+    },
+    {
+      "id": "src_research_microstructure_microstructure_ingest_trades",
+      "label": ".ingest_trades()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 37,
+      "community_name": "Microstructure",
+      "file_type": "code",
+      "norm_label": ".ingest_trades()",
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L75"
     },
     {
       "id": "src_research_microstructure_microstructure_init",
@@ -3928,16 +3919,16 @@
       "source_location": "L65"
     },
     {
-      "id": "src_research_service_researchservice_candles",
-      "label": "._candles()",
+      "id": "src_research_microstructure_normalize_book",
+      "label": "normalize_book()",
       "_callable": true,
       "_origin": "ast",
       "community": 37,
       "community_name": "Microstructure",
       "file_type": "code",
-      "norm_label": "._candles()",
-      "source_file": "src/research/service.py",
-      "source_location": "L253"
+      "norm_label": "normalize_book()",
+      "source_file": "src/research/microstructure.py",
+      "source_location": "L16"
     },
     {
       "id": "tests_test_research_book",
@@ -3986,18 +3977,6 @@
       "norm_label": ".test_band_coverage_is_explicit()",
       "source_file": "tests/test_research.py",
       "source_location": "L57"
-    },
-    {
-      "id": "tests_test_research_microstructuretests_test_no_order_block_from_unclosed_candles",
-      "label": ".test_no_order_block_from_unclosed_candles()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 37,
-      "community_name": "Microstructure",
-      "file_type": "code",
-      "norm_label": ".test_no_order_block_from_unclosed_candles()",
-      "source_file": "tests/test_research.py",
-      "source_location": "L63"
     },
     {
       "id": "tests_test_research_microstructuretests_test_persistence_resets_when_level_falls_below_wall_threshold",
@@ -4144,28 +4123,76 @@
       "source_location": "L174"
     },
     {
-      "id": "tests_test_research_journaltests_test_prospective_costs_baseline_and_idempotence",
-      "label": ".test_prospective_costs_baseline_and_idempotence()",
+      "id": "src_research_service_researchservice_init",
+      "label": ".__init__()",
       "_callable": true,
       "_origin": "ast",
       "community": 39,
       "community_name": "ResearchJournal",
       "file_type": "code",
-      "norm_label": ".test_prospective_costs_baseline_and_idempotence()",
-      "source_file": "tests/test_research.py",
-      "source_location": "L68"
+      "norm_label": ".__init__()",
+      "source_file": "src/research/service.py",
+      "source_location": "L64"
     },
     {
-      "id": "tests_test_research_journaltests_test_restart_preserves_pending_events_and_long_short_controls",
-      "label": ".test_restart_preserves_pending_events_and_long_short_controls()",
+      "id": "tests_test_experiments_journalupgradetests_test_cost_attribution_nonoverlap_and_no_automatic_promotion",
+      "label": ".test_cost_attribution_nonoverlap_and_no_automatic_promotion()",
       "_callable": true,
       "_origin": "ast",
       "community": 39,
       "community_name": "ResearchJournal",
       "file_type": "code",
-      "norm_label": ".test_restart_preserves_pending_events_and_long_short_controls()",
+      "norm_label": ".test_cost_attribution_nonoverlap_and_no_automatic_promotion()",
+      "source_file": "tests/test_experiments.py",
+      "source_location": "L146"
+    },
+    {
+      "id": "tests_test_experiments_journalupgradetests_test_legacy_horizons_preserved_and_new_events_get_long_horizons",
+      "label": ".test_legacy_horizons_preserved_and_new_events_get_long_horizons()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "ResearchJournal",
+      "file_type": "code",
+      "norm_label": ".test_legacy_horizons_preserved_and_new_events_get_long_horizons()",
+      "source_file": "tests/test_experiments.py",
+      "source_location": "L113"
+    },
+    {
+      "id": "tests_test_experiments_journalupgradetests_test_matched_comparison_requires_same_hour_regime_and_direction",
+      "label": ".test_matched_comparison_requires_same_hour_regime_and_direction()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "ResearchJournal",
+      "file_type": "code",
+      "norm_label": ".test_matched_comparison_requires_same_hour_regime_and_direction()",
+      "source_file": "tests/test_experiments.py",
+      "source_location": "L160"
+    },
+    {
+      "id": "tests_test_experiments_journalupgradetests_test_nonoverlapping_count_does_not_count_every_signal",
+      "label": ".test_nonoverlapping_count_does_not_count_every_signal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "ResearchJournal",
+      "file_type": "code",
+      "norm_label": ".test_nonoverlapping_count_does_not_count_every_signal()",
+      "source_file": "tests/test_experiments.py",
+      "source_location": "L176"
+    },
+    {
+      "id": "tests_test_research_coveragetests_test_wallet_size_changes_survive_restart_and_include_closed_positions",
+      "label": ".test_wallet_size_changes_survive_restart_and_include_closed_positions()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "ResearchJournal",
+      "file_type": "code",
+      "norm_label": ".test_wallet_size_changes_survive_restart_and_include_closed_positions()",
       "source_file": "tests/test_research.py",
-      "source_location": "L84"
+      "source_location": "L157"
     },
     {
       "id": "src_reconciler_positionreconciler_backfill_missed_fills",
@@ -4372,6 +4399,18 @@
       "source_location": "L67"
     },
     {
+      "id": "src_risk_manager_riskmanager_init",
+      "label": ".__init__()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "RiskManager",
+      "file_type": "code",
+      "norm_label": ".__init__()",
+      "source_file": "src/risk/manager.py",
+      "source_location": "L36"
+    },
+    {
       "id": "src_risk_manager_riskmanager_pause_execution",
       "label": ".pause_execution()",
       "_callable": true,
@@ -4490,6 +4529,18 @@
       "norm_label": ".update_equity()",
       "source_file": "src/risk/manager.py",
       "source_location": "L112"
+    },
+    {
+      "id": "src_risk_manager_riskstate_drawdown_pct",
+      "label": ".drawdown_pct()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "RiskManager",
+      "file_type": "code",
+      "norm_label": ".drawdown_pct()",
+      "source_file": "src/risk/manager.py",
+      "source_location": "L32"
     },
     {
       "id": "tests_test_exchange_exchangetests_client",
@@ -4732,6 +4783,18 @@
       "source_location": "L11"
     },
     {
+      "id": "tests_test_risk_risktests_test_ledger_idempotency_and_fee_totals",
+      "label": ".test_ledger_idempotency_and_fee_totals()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "RiskManager",
+      "file_type": "code",
+      "norm_label": ".test_ledger_idempotency_and_fee_totals()",
+      "source_file": "tests/test_risk.py",
+      "source_location": "L63"
+    },
+    {
       "id": "tests_test_risk_risktests_test_midnight_keeps_peak",
       "label": ".test_midnight_keeps_peak()",
       "_callable": true,
@@ -4790,6 +4853,318 @@
       "norm_label": "main()",
       "source_file": "scripts/healthcheck.py",
       "source_location": "L5"
+    },
+    {
+      "id": "src_dashboard_static_terminal_aggregate",
+      "label": "aggregate()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "terminal.js",
+      "file_type": "code",
+      "norm_label": "aggregate()",
+      "source_file": "src/dashboard/static/terminal.js",
+      "source_location": "L21"
+    },
+    {
+      "id": "src_dashboard_static_terminal_book",
+      "label": "book()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "terminal.js",
+      "file_type": "code",
+      "norm_label": "book()",
+      "source_file": "src/dashboard/static/terminal.js",
+      "source_location": "L25"
+    },
+    {
+      "id": "src_dashboard_static_terminal_chart",
+      "label": "chart()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "terminal.js",
+      "file_type": "code",
+      "norm_label": "chart()",
+      "source_file": "src/dashboard/static/terminal.js",
+      "source_location": "L22"
+    },
+    {
+      "id": "src_dashboard_static_terminal_fmt",
+      "label": "fmt()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "terminal.js",
+      "file_type": "code",
+      "norm_label": "fmt()",
+      "source_file": "src/dashboard/static/terminal.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "src_dashboard_static_terminal_num",
+      "label": "num()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "terminal.js",
+      "file_type": "code",
+      "norm_label": "num()",
+      "source_file": "src/dashboard/static/terminal.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "src_dashboard_static_terminal_pnl",
+      "label": "pnl()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "terminal.js",
+      "file_type": "code",
+      "norm_label": "pnl()",
+      "source_file": "src/dashboard/static/terminal.js",
+      "source_location": "L7"
+    },
+    {
+      "id": "src_dashboard_static_terminal_refresh",
+      "label": "refresh()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "terminal.js",
+      "file_type": "code",
+      "norm_label": "refresh()",
+      "source_file": "src/dashboard/static/terminal.js",
+      "source_location": "L27"
+    },
+    {
+      "id": "src_dashboard_static_terminal_render",
+      "label": "render()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "terminal.js",
+      "file_type": "code",
+      "norm_label": "render()",
+      "source_file": "src/dashboard/static/terminal.js",
+      "source_location": "L26"
+    },
+    {
+      "id": "src_dashboard_static_terminal_renderoperations",
+      "label": "renderOperations()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "terminal.js",
+      "file_type": "code",
+      "norm_label": "renderoperations()",
+      "source_file": "src/dashboard/static/terminal.js",
+      "source_location": "L33"
+    },
+    {
+      "id": "src_dashboard_static_terminal_rendertable",
+      "label": "renderTable()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "terminal.js",
+      "file_type": "code",
+      "norm_label": "rendertable()",
+      "source_file": "src/dashboard/static/terminal.js",
+      "source_location": "L24"
+    },
+    {
+      "id": "src_dashboard_static_terminal_row",
+      "label": "row()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "terminal.js",
+      "file_type": "code",
+      "norm_label": "row()",
+      "source_file": "src/dashboard/static/terminal.js",
+      "source_location": "L23"
+    },
+    {
+      "id": "src_dashboard_static_terminal_signed",
+      "label": "signed()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "terminal.js",
+      "file_type": "code",
+      "norm_label": "signed()",
+      "source_file": "src/dashboard/static/terminal.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "src_dashboard_static_terminal_stamp",
+      "label": "stamp()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "terminal.js",
+      "file_type": "code",
+      "norm_label": "stamp()",
+      "source_file": "src/dashboard/static/terminal.js",
+      "source_location": "L5"
+    },
+    {
+      "id": "src_dashboard_static_terminal_text",
+      "label": "text()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "terminal.js",
+      "file_type": "code",
+      "norm_label": "text()",
+      "source_file": "src/dashboard/static/terminal.js",
+      "source_location": "L6"
+    },
+    {
+      "id": "src_dashboard_static_terminal_usd",
+      "label": "usd()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "terminal.js",
+      "file_type": "code",
+      "norm_label": "usd()",
+      "source_file": "src/dashboard/static/terminal.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "src_learning_trades_complete_trades",
+      "label": "complete_trades()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 43,
+      "community_name": "complete_trades",
+      "file_type": "code",
+      "norm_label": "complete_trades()",
+      "source_file": "src/learning/trades.py",
+      "source_location": "L6"
+    },
+    {
+      "id": "tests_test_trade_episodes_fill",
+      "label": "fill()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 43,
+      "community_name": "complete_trades",
+      "file_type": "code",
+      "norm_label": "fill()",
+      "source_file": "tests/test_trade_episodes.py",
+      "source_location": "L5"
+    },
+    {
+      "id": "tests_test_trade_episodes_tradeepisodetests_test_nonfinite_or_non_usdc_fees_break_continuity",
+      "label": ".test_nonfinite_or_non_usdc_fees_break_continuity()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 43,
+      "community_name": "complete_trades",
+      "file_type": "code",
+      "norm_label": ".test_nonfinite_or_non_usdc_fees_break_continuity()",
+      "source_file": "tests/test_trade_episodes.py",
+      "source_location": "L49"
+    },
+    {
+      "id": "tests_test_trade_episodes_tradeepisodetests_test_partial_fills_form_one_trade_with_all_entry_exit_fees",
+      "label": ".test_partial_fills_form_one_trade_with_all_entry_exit_fees()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 43,
+      "community_name": "complete_trades",
+      "file_type": "code",
+      "norm_label": ".test_partial_fills_form_one_trade_with_all_entry_exit_fees()",
+      "source_file": "tests/test_trade_episodes.py",
+      "source_location": "L22"
+    },
+    {
+      "id": "tests_test_trade_episodes_tradeepisodetests_test_reversal_splits_fee_and_starts_a_new_episode",
+      "label": ".test_reversal_splits_fee_and_starts_a_new_episode()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 43,
+      "community_name": "complete_trades",
+      "file_type": "code",
+      "norm_label": ".test_reversal_splits_fee_and_starts_a_new_episode()",
+      "source_file": "tests/test_trade_episodes.py",
+      "source_location": "L38"
+    },
+    {
+      "id": "tests_test_trade_episodes_tradeepisodetests_test_unknown_initial_position_and_gaps_are_excluded",
+      "label": ".test_unknown_initial_position_and_gaps_are_excluded()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 43,
+      "community_name": "complete_trades",
+      "file_type": "code",
+      "norm_label": ".test_unknown_initial_position_and_gaps_are_excluded()",
+      "source_file": "tests/test_trade_episodes.py",
+      "source_location": "L34"
+    },
+    {
+      "id": "src_research_service_divergence",
+      "label": "divergence()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 44,
+      "community_name": "divergence",
+      "file_type": "code",
+      "norm_label": "divergence()",
+      "source_file": "src/research/service.py",
+      "source_location": "L27"
+    },
+    {
+      "id": "src_research_service_researchservice_snapshot",
+      "label": ".snapshot()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 44,
+      "community_name": "divergence",
+      "file_type": "code",
+      "norm_label": ".snapshot()",
+      "source_file": "src/research/service.py",
+      "source_location": "L421"
+    },
+    {
+      "id": "tests_test_research_sourcetests_test_divergence_deducts_four_leg_costs_and_normalizes_fx",
+      "label": ".test_divergence_deducts_four_leg_costs_and_normalizes_fx()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 44,
+      "community_name": "divergence",
+      "file_type": "code",
+      "norm_label": ".test_divergence_deducts_four_leg_costs_and_normalizes_fx()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L96"
+    },
+    {
+      "id": "tests_test_research_sourcetests_test_stale_snapshot_suppresses_direction",
+      "label": ".test_stale_snapshot_suppresses_direction()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 44,
+      "community_name": "divergence",
+      "file_type": "code",
+      "norm_label": ".test_stale_snapshot_suppresses_direction()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L104"
+    },
+    {
+      "id": "tests_test_research_sourcetests_test_wallets_only_accept_bounded_explicit_addresses",
+      "label": ".test_wallets_only_accept_bounded_explicit_addresses()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 44,
+      "community_name": "divergence",
+      "file_type": "code",
+      "norm_label": ".test_wallets_only_accept_bounded_explicit_addresses()",
+      "source_file": "tests/test_research.py",
+      "source_location": "L114"
     },
     {
       "id": "scripts_replay_main",
@@ -4910,30 +5285,6 @@
       "norm_label": ".round_size()",
       "source_file": "scripts/replay.py",
       "source_location": "L33"
-    },
-    {
-      "id": "src_risk_manager_riskmanager_init",
-      "label": ".__init__()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "bot.py",
-      "file_type": "code",
-      "norm_label": ".__init__()",
-      "source_file": "src/risk/manager.py",
-      "source_location": "L36"
-    },
-    {
-      "id": "src_risk_manager_riskstate_drawdown_pct",
-      "label": ".drawdown_pct()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "bot.py",
-      "file_type": "code",
-      "norm_label": ".drawdown_pct()",
-      "source_file": "src/risk/manager.py",
-      "source_location": "L32"
     },
     {
       "id": "src_strategy_economics_atr",
@@ -5185,7 +5536,7 @@
       "file_type": "code",
       "norm_label": "._audit_loop()",
       "source_file": "src/bot.py",
-      "source_location": "L237"
+      "source_location": "L245"
     },
     {
       "id": "src_bot_tradingbot_audit_quote",
@@ -5197,7 +5548,7 @@
       "file_type": "code",
       "norm_label": "._audit_quote()",
       "source_file": "src/bot.py",
-      "source_location": "L232"
+      "source_location": "L240"
     },
     {
       "id": "src_bot_tradingbot_cancel_stale_entries",
@@ -5209,7 +5560,7 @@
       "file_type": "code",
       "norm_label": "._cancel_stale_entries()",
       "source_file": "src/bot.py",
-      "source_location": "L751"
+      "source_location": "L770"
     },
     {
       "id": "src_bot_tradingbot_check_tuning",
@@ -5221,7 +5572,7 @@
       "file_type": "code",
       "norm_label": "._check_tuning()",
       "source_file": "src/bot.py",
-      "source_location": "L755"
+      "source_location": "L774"
     },
     {
       "id": "src_bot_tradingbot_classify_exit",
@@ -5233,7 +5584,7 @@
       "file_type": "code",
       "norm_label": "._classify_exit()",
       "source_file": "src/bot.py",
-      "source_location": "L689"
+      "source_location": "L708"
     },
     {
       "id": "src_bot_tradingbot_data_loop",
@@ -5245,7 +5596,7 @@
       "file_type": "code",
       "norm_label": "._data_loop()",
       "source_file": "src/bot.py",
-      "source_location": "L248"
+      "source_location": "L256"
     },
     {
       "id": "src_bot_tradingbot_emergency_flatten",
@@ -5257,7 +5608,7 @@
       "file_type": "code",
       "norm_label": "._emergency_flatten()",
       "source_file": "src/bot.py",
-      "source_location": "L342"
+      "source_location": "L350"
     },
     {
       "id": "src_bot_tradingbot_expire_entries",
@@ -5269,7 +5620,7 @@
       "file_type": "code",
       "norm_label": "._expire_entries()",
       "source_file": "src/bot.py",
-      "source_location": "L494"
+      "source_location": "L508"
     },
     {
       "id": "src_bot_tradingbot_flush_exit_buffers",
@@ -5281,7 +5632,7 @@
       "file_type": "code",
       "norm_label": "._flush_exit_buffers()",
       "source_file": "src/bot.py",
-      "source_location": "L702"
+      "source_location": "L721"
     },
     {
       "id": "src_bot_tradingbot_init_exchange",
@@ -5293,7 +5644,7 @@
       "file_type": "code",
       "norm_label": "._init_exchange()",
       "source_file": "src/bot.py",
-      "source_location": "L131"
+      "source_location": "L138"
     },
     {
       "id": "src_bot_tradingbot_match_active_signal",
@@ -5305,7 +5656,7 @@
       "file_type": "code",
       "norm_label": "._match_active_signal()",
       "source_file": "src/bot.py",
-      "source_location": "L637"
+      "source_location": "L656"
     },
     {
       "id": "src_bot_tradingbot_match_fill_to_signal",
@@ -5317,7 +5668,7 @@
       "file_type": "code",
       "norm_label": "._match_fill_to_signal()",
       "source_file": "src/bot.py",
-      "source_location": "L671"
+      "source_location": "L690"
     },
     {
       "id": "src_bot_tradingbot_on_fill",
@@ -5329,7 +5680,7 @@
       "file_type": "code",
       "norm_label": "._on_fill()",
       "source_file": "src/bot.py",
-      "source_location": "L516"
+      "source_location": "L530"
     },
     {
       "id": "src_bot_tradingbot_on_order_update",
@@ -5341,7 +5692,7 @@
       "file_type": "code",
       "norm_label": "._on_order_update()",
       "source_file": "src/bot.py",
-      "source_location": "L605"
+      "source_location": "L619"
     },
     {
       "id": "src_bot_tradingbot_on_ws_reconnect",
@@ -5353,7 +5704,7 @@
       "file_type": "code",
       "norm_label": "._on_ws_reconnect()",
       "source_file": "src/bot.py",
-      "source_location": "L621"
+      "source_location": "L640"
     },
     {
       "id": "src_bot_tradingbot_run_learning",
@@ -5365,7 +5716,7 @@
       "file_type": "code",
       "norm_label": "._run_learning()",
       "source_file": "src/bot.py",
-      "source_location": "L809"
+      "source_location": "L828"
     },
     {
       "id": "src_bot_tradingbot_run_loop",
@@ -5377,7 +5728,7 @@
       "file_type": "code",
       "norm_label": "._run_loop()",
       "source_file": "src/bot.py",
-      "source_location": "L305"
+      "source_location": "L313"
     },
     {
       "id": "src_bot_tradingbot_start",
@@ -5389,7 +5740,7 @@
       "file_type": "code",
       "norm_label": ".start()",
       "source_file": "src/bot.py",
-      "source_location": "L98"
+      "source_location": "L103"
     },
     {
       "id": "src_bot_tradingbot_subscribe_feeds",
@@ -5401,7 +5752,7 @@
       "file_type": "code",
       "norm_label": "._subscribe_feeds()",
       "source_file": "src/bot.py",
-      "source_location": "L279"
+      "source_location": "L287"
     },
     {
       "id": "src_bot_tradingbot_tick",
@@ -5413,7 +5764,7 @@
       "file_type": "code",
       "norm_label": "._tick()",
       "source_file": "src/bot.py",
-      "source_location": "L397"
+      "source_location": "L410"
     },
     {
       "id": "tests_test_bot_emergencytests_test_cancel_failure_still_closes_and_confirms",
@@ -5680,7 +6031,7 @@
       "source_location": "L34"
     },
     {
-      "id": "src_exchange_hyperliquid_rationale_194",
+      "id": "src_exchange_hyperliquid_rationale_195",
       "label": "Atomic quote and local receipt time; no network reads.",
       "_origin": "ast",
       "community": 1,
@@ -5688,7 +6039,7 @@
       "file_type": "rationale",
       "norm_label": "atomic quote and local receipt time; no network reads.",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L194"
+      "source_location": "L195"
     },
     {
       "id": "src_learning_evaluator",
@@ -5724,17 +6075,6 @@
       "source_location": "L1"
     },
     {
-      "id": "scripts_compact_storage",
-      "label": "compact_storage.py",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": "compact_storage.py",
-      "source_file": "scripts/compact_storage.py",
-      "source_location": "L1"
-    },
-    {
       "id": "scripts_snapshot_perf",
       "label": "snapshot_perf.py",
       "_origin": "ast",
@@ -5743,28 +6083,6 @@
       "file_type": "code",
       "norm_label": "snapshot_perf.py",
       "source_file": "scripts/snapshot_perf.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_learning_ledger",
-      "label": "ledger.py",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": "ledger.py",
-      "source_file": "src/learning/ledger.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_learning_trades",
-      "label": "trades.py",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": "trades.py",
-      "source_file": "src/learning/trades.py",
       "source_location": "L1"
     },
     {
@@ -5790,28 +6108,6 @@
       "source_location": "L1"
     },
     {
-      "id": "tests_test_trade_episodes",
-      "label": "test_trade_episodes.py",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "FillLedger",
-      "file_type": "code",
-      "norm_label": "test_trade_episodes.py",
-      "source_file": "tests/test_trade_episodes.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "scripts_compact_storage_rationale_1",
-      "label": "Offline one-time compaction. Stop hl-bot before running; backups stay private.",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "FillLedger",
-      "file_type": "rationale",
-      "norm_label": "offline one-time compaction. stop hl-bot before running; backups stay private.",
-      "source_file": "scripts/compact_storage.py",
-      "source_location": "L1"
-    },
-    {
       "id": "scripts_snapshot_perf_rationale_2",
       "label": "Append cost-inclusive exchange ledger and risk snapshots; safe for hourly cron.",
       "_origin": "ast",
@@ -5821,17 +6117,6 @@
       "norm_label": "append cost-inclusive exchange ledger and risk snapshots; safe for hourly cron.",
       "source_file": "scripts/snapshot_perf.py",
       "source_location": "L2"
-    },
-    {
-      "id": "src_learning_ledger_rationale_1",
-      "label": "Durable exchange-fill journal; actual costs, no inferred round trips.",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "FillLedger",
-      "file_type": "rationale",
-      "norm_label": "durable exchange-fill journal; actual costs, no inferred round trips.",
-      "source_file": "src/learning/ledger.py",
-      "source_location": "L1"
     },
     {
       "id": "src_learning_ledger_rationale_60",
@@ -5845,17 +6130,6 @@
       "source_location": "L60"
     },
     {
-      "id": "src_learning_trades_rationale_1",
-      "label": "Reconstruct flat-to-flat episodes only when exchange position continuity is\u2026",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "FillLedger",
-      "file_type": "rationale",
-      "norm_label": "reconstruct flat-to-flat episodes only when exchange position continuity is...",
-      "source_file": "src/learning/trades.py",
-      "source_location": "L1"
-    },
-    {
       "id": "src_logging_setup_rationale_1",
       "label": "File logs reopen after external rotation; operational stdout stays in journald.",
       "_origin": "ast",
@@ -5865,17 +6139,6 @@
       "norm_label": "file logs reopen after external rotation; operational stdout stays in journald.",
       "source_file": "src/logging_setup.py",
       "source_location": "L1"
-    },
-    {
-      "id": "src_research_journal_rationale_11",
-      "label": "Diagnostic minute sample; event evidence lives in signals/outcomes.",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "FillLedger",
-      "file_type": "rationale",
-      "norm_label": "diagnostic minute sample; event evidence lives in signals/outcomes.",
-      "source_file": "src/research/journal.py",
-      "source_location": "L11"
     },
     {
       "id": "scripts_monitor",
@@ -6245,7 +6508,7 @@
       "label": "candles.py",
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": "candles.py",
       "source_file": "src/market/candles.py",
@@ -6256,7 +6519,7 @@
       "label": "operations.py",
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": "operations.py",
       "source_file": "src/operations.py",
@@ -6267,7 +6530,7 @@
       "label": "test_continuity.py",
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "code",
       "norm_label": "test_continuity.py",
       "source_file": "tests/test_continuity.py",
@@ -6278,7 +6541,7 @@
       "label": "Deterministic closed-bar integrity shared by execution and diagnostics.",
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "rationale",
       "norm_label": "deterministic closed-bar integrity shared by execution and diagnostics.",
       "source_file": "src/market/candles.py",
@@ -6289,7 +6552,7 @@
       "label": "Newest observed update per timestamp, sorted and bounded; never forward-fill.",
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "rationale",
       "norm_label": "newest observed update per timestamp, sorted and bounded; never forward-fill.",
       "source_file": "src/market/candles.py",
@@ -6300,44 +6563,132 @@
       "label": "Durable incident boundaries and bounded heartbeat state; no exchange actions.",
       "_origin": "ast",
       "community": 22,
-      "community_name": "Operations",
+      "community_name": ".__init__",
       "file_type": "rationale",
       "norm_label": "durable incident boundaries and bounded heartbeat state; no exchange actions.",
       "source_file": "src/operations.py",
       "source_location": "L1"
     },
     {
-      "id": "src_dashboard_static_terminal",
-      "label": "terminal.js",
+      "id": "src_learning_accounting",
+      "label": "accounting.py",
       "_origin": "ast",
       "community": 23,
-      "community_name": "terminal.js",
+      "community_name": "transaction",
       "file_type": "code",
-      "norm_label": "terminal.js",
-      "source_file": "src/dashboard/static/terminal.js",
+      "norm_label": "accounting.py",
+      "source_file": "src/learning/accounting.py",
       "source_location": "L1"
     },
     {
-      "id": "src_dashboard_static_terminal_levellines",
-      "label": "levelLines",
+      "id": "src_learning_execution",
+      "label": "execution.py",
       "_origin": "ast",
       "community": 23,
-      "community_name": "terminal.js",
+      "community_name": "transaction",
       "file_type": "code",
-      "norm_label": "levellines",
-      "source_file": "src/dashboard/static/terminal.js",
-      "source_location": "L8"
+      "norm_label": "execution.py",
+      "source_file": "src/learning/execution.py",
+      "source_location": "L1"
     },
     {
-      "id": "src_dashboard_static_terminal_options",
-      "label": "options",
+      "id": "src_learning_funding",
+      "label": "funding.py",
       "_origin": "ast",
       "community": 23,
-      "community_name": "terminal.js",
+      "community_name": "transaction",
       "file_type": "code",
-      "norm_label": "options",
-      "source_file": "src/dashboard/static/terminal.js",
-      "source_location": "L9"
+      "norm_label": "funding.py",
+      "source_file": "src/learning/funding.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_learning_ledger",
+      "label": "ledger.py",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": "ledger.py",
+      "source_file": "src/learning/ledger.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_storage",
+      "label": "storage.py",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": "storage.py",
+      "source_file": "src/storage.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_test_account_audit",
+      "label": "test_account_audit.py",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "code",
+      "norm_label": "test_account_audit.py",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_learning_accounting_rationale_1",
+      "label": "Prospective equity bridge and bounded public testnet account-event retrieval.",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "rationale",
+      "norm_label": "prospective equity bridge and bounded public testnet account-event retrieval.",
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_learning_execution_rationale_1",
+      "label": "Durable submission intent and exchange-ID lifecycle evidence, never price\u2026",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "rationale",
+      "norm_label": "durable submission intent and exchange-id lifecycle evidence, never price...",
+      "source_file": "src/learning/execution.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_learning_funding_rationale_1",
+      "label": "Read-only testnet funding synchronization, outside the trading/risk loop.",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "rationale",
+      "norm_label": "read-only testnet funding synchronization, outside the trading/risk loop.",
+      "source_file": "src/learning/funding.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_learning_ledger_rationale_1",
+      "label": "Durable exchange-fill journal; actual costs, no inferred round trips.",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "rationale",
+      "norm_label": "durable exchange-fill journal; actual costs, no inferred round trips.",
+      "source_file": "src/learning/ledger.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_storage_rationale_1",
+      "label": "Short-lived SQLite transactions with deterministic connection cleanup.",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "transaction",
+      "file_type": "rationale",
+      "norm_label": "short-lived sqlite transactions with deterministic connection cleanup.",
+      "source_file": "src/storage.py",
+      "source_location": "L1"
     },
     {
       "id": "scripts_git_push",
@@ -6483,17 +6834,6 @@
       "source_location": "L1"
     },
     {
-      "id": "src_learning_funding",
-      "label": "funding.py",
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "QualityAudit",
-      "file_type": "code",
-      "norm_label": "funding.py",
-      "source_file": "src/learning/funding.py",
-      "source_location": "L1"
-    },
-    {
       "id": "src_learning_quality",
       "label": "quality.py",
       "_origin": "ast",
@@ -6502,17 +6842,6 @@
       "file_type": "code",
       "norm_label": "quality.py",
       "source_file": "src/learning/quality.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_storage",
-      "label": "storage.py",
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "QualityAudit",
-      "file_type": "code",
-      "norm_label": "storage.py",
-      "source_file": "src/storage.py",
       "source_location": "L1"
     },
     {
@@ -6535,17 +6864,6 @@
       "file_type": "rationale",
       "norm_label": "read-only chronological challenger report; stdout json, optional private output.",
       "source_file": "scripts/quality_report.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_learning_funding_rationale_1",
-      "label": "Read-only testnet funding synchronization, outside the trading/risk loop.",
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "QualityAudit",
-      "file_type": "rationale",
-      "norm_label": "read-only testnet funding synchronization, outside the trading/risk loop.",
-      "source_file": "src/learning/funding.py",
       "source_location": "L1"
     },
     {
@@ -6582,17 +6900,6 @@
       "source_location": "L61"
     },
     {
-      "id": "src_storage_rationale_1",
-      "label": "Short-lived SQLite transactions with deterministic connection cleanup.",
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "QualityAudit",
-      "file_type": "rationale",
-      "norm_label": "short-lived sqlite transactions with deterministic connection cleanup.",
-      "source_file": "src/storage.py",
-      "source_location": "L1"
-    },
-    {
       "id": "src_dashboard_static_research",
       "label": "research.js",
       "_origin": "ast",
@@ -6626,17 +6933,6 @@
       "source_location": "L1"
     },
     {
-      "id": "path",
-      "label": "Path",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "ResearchService",
-      "file_type": "code",
-      "norm_label": "path",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "src_research_service_rationale_350",
       "label": "Keep fixed candidate selection separate from collection and source refresh.",
       "_origin": "ast",
@@ -6646,6 +6942,17 @@
       "norm_label": "keep fixed candidate selection separate from collection and source refresh.",
       "source_file": "src/research/service.py",
       "source_location": "L350"
+    },
+    {
+      "id": "scripts_compact_storage",
+      "label": "compact_storage.py",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "test_research.py",
+      "file_type": "code",
+      "norm_label": "compact_storage.py",
+      "source_file": "scripts/compact_storage.py",
+      "source_location": "L1"
     },
     {
       "id": "src_research_journal",
@@ -6692,6 +6999,17 @@
       "source_location": "L1"
     },
     {
+      "id": "scripts_compact_storage_rationale_1",
+      "label": "Offline one-time compaction. Stop hl-bot before running; backups stay private.",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "test_research.py",
+      "file_type": "rationale",
+      "norm_label": "offline one-time compaction. stop hl-bot before running; backups stay private.",
+      "source_file": "scripts/compact_storage.py",
+      "source_location": "L1"
+    },
+    {
       "id": "src_research_journal_rationale_1",
       "label": "Persistent prospective markouts. These are quote-based research, not filled\u2026",
       "_origin": "ast",
@@ -6701,6 +7019,17 @@
       "norm_label": "persistent prospective markouts. these are quote-based research, not filled...",
       "source_file": "src/research/journal.py",
       "source_location": "L1"
+    },
+    {
+      "id": "src_research_journal_rationale_11",
+      "label": "Diagnostic minute sample; event evidence lives in signals/outcomes.",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "test_research.py",
+      "file_type": "rationale",
+      "norm_label": "diagnostic minute sample; event evidence lives in signals/outcomes.",
+      "source_file": "src/research/journal.py",
+      "source_location": "L11"
     },
     {
       "id": "src_research_microstructure_rationale_1",
@@ -6725,17 +7054,6 @@
       "source_location": "L1"
     },
     {
-      "id": "src_research_service_rationale_28",
-      "label": "Indicative two-venue, four-leg roundtrip economics; no claim of executability.",
-      "_origin": "ast",
-      "community": 35,
-      "community_name": "test_research.py",
-      "file_type": "rationale",
-      "norm_label": "indicative two-venue, four-leg roundtrip economics; no claim of executability.",
-      "source_file": "src/research/service.py",
-      "source_location": "L28"
-    },
-    {
       "id": "src_dashboard_static_quality",
       "label": "quality.js",
       "_origin": "ast",
@@ -6754,6 +7072,17 @@
       "community_name": "RiskManager",
       "file_type": "code",
       "norm_label": "riskmanager",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "path",
+      "label": "Path",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "ResearchJournal",
+      "file_type": "code",
+      "norm_label": "path",
       "source_file": "",
       "source_location": ""
     },
@@ -6835,26 +7164,37 @@
       "source_location": "L1"
     },
     {
-      "id": "scripts_browser_check",
-      "label": "browser_check.py",
+      "id": "src_dashboard_static_terminal",
+      "label": "terminal.js",
       "_origin": "ast",
       "community": 41,
-      "community_name": "browser_check.py",
+      "community_name": "terminal.js",
       "file_type": "code",
-      "norm_label": "browser_check.py",
-      "source_file": "scripts/browser_check.py",
+      "norm_label": "terminal.js",
+      "source_file": "src/dashboard/static/terminal.js",
       "source_location": "L1"
     },
     {
-      "id": "scripts_browser_check_rationale_1",
-      "label": "Real Chromium checks against the running local dashboard.",
+      "id": "src_dashboard_static_terminal_levellines",
+      "label": "levelLines",
       "_origin": "ast",
       "community": 41,
-      "community_name": "browser_check.py",
-      "file_type": "rationale",
-      "norm_label": "real chromium checks against the running local dashboard.",
-      "source_file": "scripts/browser_check.py",
-      "source_location": "L1"
+      "community_name": "terminal.js",
+      "file_type": "code",
+      "norm_label": "levellines",
+      "source_file": "src/dashboard/static/terminal.js",
+      "source_location": "L8"
+    },
+    {
+      "id": "src_dashboard_static_terminal_options",
+      "label": "options",
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "terminal.js",
+      "file_type": "code",
+      "norm_label": "options",
+      "source_file": "src/dashboard/static/terminal.js",
+      "source_location": "L9"
     },
     {
       "id": "src_market_init",
@@ -6876,6 +7216,72 @@
       "file_type": "rationale",
       "norm_label": "validated market observations; no trading or inferred missing bars.",
       "source_file": "src/market/__init__.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_learning_trades",
+      "label": "trades.py",
+      "_origin": "ast",
+      "community": 43,
+      "community_name": "complete_trades",
+      "file_type": "code",
+      "norm_label": "trades.py",
+      "source_file": "src/learning/trades.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_test_trade_episodes",
+      "label": "test_trade_episodes.py",
+      "_origin": "ast",
+      "community": 43,
+      "community_name": "complete_trades",
+      "file_type": "code",
+      "norm_label": "test_trade_episodes.py",
+      "source_file": "tests/test_trade_episodes.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_learning_trades_rationale_1",
+      "label": "Reconstruct flat-to-flat episodes only when exchange position continuity is\u2026",
+      "_origin": "ast",
+      "community": 43,
+      "community_name": "complete_trades",
+      "file_type": "rationale",
+      "norm_label": "reconstruct flat-to-flat episodes only when exchange position continuity is...",
+      "source_file": "src/learning/trades.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_research_service_rationale_28",
+      "label": "Indicative two-venue, four-leg roundtrip economics; no claim of executability.",
+      "_origin": "ast",
+      "community": 44,
+      "community_name": "divergence",
+      "file_type": "rationale",
+      "norm_label": "indicative two-venue, four-leg roundtrip economics; no claim of executability.",
+      "source_file": "src/research/service.py",
+      "source_location": "L28"
+    },
+    {
+      "id": "scripts_browser_check",
+      "label": "browser_check.py",
+      "_origin": "ast",
+      "community": 45,
+      "community_name": "browser_check.py",
+      "file_type": "code",
+      "norm_label": "browser_check.py",
+      "source_file": "scripts/browser_check.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "scripts_browser_check_rationale_1",
+      "label": "Real Chromium checks against the running local dashboard.",
+      "_origin": "ast",
+      "community": 45,
+      "community_name": "browser_check.py",
+      "file_type": "rationale",
+      "norm_label": "real chromium checks against the running local dashboard.",
+      "source_file": "scripts/browser_check.py",
       "source_location": "L1"
     },
     {
@@ -7077,7 +7483,7 @@
       "source_location": "L1"
     },
     {
-      "id": "src_bot_rationale_638",
+      "id": "src_bot_rationale_657",
       "label": "Match fill to active signal without removing it (partial fills reuse the\u2026",
       "_origin": "ast",
       "community": 7,
@@ -7085,7 +7491,7 @@
       "file_type": "rationale",
       "norm_label": "match fill to active signal without removing it (partial fills reuse the...",
       "source_file": "src/bot.py",
-      "source_location": "L638"
+      "source_location": "L657"
     },
     {
       "id": "src_reconciler_py_hyperliquidclient",
@@ -8089,7 +8495,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L240",
+      "source_location": "L248",
       "weight": 1.0
     },
     {
@@ -8101,7 +8507,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L728",
+      "source_location": "L747",
       "weight": 1.0
     },
     {
@@ -8113,7 +8519,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L41",
+      "source_location": "L43",
       "weight": 1.0
     },
     {
@@ -8125,7 +8531,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L47",
+      "source_location": "L49",
       "weight": 1.0
     },
     {
@@ -8137,7 +8543,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L49",
+      "source_location": "L51",
       "weight": 1.0
     },
     {
@@ -8149,7 +8555,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L50",
+      "source_location": "L52",
       "weight": 1.0
     },
     {
@@ -8161,7 +8567,31 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L51",
+      "source_location": "L53",
+      "weight": 1.0
+    },
+    {
+      "source": "src_bot_tradingbot_init",
+      "target": "src_learning_execution_executionjournal",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/bot.py",
+      "source_location": "L54",
+      "weight": 1.0
+    },
+    {
+      "source": "src_bot_tradingbot_init",
+      "target": "src_learning_accounting_accountaudit",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/bot.py",
+      "source_location": "L56",
       "weight": 1.0
     },
     {
@@ -8173,7 +8603,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L52",
+      "source_location": "L57",
       "weight": 1.0
     },
     {
@@ -8185,7 +8615,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L65",
+      "source_location": "L70",
       "weight": 1.0
     },
     {
@@ -8197,7 +8627,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L66",
+      "source_location": "L71",
       "weight": 1.0
     },
     {
@@ -8209,7 +8639,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L70",
+      "source_location": "L75",
       "weight": 1.0
     },
     {
@@ -8221,7 +8651,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L202",
+      "source_location": "L210",
       "weight": 1.0
     },
     {
@@ -8233,7 +8663,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L214",
+      "source_location": "L222",
       "weight": 1.0
     },
     {
@@ -8245,7 +8675,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L524",
+      "source_location": "L538",
       "weight": 1.0
     },
     {
@@ -8257,7 +8687,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L548",
+      "source_location": "L562",
       "weight": 1.0
     },
     {
@@ -8269,7 +8699,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L569",
+      "source_location": "L583",
       "weight": 1.0
     },
     {
@@ -8281,7 +8711,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L581",
+      "source_location": "L595",
       "weight": 1.0
     },
     {
@@ -8293,7 +8723,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L629",
+      "source_location": "L648",
       "weight": 1.0
     },
     {
@@ -8305,7 +8735,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L328",
+      "source_location": "L336",
       "weight": 1.0
     },
     {
@@ -8317,7 +8747,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L104",
+      "source_location": "L109",
       "weight": 1.0
     },
     {
@@ -8329,7 +8759,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L105",
+      "source_location": "L110",
       "weight": 1.0
     },
     {
@@ -8341,7 +8771,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L110",
+      "source_location": "L115",
       "weight": 1.0
     },
     {
@@ -8353,7 +8783,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L114",
+      "source_location": "L120",
       "weight": 1.0
     },
     {
@@ -8365,7 +8795,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L121",
+      "source_location": "L127",
       "weight": 1.0
     },
     {
@@ -8377,7 +8807,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L301",
+      "source_location": "L309",
       "weight": 1.0
     },
     {
@@ -8389,7 +8819,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L399",
+      "source_location": "L412",
       "weight": 1.0
     },
     {
@@ -8401,7 +8831,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L410",
+      "source_location": "L423",
       "weight": 1.0
     },
     {
@@ -8413,7 +8843,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L455",
+      "source_location": "L469",
       "weight": 1.0
     },
     {
@@ -8425,7 +8855,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L467",
+      "source_location": "L481",
       "weight": 1.0
     },
     {
@@ -8437,7 +8867,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L469",
+      "source_location": "L483",
       "weight": 1.0
     },
     {
@@ -8449,7 +8879,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot.py",
-      "source_location": "L487",
+      "source_location": "L501",
       "weight": 1.0
     },
     {
@@ -8922,19 +9352,19 @@
     },
     {
       "source": "src_dashboard_static_terminal_renderoperations",
-      "target": "src_dashboard_static_terminal_fmt",
+      "target": "src_dashboard_static_terminal_usd",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/dashboard/static/terminal.js",
-      "source_location": "L36",
+      "source_location": "L37",
       "weight": 1.0
     },
     {
       "source": "src_dashboard_static_terminal_renderoperations",
-      "target": "src_dashboard_static_terminal_stamp",
+      "target": "src_dashboard_static_terminal_fmt",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -8946,7 +9376,7 @@
     },
     {
       "source": "src_dashboard_static_terminal_renderoperations",
-      "target": "src_dashboard_static_terminal_row",
+      "target": "src_dashboard_static_terminal_stamp",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -9061,7 +9491,31 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L249",
+      "source_location": "L283",
+      "weight": 1.0
+    },
+    {
+      "source": "src_exchange_hyperliquid_hyperliquidclient_cancel_all_orders",
+      "target": "src_exchange_hyperliquid_hyperliquidclient_submit_audited",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/exchange/hyperliquid.py",
+      "source_location": "L289",
+      "weight": 1.0
+    },
+    {
+      "source": "src_exchange_hyperliquid_hyperliquidclient_cancel_order",
+      "target": "src_exchange_hyperliquid_hyperliquidclient_submit_audited",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/exchange/hyperliquid.py",
+      "source_location": "L280",
       "weight": 1.0
     },
     {
@@ -9073,7 +9527,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L395",
+      "source_location": "L431",
+      "weight": 1.0
+    },
+    {
+      "source": "src_exchange_hyperliquid_hyperliquidclient_close_position",
+      "target": "src_exchange_hyperliquid_hyperliquidclient_submit_audited",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/exchange/hyperliquid.py",
+      "source_location": "L293",
       "weight": 1.0
     },
     {
@@ -9085,7 +9551,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L173",
+      "source_location": "L174",
       "weight": 1.0
     },
     {
@@ -9097,7 +9563,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L174",
+      "source_location": "L175",
       "weight": 1.0
     },
     {
@@ -9109,7 +9575,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L191",
+      "source_location": "L192",
       "weight": 1.0
     },
     {
@@ -9121,7 +9587,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L164",
+      "source_location": "L165",
       "weight": 1.0
     },
     {
@@ -9133,7 +9599,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L160",
+      "source_location": "L161",
       "weight": 1.0
     },
     {
@@ -9145,7 +9611,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L150",
+      "source_location": "L151",
       "weight": 1.0
     },
     {
@@ -9157,7 +9623,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L143",
+      "source_location": "L144",
       "weight": 1.0
     },
     {
@@ -9169,7 +9635,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L89",
+      "source_location": "L90",
       "weight": 1.0
     },
     {
@@ -9181,7 +9647,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L107",
+      "source_location": "L108",
       "weight": 1.0
     },
     {
@@ -9193,7 +9659,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L291",
+      "source_location": "L327",
       "weight": 1.0
     },
     {
@@ -9205,7 +9671,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L380",
+      "source_location": "L416",
       "weight": 1.0
     },
     {
@@ -9217,7 +9683,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L211",
+      "source_location": "L241",
+      "weight": 1.0
+    },
+    {
+      "source": "src_exchange_hyperliquid_hyperliquidclient_place_limit_order",
+      "target": "src_exchange_hyperliquid_hyperliquidclient_submit_audited",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/exchange/hyperliquid.py",
+      "source_location": "L242",
       "weight": 1.0
     },
     {
@@ -9229,7 +9707,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L207",
+      "source_location": "L236",
+      "weight": 1.0
+    },
+    {
+      "source": "src_exchange_hyperliquid_hyperliquidclient_place_maker_order",
+      "target": "src_exchange_hyperliquid_hyperliquidclient_submit_audited",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/exchange/hyperliquid.py",
+      "source_location": "L237",
       "weight": 1.0
     },
     {
@@ -9241,7 +9731,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L215",
+      "source_location": "L246",
+      "weight": 1.0
+    },
+    {
+      "source": "src_exchange_hyperliquid_hyperliquidclient_place_market_order",
+      "target": "src_exchange_hyperliquid_hyperliquidclient_submit_audited",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/exchange/hyperliquid.py",
+      "source_location": "L247",
       "weight": 1.0
     },
     {
@@ -9253,7 +9755,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L220",
+      "source_location": "L252",
       "weight": 1.0
     },
     {
@@ -9265,7 +9767,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L224",
+      "source_location": "L256",
+      "weight": 1.0
+    },
+    {
+      "source": "src_exchange_hyperliquid_hyperliquidclient_place_order_with_tpsl",
+      "target": "src_exchange_hyperliquid_hyperliquidclient_submit_audited",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/exchange/hyperliquid.py",
+      "source_location": "L275",
       "weight": 1.0
     },
     {
@@ -9277,7 +9791,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L263",
+      "source_location": "L297",
       "weight": 1.0
     },
     {
@@ -9289,7 +9803,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L266",
+      "source_location": "L300",
+      "weight": 1.0
+    },
+    {
+      "source": "src_exchange_hyperliquid_hyperliquidclient_place_trigger_orders",
+      "target": "src_exchange_hyperliquid_hyperliquidclient_submit_audited",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/exchange/hyperliquid.py",
+      "source_location": "L315",
       "weight": 1.0
     },
     {
@@ -9301,7 +9827,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L103",
+      "source_location": "L104",
       "weight": 1.0
     },
     {
@@ -9313,7 +9839,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L96",
+      "source_location": "L97",
       "weight": 1.0
     },
     {
@@ -9325,7 +9851,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L351",
+      "source_location": "L387",
       "weight": 1.0
     },
     {
@@ -9337,7 +9863,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L409",
+      "source_location": "L445",
       "weight": 1.0
     },
     {
@@ -9349,7 +9875,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L425",
+      "source_location": "L461",
       "weight": 1.0
     },
     {
@@ -9361,7 +9887,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L361",
+      "source_location": "L397",
       "weight": 1.0
     },
     {
@@ -9373,7 +9899,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L433",
+      "source_location": "L469",
       "weight": 1.0
     },
     {
@@ -9385,7 +9911,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L371",
+      "source_location": "L407",
       "weight": 1.0
     },
     {
@@ -9397,7 +9923,91 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L308",
+      "source_location": "L344",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_accounting_accountaudit_init",
+      "target": "src_storage_transaction",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_accounting_accountaudit_run",
+      "target": "src_learning_accounting_accountaudit_step",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L141",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_accounting_accountaudit_run",
+      "target": "src_storage_transaction",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L144",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_accounting_accountaudit_sample",
+      "target": "src_storage_transaction",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_accounting_accountaudit_step",
+      "target": "src_storage_transaction",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L54",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_accounting_accountaudit_step",
+      "target": "src_learning_accounting_accountaudit_cash_amount",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L84",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_accounting_accountaudit_summary",
+      "target": "src_storage_transaction",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L93",
       "weight": 1.0
     },
     {
@@ -9482,6 +10092,90 @@
       "context": "call",
       "source_file": "src/learning/evaluator.py",
       "source_location": "L184",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_execution_executionjournal_begin",
+      "target": "src_storage_transaction",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/learning/execution.py",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_execution_executionjournal_event",
+      "target": "src_storage_transaction",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/learning/execution.py",
+      "source_location": "L53",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_execution_executionjournal_fail",
+      "target": "src_storage_transaction",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/learning/execution.py",
+      "source_location": "L43",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_execution_executionjournal_finish",
+      "target": "src_storage_transaction",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/learning/execution.py",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_execution_executionjournal_init",
+      "target": "src_storage_transaction",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/learning/execution.py",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_execution_executionjournal_links",
+      "target": "src_storage_transaction",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/learning/execution.py",
+      "source_location": "L60",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_execution_executionjournal_summary",
+      "target": "src_storage_transaction",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/learning/execution.py",
+      "source_location": "L64",
       "weight": 1.0
     },
     {
@@ -9781,7 +10475,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/learning/quality.py",
-      "source_location": "L339",
+      "source_location": "L343",
       "weight": 1.0
     },
     {
@@ -10802,6 +11496,150 @@
       "context": "call",
       "source_file": "src/strategy/sr_detector.py",
       "source_location": "L130",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests_setup",
+      "target": "src_learning_execution_executionjournal",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests_setup",
+      "target": "src_learning_ledger_fillledger",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests_setup",
+      "target": "src_learning_funding_fundingsync",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests_setup",
+      "target": "src_learning_accounting_accountaudit",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests_test_capped_or_malformed_history_does_not_advance_coverage",
+      "target": "tests_test_account_audit_accountaudittests_sample",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L88",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests_test_capped_or_malformed_history_does_not_advance_coverage",
+      "target": "src_storage_transaction",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L90",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests_test_equity_bridge_components_and_baseline_survive_restart",
+      "target": "tests_test_account_audit_accountaudittests_sample",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L61",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests_test_equity_bridge_components_and_baseline_survive_restart",
+      "target": "src_storage_transaction",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L67",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests_test_equity_bridge_components_and_baseline_survive_restart",
+      "target": "src_learning_accounting_accountaudit",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L74",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests_test_recovery_exit_attribution_does_not_invent_entry_context",
+      "target": "src_learning_quality_qualityaudit",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L95",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests_test_unknown_movement_and_missing_funding_never_assumed_zero",
+      "target": "tests_test_account_audit_accountaudittests_sample",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L79",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests_test_unknown_movement_and_missing_funding_never_assumed_zero",
+      "target": "src_storage_transaction",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L82",
       "weight": 1.0
     },
     {
@@ -12589,7 +13427,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "src/dashboard/app.py",
-      "source_location": "L240",
+      "source_location": "L246",
       "weight": 1.0
     },
     {
@@ -12661,7 +13499,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "src/dashboard/app.py",
-      "source_location": "L246",
+      "source_location": "L252",
       "weight": 1.0
     },
     {
@@ -12697,7 +13535,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "src/dashboard/app.py",
-      "source_location": "L256",
+      "source_location": "L262",
       "weight": 1.0
     },
     {
@@ -12918,14 +13756,50 @@
     },
     {
       "source": "src_bot",
-      "target": "src_operations_operations",
+      "target": "src_learning_quality_candle_context",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/bot.py",
-      "source_location": "L17",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "src_bot",
+      "target": "src_learning_quality_qualityaudit",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/bot.py",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "src_bot",
+      "target": "src_learning_execution_executionjournal",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/bot.py",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "src_bot",
+      "target": "src_learning_accounting_accountaudit",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/bot.py",
+      "source_location": "L19",
       "weight": 1.0
     },
     {
@@ -12937,7 +13811,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/bot.py",
-      "source_location": "L18",
+      "source_location": "L20",
       "weight": 1.0
     },
     {
@@ -12949,7 +13823,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/bot.py",
-      "source_location": "L18",
+      "source_location": "L20",
       "weight": 1.0
     },
     {
@@ -12962,42 +13836,6 @@
       "context": "import",
       "source_file": "src/bot.py",
       "source_location": "L7",
-      "weight": 1.0
-    },
-    {
-      "source": "src_bot",
-      "target": "src_strategy_scalper_scalper",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "src/bot.py",
-      "source_location": "L9",
-      "weight": 1.0
-    },
-    {
-      "source": "src_exchange_hyperliquid",
-      "target": "src_market_candles_coverage",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L8",
-      "weight": 1.0
-    },
-    {
-      "source": "src_exchange_hyperliquid",
-      "target": "src_market_candles_merge_bars",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L8",
       "weight": 1.0
     },
     {
@@ -13046,6 +13884,54 @@
       "context": "import",
       "source_file": "src/strategy/scalper.py",
       "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit",
+      "target": "src_exchange_hyperliquid_hyperliquidclient",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit",
+      "target": "src_learning_execution_executionjournal",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit",
+      "target": "src_learning_accounting_accountaudit",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit",
+      "target": "src_learning_quality_qualityaudit",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L9",
       "weight": 1.0
     },
     {
@@ -13662,7 +14548,7 @@
     },
     {
       "source": "src_bot",
-      "target": "src_dashboard_app",
+      "target": "src_learning_execution",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -13670,6 +14556,30 @@
       "context": "import",
       "source_file": "src/bot.py",
       "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "src_bot",
+      "target": "src_learning_accounting",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/bot.py",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "src_bot",
+      "target": "src_dashboard_app",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/bot.py",
+      "source_location": "L20",
       "weight": 1.0
     },
     {
@@ -13717,7 +14627,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/dashboard/app.py",
-      "source_location": "L266",
+      "source_location": "L272",
       "weight": 1.0
     },
     {
@@ -13730,6 +14640,30 @@
       "context": "import",
       "source_file": "src/exchange/hyperliquid.py",
       "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_accounting",
+      "target": "src_storage",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_execution",
+      "target": "src_storage",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/learning/execution.py",
+      "source_location": "L7",
       "weight": 1.0
     },
     {
@@ -13958,6 +14892,90 @@
       "context": "import",
       "source_file": "src/strategy/scalper.py",
       "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit",
+      "target": "src_exchange_hyperliquid",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit",
+      "target": "src_storage",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit",
+      "target": "src_learning_execution",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit",
+      "target": "src_learning_accounting",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit",
+      "target": "src_learning_funding",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit",
+      "target": "src_learning_ledger",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit",
+      "target": "src_learning_quality",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L9",
       "weight": 1.0
     },
     {
@@ -14293,7 +15311,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "src/bot.py",
-      "source_location": "L25",
+      "source_location": "L27",
       "weight": 1.0
     },
     {
@@ -14887,7 +15905,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L23",
+      "source_location": "L25",
       "weight": 1.0
     },
     {
@@ -14986,7 +16004,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/dashboard/app.py",
-      "source_location": "L241",
+      "source_location": "L247",
       "weight": 1.0
     },
     {
@@ -14997,7 +16015,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/dashboard/app.py",
-      "source_location": "L247",
+      "source_location": "L253",
       "weight": 1.0
     },
     {
@@ -15008,7 +16026,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/dashboard/app.py",
-      "source_location": "L257",
+      "source_location": "L263",
       "weight": 1.0
     },
     {
@@ -15386,6 +16404,17 @@
       "weight": 1.0
     },
     {
+      "source": "src_learning_accounting",
+      "target": "src_learning_accounting_accountaudit",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
       "source": "src_learning_evaluator",
       "target": "src_learning_evaluator_traderecord",
       "relation": "contains",
@@ -15405,6 +16434,17 @@
       "confidence_score": 1.0,
       "source_file": "src/learning/evaluator.py",
       "source_location": "L39",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_execution",
+      "target": "src_learning_execution_executionjournal",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/learning/execution.py",
+      "source_location": "L10",
       "weight": 1.0
     },
     {
@@ -15757,6 +16797,17 @@
       "confidence_score": 1.0,
       "source_file": "src/strategy/sr_detector.py",
       "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit",
+      "target": "tests_test_account_audit_accountaudittests",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L14",
       "weight": 1.0
     },
     {
@@ -16201,13 +17252,24 @@
     },
     {
       "source": "src_bot_tradingbot",
+      "target": "src_bot_tradingbot_start",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/bot.py",
+      "source_location": "L103",
+      "weight": 1.0
+    },
+    {
+      "source": "src_bot_tradingbot",
       "target": "src_bot_tradingbot_init_exchange",
       "relation": "method",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L131",
+      "source_location": "L138",
       "weight": 1.0
     },
     {
@@ -16218,7 +17280,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L232",
+      "source_location": "L240",
       "weight": 1.0
     },
     {
@@ -16229,7 +17291,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L237",
+      "source_location": "L245",
       "weight": 1.0
     },
     {
@@ -16240,7 +17302,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L248",
+      "source_location": "L256",
       "weight": 1.0
     },
     {
@@ -16251,7 +17313,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L25",
+      "source_location": "L27",
       "weight": 1.0
     },
     {
@@ -16262,7 +17324,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L279",
+      "source_location": "L287",
       "weight": 1.0
     },
     {
@@ -16273,7 +17335,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L300",
+      "source_location": "L308",
       "weight": 1.0
     },
     {
@@ -16284,7 +17346,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L305",
+      "source_location": "L313",
       "weight": 1.0
     },
     {
@@ -16295,7 +17357,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L342",
+      "source_location": "L350",
       "weight": 1.0
     },
     {
@@ -16306,7 +17368,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L397",
+      "source_location": "L410",
       "weight": 1.0
     },
     {
@@ -16317,7 +17379,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L494",
+      "source_location": "L508",
       "weight": 1.0
     },
     {
@@ -16328,7 +17390,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L516",
+      "source_location": "L530",
       "weight": 1.0
     },
     {
@@ -16339,7 +17401,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L605",
+      "source_location": "L619",
       "weight": 1.0
     },
     {
@@ -16350,7 +17412,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L621",
+      "source_location": "L640",
       "weight": 1.0
     },
     {
@@ -16361,7 +17423,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L637",
+      "source_location": "L656",
       "weight": 1.0
     },
     {
@@ -16372,7 +17434,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L671",
+      "source_location": "L690",
       "weight": 1.0
     },
     {
@@ -16383,7 +17445,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L689",
+      "source_location": "L708",
       "weight": 1.0
     },
     {
@@ -16394,7 +17456,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L702",
+      "source_location": "L721",
       "weight": 1.0
     },
     {
@@ -16405,7 +17467,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L751",
+      "source_location": "L770",
       "weight": 1.0
     },
     {
@@ -16416,7 +17478,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L755",
+      "source_location": "L774",
       "weight": 1.0
     },
     {
@@ -16427,18 +17489,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L809",
-      "weight": 1.0
-    },
-    {
-      "source": "src_bot_tradingbot",
-      "target": "src_bot_tradingbot_start",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/bot.py",
-      "source_location": "L98",
+      "source_location": "L828",
       "weight": 1.0
     },
     {
@@ -16449,7 +17500,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L102",
+      "source_location": "L103",
       "weight": 1.0
     },
     {
@@ -16460,7 +17511,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L106",
+      "source_location": "L107",
       "weight": 1.0
     },
     {
@@ -16471,7 +17522,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L119",
+      "source_location": "L120",
       "weight": 1.0
     },
     {
@@ -16482,7 +17533,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L128",
+      "source_location": "L129",
       "weight": 1.0
     },
     {
@@ -16493,7 +17544,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L131",
+      "source_location": "L132",
       "weight": 1.0
     },
     {
@@ -16504,7 +17555,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L136",
+      "source_location": "L137",
       "weight": 1.0
     },
     {
@@ -16515,7 +17566,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L139",
+      "source_location": "L140",
       "weight": 1.0
     },
     {
@@ -16526,7 +17577,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L142",
+      "source_location": "L143",
       "weight": 1.0
     },
     {
@@ -16537,7 +17588,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L149",
+      "source_location": "L150",
       "weight": 1.0
     },
     {
@@ -16548,7 +17599,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L153",
+      "source_location": "L154",
       "weight": 1.0
     },
     {
@@ -16559,7 +17610,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L156",
+      "source_location": "L157",
       "weight": 1.0
     },
     {
@@ -16570,7 +17621,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L159",
+      "source_location": "L160",
       "weight": 1.0
     },
     {
@@ -16581,7 +17632,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L163",
+      "source_location": "L164",
       "weight": 1.0
     },
     {
@@ -16592,7 +17643,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L170",
+      "source_location": "L171",
       "weight": 1.0
     },
     {
@@ -16603,7 +17654,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L190",
+      "source_location": "L191",
       "weight": 1.0
     },
     {
@@ -16614,7 +17665,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L193",
+      "source_location": "L194",
       "weight": 1.0
     },
     {
@@ -16625,7 +17676,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L198",
+      "source_location": "L199",
       "weight": 1.0
     },
     {
@@ -16647,7 +17698,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L201",
+      "source_location": "L202",
+      "weight": 1.0
+    },
+    {
+      "source": "src_exchange_hyperliquid_hyperliquidclient",
+      "target": "src_exchange_hyperliquid_hyperliquidclient_submit_audited",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/exchange/hyperliquid.py",
+      "source_location": "L207",
       "weight": 1.0
     },
     {
@@ -16658,7 +17720,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L206",
+      "source_location": "L235",
       "weight": 1.0
     },
     {
@@ -16669,7 +17731,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L210",
+      "source_location": "L240",
       "weight": 1.0
     },
     {
@@ -16680,7 +17742,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L214",
+      "source_location": "L245",
       "weight": 1.0
     },
     {
@@ -16691,7 +17753,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L218",
+      "source_location": "L250",
       "weight": 1.0
     },
     {
@@ -16702,7 +17764,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L245",
+      "source_location": "L279",
       "weight": 1.0
     },
     {
@@ -16713,7 +17775,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L248",
+      "source_location": "L282",
       "weight": 1.0
     },
     {
@@ -16724,7 +17786,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L258",
+      "source_location": "L292",
       "weight": 1.0
     },
     {
@@ -16735,7 +17797,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L261",
+      "source_location": "L295",
       "weight": 1.0
     },
     {
@@ -16746,7 +17808,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L283",
+      "source_location": "L319",
       "weight": 1.0
     },
     {
@@ -16757,7 +17819,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L288",
+      "source_location": "L324",
       "weight": 1.0
     },
     {
@@ -16768,7 +17830,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L294",
+      "source_location": "L330",
       "weight": 1.0
     },
     {
@@ -16779,7 +17841,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L300",
+      "source_location": "L336",
       "weight": 1.0
     },
     {
@@ -16790,7 +17852,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L312",
+      "source_location": "L348",
       "weight": 1.0
     },
     {
@@ -16801,7 +17863,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L333",
+      "source_location": "L369",
       "weight": 1.0
     },
     {
@@ -16812,7 +17874,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L336",
+      "source_location": "L372",
       "weight": 1.0
     },
     {
@@ -16823,7 +17885,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L353",
+      "source_location": "L389",
       "weight": 1.0
     },
     {
@@ -16834,7 +17896,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L363",
+      "source_location": "L399",
       "weight": 1.0
     },
     {
@@ -16845,7 +17907,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L373",
+      "source_location": "L409",
       "weight": 1.0
     },
     {
@@ -16856,7 +17918,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L392",
+      "source_location": "L428",
       "weight": 1.0
     },
     {
@@ -16867,7 +17929,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L401",
+      "source_location": "L437",
       "weight": 1.0
     },
     {
@@ -16878,7 +17940,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L411",
+      "source_location": "L447",
       "weight": 1.0
     },
     {
@@ -16889,7 +17951,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L427",
+      "source_location": "L463",
       "weight": 1.0
     },
     {
@@ -16900,7 +17962,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L437",
+      "source_location": "L473",
       "weight": 1.0
     },
     {
@@ -16911,40 +17973,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L441",
-      "weight": 1.0
-    },
-    {
-      "source": "src_exchange_hyperliquid_hyperliquidclient",
-      "target": "src_exchange_hyperliquid_hyperliquidclient_get_cached_candles",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L445",
-      "weight": 1.0
-    },
-    {
-      "source": "src_exchange_hyperliquid_hyperliquidclient",
-      "target": "src_exchange_hyperliquid_hyperliquidclient_get_cached_trades",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L449",
-      "weight": 1.0
-    },
-    {
-      "source": "src_exchange_hyperliquid_hyperliquidclient",
-      "target": "src_exchange_hyperliquid_hyperliquidclient_get_cached_fills",
-      "relation": "method",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L453",
+      "source_location": "L477",
       "weight": 1.0
     },
     {
@@ -16955,7 +17984,40 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L47",
+      "source_location": "L48",
+      "weight": 1.0
+    },
+    {
+      "source": "src_exchange_hyperliquid_hyperliquidclient",
+      "target": "src_exchange_hyperliquid_hyperliquidclient_get_cached_candles",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/exchange/hyperliquid.py",
+      "source_location": "L481",
+      "weight": 1.0
+    },
+    {
+      "source": "src_exchange_hyperliquid_hyperliquidclient",
+      "target": "src_exchange_hyperliquid_hyperliquidclient_get_cached_trades",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/exchange/hyperliquid.py",
+      "source_location": "L485",
+      "weight": 1.0
+    },
+    {
+      "source": "src_exchange_hyperliquid_hyperliquidclient",
+      "target": "src_exchange_hyperliquid_hyperliquidclient_get_cached_fills",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/exchange/hyperliquid.py",
+      "source_location": "L489",
       "weight": 1.0
     },
     {
@@ -16966,7 +18028,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L66",
+      "source_location": "L67",
       "weight": 1.0
     },
     {
@@ -16977,7 +18039,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L82",
+      "source_location": "L83",
       "weight": 1.0
     },
     {
@@ -16988,7 +18050,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L88",
+      "source_location": "L89",
       "weight": 1.0
     },
     {
@@ -16999,7 +18061,84 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L95",
+      "source_location": "L96",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_accounting_accountaudit",
+      "target": "src_learning_accounting_accountaudit_init",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_accounting_accountaudit",
+      "target": "src_learning_accounting_accountaudit_start",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L131",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_accounting_accountaudit",
+      "target": "src_learning_accounting_accountaudit_run",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L134",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_accounting_accountaudit",
+      "target": "src_learning_accounting_accountaudit_sample",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_accounting_accountaudit",
+      "target": "src_learning_accounting_accountaudit_cash_amount",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L43",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_accounting_accountaudit",
+      "target": "src_learning_accounting_accountaudit_step",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L53",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_accounting_accountaudit",
+      "target": "src_learning_accounting_accountaudit_summary",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L92",
       "weight": 1.0
     },
     {
@@ -17132,6 +18271,83 @@
       "confidence_score": 1.0,
       "source_file": "src/learning/evaluator.py",
       "source_location": "L34",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_execution_executionjournal",
+      "target": "src_learning_execution_executionjournal_init",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/learning/execution.py",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_execution_executionjournal",
+      "target": "src_learning_execution_executionjournal_begin",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/learning/execution.py",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_execution_executionjournal",
+      "target": "src_learning_execution_executionjournal_finish",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/learning/execution.py",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_execution_executionjournal",
+      "target": "src_learning_execution_executionjournal_fail",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/learning/execution.py",
+      "source_location": "L42",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_execution_executionjournal",
+      "target": "src_learning_execution_executionjournal_event",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/learning/execution.py",
+      "source_location": "L46",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_execution_executionjournal",
+      "target": "src_learning_execution_executionjournal_links",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/learning/execution.py",
+      "source_location": "L59",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_execution_executionjournal",
+      "target": "src_learning_execution_executionjournal_summary",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/learning/execution.py",
+      "source_location": "L63",
       "weight": 1.0
     },
     {
@@ -18408,6 +19624,127 @@
       "confidence_score": 1.0,
       "source_file": "src/strategy/sr_detector.py",
       "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests",
+      "target": "tests_test_account_audit_accountaudittests_setup",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests",
+      "target": "tests_test_account_audit_accountaudittests_teardown",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests",
+      "target": "tests_test_account_audit_accountaudittests_test_intent_is_durable_before_submission_and_roles_use_exact_ids",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests",
+      "target": "tests_test_account_audit_accountaudittests_test_ambiguous_submission_never_retries",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L33",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests",
+      "target": "tests_test_account_audit_accountaudittests_test_failed_intent_blocks_entry_but_never_blocks_close",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L41",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests",
+      "target": "tests_test_account_audit_accountaudittests_test_nested_order_updates_are_idempotent_and_preserved",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L51",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests",
+      "target": "tests_test_account_audit_accountaudittests_sample",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L57",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests",
+      "target": "tests_test_account_audit_accountaudittests_test_equity_bridge_components_and_baseline_survive_restart",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L60",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests",
+      "target": "tests_test_account_audit_accountaudittests_test_unknown_movement_and_missing_funding_never_assumed_zero",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L78",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests",
+      "target": "tests_test_account_audit_accountaudittests_test_capped_or_malformed_history_does_not_advance_coverage",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L87",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests",
+      "target": "tests_test_account_audit_accountaudittests_test_recovery_exit_attribution_does_not_invent_entry_context",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L94",
       "weight": 1.0
     },
     {
@@ -19698,25 +21035,47 @@
       "weight": 1.0
     },
     {
-      "source": "src_bot_rationale_638",
+      "source": "src_bot_rationale_657",
       "target": "src_bot_tradingbot_match_active_signal",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot.py",
-      "source_location": "L638",
+      "source_location": "L657",
       "weight": 1.0
     },
     {
-      "source": "src_exchange_hyperliquid_rationale_194",
+      "source": "src_exchange_hyperliquid_rationale_195",
       "target": "src_exchange_hyperliquid_hyperliquidclient_get_audit_bbo",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/exchange/hyperliquid.py",
-      "source_location": "L194",
+      "source_location": "L195",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_accounting_rationale_1",
+      "target": "src_learning_accounting",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/learning/accounting.py",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "src_learning_execution_rationale_1",
+      "target": "src_learning_execution",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/learning/execution.py",
+      "source_location": "L1",
       "weight": 1.0
     },
     {
@@ -20058,7 +21417,7 @@
       "confidence_score": 0.85,
       "context": "argument",
       "source_file": "src/bot.py",
-      "source_location": "L302",
+      "source_location": "L310",
       "weight": 1.0
     },
     {
@@ -20131,6 +21490,18 @@
       "context": "argument",
       "source_file": "src/dashboard/static/terminal.js",
       "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "src_dashboard_static_terminal_renderoperations",
+      "target": "src_dashboard_static_terminal_row",
+      "relation": "indirect_call",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "argument",
+      "source_file": "src/dashboard/static/terminal.js",
+      "source_location": "L41",
       "weight": 1.0
     },
     {
@@ -20465,29 +21836,40 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "src/bot.py",
-      "source_location": "L25",
+      "source_location": "L27",
       "weight": 0.8
     },
     {
       "source": "src_bot_tradingbot",
-      "target": "src_operations_operations",
+      "target": "src_learning_quality_qualityaudit",
       "relation": "uses",
       "_origin": "ast",
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "src/bot.py",
-      "source_location": "L52",
+      "source_location": "L53",
       "weight": 0.8
     },
     {
       "source": "src_bot_tradingbot",
-      "target": "src_strategy_scalper_scalper",
+      "target": "src_learning_execution_executionjournal",
       "relation": "uses",
       "_origin": "ast",
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "src/bot.py",
-      "source_location": "L62",
+      "source_location": "L54",
+      "weight": 0.8
+    },
+    {
+      "source": "src_bot_tradingbot",
+      "target": "src_learning_accounting_accountaudit",
+      "relation": "uses",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "src/bot.py",
+      "source_location": "L56",
       "weight": 0.8
     },
     {
@@ -20532,6 +21914,50 @@
       "confidence_score": 0.95,
       "source_file": "src/strategy/scalper.py",
       "source_location": "L40",
+      "weight": 0.8
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests",
+      "target": "src_learning_execution_executionjournal",
+      "relation": "uses",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L17",
+      "weight": 0.8
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests",
+      "target": "src_learning_accounting_accountaudit",
+      "relation": "uses",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L20",
+      "weight": 0.8
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests",
+      "target": "src_exchange_hyperliquid_hyperliquidclient",
+      "relation": "uses",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L24",
+      "weight": 0.8
+    },
+    {
+      "source": "tests_test_account_audit_accountaudittests",
+      "target": "src_learning_quality_qualityaudit",
+      "relation": "uses",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "tests/test_account_audit.py",
+      "source_location": "L95",
       "weight": 0.8
     },
     {
@@ -21129,5 +22555,5 @@
       "source_file": "agents.md"
     }
   ],
-  "built_at_commit": "a2cb2c3c3506e7f3e80920c38a03727e2109dfe3"
+  "built_at_commit": "1fb6bad6991e3fdbc97f955b05af494b26d647f9"
 }

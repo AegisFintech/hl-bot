@@ -24,6 +24,7 @@ with sync_playwright() as p:
     page.goto('http://127.0.0.1:8080',wait_until='networkidle')
     page.wait_for_function("document.getElementById('equity').textContent !== '—'",timeout=20000)
     page.wait_for_function("document.getElementById('research-health').textContent.includes('MAINNET')",timeout=20000)
+    assert page.locator('#account-audit').is_visible()
     assert page.locator('#operations').is_visible()
     page.wait_for_function("document.getElementById('ops-coverage').textContent.includes('60 / 60')",timeout=20000)
     assert page.locator('#research').is_visible()
@@ -69,19 +70,26 @@ with sync_playwright() as p:
     page.evaluate('window.scrollTo(0,0)')
     page.screenshot(path=str(root/'artifacts/dashboard-mobile.png'),full_page=True)
     payload=requests.get('http://127.0.0.1:8080/api/terminal',timeout=15).json()
+    payload['equity_bridge']={'status':'review_required','equity_change':1,'explained_change':.7,'unexplained':.3,'reasons':['Unsupported account movements']}
+    payload['execution_audit']={'unresolved_submissions':1,'recent':[{'time':payload['timestamp'],'coin':'BTC','kind':'emergency_close','outcome':'TimeoutError'}]}
     payload['quality']['markouts']=[dict(role='entry',horizon=60,n=2,missed=1,mean_bps=-3.25)]
     payload['quality']['challenger']['results']=[dict(kind='shadow_trend_v1',direction=1,horizon=3600,n=4,nonoverlap_n=1,mean_net_bps=-5,nonoverlap_mean_net_bps=-6,review_status='insufficient evidence')]
     payload['quality']['recent_decisions']=[dict(time=payload['timestamp'],side='long',regime='range',reason='<img src=x onerror=alert(1)>')]
     payload['quality']['recent']=[dict(closed_at=payload['timestamp']*1000,regime='unknown',net_pnl=-.1,funding_usdc=None,net_after_funding=None)]
     page.route('**/api/terminal',lambda route:route.fulfill(status=200,content_type='application/json',body=json.dumps(payload)))
     page.wait_for_function("document.getElementById('quality-markouts').textContent.includes('-3.25')",timeout=15000)
+    assert 'REVIEW REQUIRED' in page.locator('#bridge-status').inner_text()
+    assert '0.300000' in page.locator('#bridge-residual').inner_text()
+    assert page.locator('#audit-unresolved').inner_text()=='1'
     assert 'Trend continuation v1' in page.locator('#quality-challengers').inner_text()
     page.locator('#quality details').last.locator('summary').click()
     assert '—' in page.locator('#quality-episodes').inner_text()
     assert page.locator('#quality-reasons img').count()==0
+    payload['equity_bridge']={'status':'warming_up'}
     payload['status']['risk'].update(halted=False, execution_paused=True, pause_reason='Exchange maintenance', pause_until=time.time()+60)
     payload['status']['halt_cleanup']='Confirmed flat; no orders'
     page.wait_for_function("document.getElementById('engine').textContent === 'RECOVERING'",timeout=15000)
+    assert page.locator('#bridge-residual').inner_text()=='—'
     assert 'Automatic checks active' in page.locator('#notice').inner_text()
     assert 'Confirmed flat; no orders' in page.locator('#notice').inner_text()
     assert 'operator review required' not in page.locator('#notice').inner_text().lower()
