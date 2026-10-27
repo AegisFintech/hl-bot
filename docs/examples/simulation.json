@@ -1,0 +1,15 @@
+{
+  "label": "SYNTHETIC FORMAT EXAMPLE, NOT MARKET EVIDENCE",
+  "order": {"time": 1000, "direction": 1, "limit": 100, "size": 1, "entry_ttl_s": 2, "holding_s": 3},
+  "events": [
+    {"type": "quote", "time": 1000, "bid": 100, "ask": 101},
+    {"type": "trade", "time": 1001, "id": "synthetic-1", "side": "sell", "price": 100, "size": 1},
+    {"type": "quote", "time": 1002, "bid": 100, "ask": 101},
+    {"type": "quote", "time": 1004, "bid": 100.5, "ask": 101},
+    {"type": "quote", "time": 1006, "bid": 100.5, "ask": 101}
+  ],
+  "scenarios": {
+    "illustrative_conservative": {"latency_s": 0.5, "queue_ahead": 0.25, "participation": 0.5, "max_quote_gap_s": 3, "maker_fee_bps": 2, "taker_fee_bps": 5, "exit_slippage_bps": 2, "funding_cost_bps_hour": 1},
+    "illustrative_stressed": {"latency_s": 1.5, "queue_ahead": 1, "participation": 0.25, "max_quote_gap_s": 3, "maker_fee_bps": 2, "taker_fee_bps": 5, "exit_slippage_bps": 5, "funding_cost_bps_hour": 2}
+  }
+}

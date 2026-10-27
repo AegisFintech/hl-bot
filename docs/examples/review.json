@@ -1,0 +1,20 @@
+{
+  "label": "SYNTHETIC FORMAT ONLY; REGISTER REAL DATES AND TRIALS BEFORE FUTURE HOLDOUT",
+  "protocol": {
+    "version": "FORMAT-EXAMPLE-NOT-ACTUAL-PROTOCOL",
+    "locked_at": 1000,
+    "training_end": 2000,
+    "holdout_start": 20000,
+    "holdout_end": 3000000,
+    "embargo_s": 14400,
+    "trials_attempted": 1,
+    "trial_inventory_complete": false,
+    "min_days": 30,
+    "min_episodes": 100,
+    "extra_cost_stress_bps": 6,
+    "execution_stress_reviewed": false
+  },
+  "protocol_hash": "01e969469a03c4289e58ea37282128807dc64e04a4d386624a6f4518b77a8b33",
+  "as_of": 25000,
+  "episodes": []
+}

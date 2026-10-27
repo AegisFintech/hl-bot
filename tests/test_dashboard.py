@@ -41,3 +41,11 @@ class DashboardTests(unittest.TestCase):
         dashboard.set_bot_reference(SimpleNamespace(research=SimpleNamespace(snapshot=lambda:snapshot)))
         self.assertEqual(self.client.get('/api/research').json,snapshot)
         self.assertEqual(self.client.post('/api/research').status_code,405)
+
+    def test_development_registry_is_read_only_and_preserves_gates(self):
+        r=self.client.get('/api/development')
+        self.assertEqual(r.status_code,200)
+        self.assertFalse(r.json['automatic_promotion'])
+        self.assertEqual(len(r.json['milestones']),10)
+        self.assertTrue(any(h['status'].startswith('blocked') for h in r.json['hypotheses']))
+        self.assertEqual(self.client.post('/api/development').status_code,405)

@@ -18,7 +18,7 @@ This is an actively running Hyperliquid **testnet** bot. User authorizes review,
 
 ## Verification
 
-- `python3 -m unittest discover -s tests -v` — current baseline **41** regression tests.
+- `python3 -m unittest discover -s tests -v` — current baseline **117** regression tests.
 - `python3 -m compileall -q src scripts main.py config.py`.
 - `python3 scripts/healthcheck.py` — local execution health; nonzero on halt/stale/unavailable state.
 - Browser: install requirements-dev.txt and Chromium (`python3 -m playwright install --with-deps chromium`), run demo service, then `python3 scripts/browser_check.py`. It validates desktop/mobile, existing terminal controls, research band/horizon controls, and stale/disconnected handling. Screenshots are private under artifacts/.
@@ -66,3 +66,7 @@ Baseline **91 regressions**. Preserve docs/DEVELOPMENT_PLAN.md implementation/ev
 ## Roadmap M3 accounting foundation — 2026-10-27
 
 Baseline **99 regressions**. Preserve `data/execution.sqlite` intent/results/events, account baseline and retrieved coverage. Never resend ambiguous orders automatically or infer order roles from price. Entry intent persistence is required; audit failure must not prevent cancellation/flatten attempts. An unresolved intent is not proof of an open order. Bridge `within_tolerance` is provisional arithmetic, not an audited completeness guarantee; unsupported account event types/fees remain unknown. Retain explicit (baseline,end] boundary limitations and source coverage. Seven-day minute samples must never alter risk state. Historical features and quotes remain unknown.
+
+## Offline research and readiness milestone — 2026-10-27
+
+Baseline **117 regressions**. Offline validation has no network/signing/trading pathway. Never describe docs/examples synthetic outputs as market results. Passive-horizon-v1 is not a full TP/SL strategy simulator; queue/latency/participation/funding are supplied assumptions, and missing paths suppress profit results. Sparse markouts cannot substitute for real execution traces. Protocol changes require new hashes/versions and untouched future cohorts. Day bootstrap, declared trial adjustment and planning sample thresholds are limited review aids, not proof of independence/edge. Mixed actual/quote/simulated cohorts must be rejected. All review and portfolio outputs prohibit automatic promotion/allocation; M8/M10 remain evidence-gated. README/plan/registry/dashboard statuses must distinguish foundations from completion. Preserve final pre-submission candle and quote rechecks after slow account reads.

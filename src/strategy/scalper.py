@@ -335,6 +335,9 @@ class Scalper:
         return False
 
     def execute_signal(self, signal: TradeSignal) -> dict | None:
+        if not self.client.candle_health(self.coin)['eligible']:
+            self.diagnostics['reason'] = 'Closed candle integrity admission blocked'
+            return None
         if self._is_level_on_cooldown(signal.sr_level):
             return None
 
@@ -365,6 +368,16 @@ class Scalper:
             self.diagnostics['reason'] = 'Account risk admission blocked'
             return None
 
+        # Exposure/account REST reads can outlast the original quote/context.
+        bbo = self.client.get_cached_bbo(self.coin)
+        if (not self.client.candle_health(self.coin)['eligible'] or not bbo
+                or not 0 <= self.client.bbo_age(self.coin) <= 10):
+            self.diagnostics['reason'] = 'Market data changed or expired during admission'
+            return None
+        ok, reason = viable(signal, float(bbo['bid']['px']), float(bbo['ask']['px']), self.fee_entry, self.fee_exit)
+        if not ok:
+            self.diagnostics['reason'] = reason
+            return None
         is_buy = signal.side == "long"
         size = self.risk.compute_position_size(signal)
         size = self.client.round_size(self.coin, size)

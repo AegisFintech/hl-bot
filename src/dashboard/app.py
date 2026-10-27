@@ -1,4 +1,5 @@
 import time
+import json
 import logging
 from pathlib import Path
 
@@ -209,6 +210,7 @@ def api_terminal():
         except Exception:
             log.exception('Quality audit unavailable')
             out['quality'] = {'status': 'unavailable'}
+        out['development'] = development_registry()
         out['execution_audit'] = bot.execution.summary()
         try:
             out['equity_bridge'] = bot.account_audit.summary()
@@ -265,6 +267,21 @@ def security_headers(response):
     response.headers['X-Frame-Options'] = 'SAMEORIGIN'
     response.headers['Cache-Control'] = 'no-store'
     return response
+
+
+
+def development_registry():
+    try:
+        path = Path(__file__).resolve().parents[2] / 'docs/RESEARCH_REGISTRY.json'
+        return json.loads(path.read_text())
+    except (OSError, ValueError):
+        return {'automatic_promotion': False, 'milestones': [], 'hypotheses': [], 'status': 'unavailable'}
+
+
+@app.route('/api/development', methods=['GET'])
+def api_development():
+    return jsonify(development_registry())
+
 
 if __name__ == "__main__":
     import sys

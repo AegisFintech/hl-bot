@@ -1,0 +1,158 @@
+{
+  "registry_version": "roadmap-2026-10-27-v1",
+  "purpose": "Hypothesis inventory and prerequisites; not evidence of profitability or execution approval",
+  "automatic_promotion": false,
+  "review_defaults": {
+    "min_days": 30,
+    "min_nonoverlap_episodes": 100,
+    "extra_cost_stress_bps": 6,
+    "note": "Planning thresholds only; preregister an immutable dated protocol before its untouched period. More evidence may be necessary."
+  },
+  "hypotheses": [
+    {
+      "id": "quality-v1-trend",
+      "status": "observing",
+      "definition": "docs/TRADE_QUALITY.md",
+      "mechanism": "Closed-bar direction and continuation",
+      "next": "Observe frozen cohort; do not change rules from initial outcomes"
+    },
+    {
+      "id": "quality-v1-range",
+      "status": "observing",
+      "definition": "docs/TRADE_QUALITY.md",
+      "mechanism": "Range edge return toward midpoint after heuristic cost admission",
+      "next": "Retain abstentions and future outcomes"
+    },
+    {
+      "id": "failed-aggression-v1",
+      "status": "observing_mainnet_only",
+      "definition": "docs/EXPERIMENTS.md",
+      "mechanism": "Opposing aggressive volume absorbed before later price confirmation",
+      "next": "Quote outcomes and dependent-window analysis; no testnet fill equivalence"
+    },
+    {
+      "id": "wall-defense-v1",
+      "status": "observing_mainnet_only",
+      "definition": "docs/EXPERIMENTS.md",
+      "mechanism": "Persistent displayed level plus actual trading, refill and subsequent reaction",
+      "next": "Sampled depth cannot establish complete order flow or intent"
+    },
+    {
+      "id": "crowded-failure-v1",
+      "status": "observing_mainnet_only",
+      "definition": "docs/EXPERIMENTS.md",
+      "mechanism": "Funding/OI crowding with failed excursion",
+      "next": "Collect sufficient eligible events without relaxing rules"
+    },
+    {
+      "id": "liquidation-exhaustion",
+      "status": "blocked_data",
+      "requires": [
+        "suitable broad liquidation source",
+        "event timestamps",
+        "continuation versus reversal controls"
+      ],
+      "next": "Watched-wallet events cannot stand in for a global source"
+    },
+    {
+      "id": "cross-venue-dislocation",
+      "status": "blocked_data_execution_model",
+      "requires": [
+        "synchronized executable books",
+        "both-leg fees and depth",
+        "hedge/cancel/venue failure scenarios"
+      ],
+      "next": "No funded second exchange or automatic arbitrage orders"
+    },
+    {
+      "id": "wallet-context",
+      "status": "observation_only",
+      "requires": [
+        "persistent public-wallet baselines",
+        "account for undisclosed external hedges"
+      ],
+      "next": "Public activity is context, not known intent or whale identity"
+    },
+    {
+      "id": "sentiment-context",
+      "status": "observation_only",
+      "requires": [
+        "publication timestamps",
+        "incremental benefit over price-only controls"
+      ],
+      "next": "Fear/greed alone does not admit entries"
+    },
+    {
+      "id": "portfolio-expansion",
+      "status": "blocked_evidence",
+      "requires": [
+        "multiple independently reviewed strategies",
+        "aligned net daily results",
+        "liquidity/correlation/stress review"
+      ],
+      "next": "Execution remains BTC demo only"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "M1",
+      "name": "Operational reliability",
+      "state": "Foundation deployed",
+      "next": "Observe incidents; extend failure-duration metrics"
+    },
+    {
+      "id": "M2",
+      "name": "Market-data continuity",
+      "state": "Foundation deployed",
+      "next": "Measure coverage across future reconnects"
+    },
+    {
+      "id": "M3",
+      "name": "Order/account accounting",
+      "state": "Foundation deployed",
+      "next": "Resolve uncertain intents and unsupported movement schemas"
+    },
+    {
+      "id": "M4",
+      "name": "Execution simulator",
+      "state": "Offline foundation",
+      "next": "Collect bounded real traces; calibrate queues and model bracket/cancel races"
+    },
+    {
+      "id": "M5",
+      "name": "Research validation",
+      "state": "Offline foundation",
+      "next": "Commit a real protocol and collect untouched future observations"
+    },
+    {
+      "id": "M6",
+      "name": "Regime laboratory",
+      "state": "Frozen cohorts observing",
+      "next": "Review future evidence without changing v1"
+    },
+    {
+      "id": "M7",
+      "name": "Creative experiments",
+      "state": "Observers and prerequisite inventory",
+      "next": "Broad liquidation and executable hedge feeds remain unavailable"
+    },
+    {
+      "id": "M8",
+      "name": "Controlled demo promotion",
+      "state": "Evidence-gated",
+      "next": "Manual independent review; no automatic promotion"
+    },
+    {
+      "id": "M9",
+      "name": "Decision dashboard",
+      "state": "Incremental release deployed",
+      "next": "Operational, data, accounting and evidence readiness views"
+    },
+    {
+      "id": "M10",
+      "name": "Portfolio/capacity research",
+      "state": "Offline diagnostics; evidence-gated",
+      "next": "Multiple reviewed strategies and aligned net returns required"
+    }
+  ]
+}

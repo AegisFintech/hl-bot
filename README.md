@@ -117,3 +117,15 @@ The approved ten-milestone delivery plan is [docs/DEVELOPMENT_PLAN.md](docs/DEVE
 ### Prospective lifecycle and equity reconciliation — 2026-10-27
 
 Order requests now retain durable submission intent, exact returned order IDs and deduplicated exchange status events, including recovery brackets and emergency closes. Failed intent persistence blocks new exposure; it never blocks an emergency close/cancel. Uncertain outcomes remain unresolved rather than blindly resubmitted. An independent public testnet history collector and fixed prospective account baseline support an equity bridge across fills, USDC fees, funding, known cash movements and unrealized P&L. Missing coverage/unsupported movements remain explicit. The terminal shows unexplained residuals and request/event evidence. See [docs/ACCOUNTING.md](docs/ACCOUNTING.md). Baseline: **99 regressions**; no change to strategy sizing or persistent risk peak.
+
+### Offline research tools and evidence readiness — 2026-10-27
+
+The terminal now shows all ten development milestones and the hypothesis/prerequisite inventory from [docs/RESEARCH_REGISTRY.json](docs/RESEARCH_REGISTRY.json). Offline tools provide a conservative passive-entry/fixed-horizon simulation, chronological protocol/cohort review and aligned portfolio/capacity diagnostics:
+
+```bash
+python3 scripts/research_evaluate.py simulate docs/examples/simulation.json
+python3 scripts/research_evaluate.py review docs/examples/review.json
+python3 scripts/research_evaluate.py portfolio docs/examples/portfolio.json
+```
+
+Examples are synthetic formats, not market evidence. The simulator requires trade volume and explicit queue/latency assumptions; quotes alone cannot establish fills. It does not yet model full brackets/cancel races or calibrated live queues. Reviews preserve source separation, observation cutoffs, horizon embargo, declared trials and dependent-day uncertainty, and never auto-promote. Portfolio diagnostics never change allocation. Full contracts, limitations and pending work: [docs/VALIDATION.md](docs/VALIDATION.md) and [development plan](docs/DEVELOPMENT_PLAN.md). Validation baseline: **117 regressions**, compilation, Chromium desktop/mobile, all three CLI formats and live health. No sizing, risk-peak or real-fund changes.

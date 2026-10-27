@@ -31,7 +31,9 @@ $('table-search').addEventListener('input',renderTable);$('levels-toggle').addEv
 setInterval(()=>text('clock',new Date().toISOString().slice(11,19)+' UTC'),1000);refresh();setInterval(refresh,5000);
 
 function renderOperations(){
-    const o=data.operations||{},m=data.market_data||{},a=data.execution_audit||{},b=data.equity_bridge||{};
+    const o=data.operations||{},m=data.market_data||{},a=data.execution_audit||{},b=data.equity_bridge||{},d=data.development||{};
+    $('development-milestones').replaceChildren(...(d.milestones||[]).map(m=>row([m.id+' · '+m.name,m.state,m.next])));
+    $('development-hypotheses').replaceChildren(...(d.hypotheses||[]).map(h=>row([h.id,h.status,h.next])));
     text('bridge-status',(b.status||'unavailable').replaceAll('_',' ').toUpperCase());
     text('audit-unresolved',a.unresolved_submissions??'—');
     text('bridge-change',b.equity_change==null?'—':usd(b.equity_change));

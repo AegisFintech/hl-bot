@@ -1,0 +1,19 @@
+{
+  "label": "FORMAT EXAMPLE; NO VALIDATED STRATEGIES OR DAILY RETURNS",
+  "strategies": {
+    "trend": {
+      "evidence_status": "unvalidated",
+      "daily_returns": {}
+    },
+    "range": {
+      "evidence_status": "unvalidated",
+      "daily_returns": {}
+    }
+  },
+  "weights": {
+    "trend": 0.25,
+    "range": 0.25
+  },
+  "stress_scenarios": [],
+  "capacity": null
+}
