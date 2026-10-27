@@ -9,7 +9,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `fd104d14`
+- Built from commit: `04e361b9`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -71,8 +71,8 @@
   tests/test_storage_retention.py → src/research/journal.py
 - `CoverageTests` --uses--> `ResearchJournal`  [INFERRED]
   tests/test_research.py → src/research/journal.py
-- `RecoveryTests` --uses--> `TradingBot`  [INFERRED]
-  tests/test_recovery.py → src/bot.py
+- `ContinuityTests` --uses--> `Scalper`  [INFERRED]
+  tests/test_continuity.py → src/strategy/scalper.py
 
 ## Import Cycles
 - None detected.
@@ -159,7 +159,7 @@ Cohesion: 0.38
 Nodes (4): complete_trades(), Reconstruct flat-to-flat episodes only when exchange position continuity is…, fill(), TradeEpisodeTests
 
 ## Knowledge Gaps
-- **15 isolated node(s):** `researchNames`, `Flask Web Framework`, `Hyperliquid Python SDK`, `NumPy Numerical Computing Library`, `Pandas Data Analysis Library` (+10 more)
+- **15 isolated node(s):** `levelLines`, `options`, `researchNames`, `Flask Web Framework`, `Hyperliquid Python SDK` (+10 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 182 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **17 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 

@@ -129,3 +129,7 @@ python3 scripts/research_evaluate.py portfolio docs/examples/portfolio.json
 ```
 
 Examples are synthetic formats, not market evidence. The simulator requires trade volume and explicit queue/latency assumptions; quotes alone cannot establish fills. It does not yet model full brackets/cancel races or calibrated live queues. Reviews preserve source separation, observation cutoffs, horizon embargo, declared trials and dependent-day uncertainty, and never auto-promote. Portfolio diagnostics never change allocation. Full contracts, limitations and pending work: [docs/VALIDATION.md](docs/VALIDATION.md) and [development plan](docs/DEVELOPMENT_PLAN.md). Validation baseline: **117 regressions**, compilation, Chromium desktop/mobile, all three CLI formats and live health. No sizing, risk-peak or real-fund changes.
+
+## Local verification and delivery
+
+Builds, compilation and applicable tests run locally. GitHub CI is disabled. Each completed change set is committed and merged into `main`, then pushed with remote HEAD verification; changes made directly on `main` need no redundant merge. Major milestones also update documentation and rebuild Graphify.

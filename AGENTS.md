@@ -35,7 +35,7 @@ graphify cluster-only . --no-label --no-viz
 graphify export html
 ```
 
-`.graphifyignore` excludes credentials, runtime data and vendored scripts. Track graphify-out/graph.json, graph.html and GRAPH_REPORT.md explicitly; caches remain ignored. Confirm remote HEAD/CI after pushing. Full research definitions and operational limitations are in docs/RESEARCH.md; initial overhaul findings are in docs/OVERHAUL.md.
+`.graphifyignore` excludes credentials, runtime data and vendored scripts. Track graphify-out/graph.json, graph.html and GRAPH_REPORT.md explicitly; caches remain ignored. Run builds, compilation and applicable tests locally; do not run GitHub Actions/CI. Commit each completed change set and merge it into main (a commit already on main needs no redundant merge), then push and verify remote HEAD. Full research definitions and operational limitations are in docs/RESEARCH.md; initial overhaul findings are in docs/OVERHAUL.md.
 
 ## Experiment backend milestone — 2026-10-24
 
