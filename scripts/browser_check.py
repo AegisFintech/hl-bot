@@ -77,6 +77,17 @@ with sync_playwright() as p:
     page.locator('#quality details').last.locator('summary').click()
     assert '—' in page.locator('#quality-episodes').inner_text()
     assert page.locator('#quality-reasons img').count()==0
+    payload['status']['risk'].update(halted=False, execution_paused=True, pause_reason='Exchange maintenance', pause_until=time.time()+60)
+    payload['status']['halt_cleanup']='Confirmed flat; no orders'
+    page.wait_for_function("document.getElementById('engine').textContent === 'RECOVERING'",timeout=15000)
+    assert 'Automatic checks active' in page.locator('#notice').inner_text()
+    assert 'Confirmed flat; no orders' in page.locator('#notice').inner_text()
+    assert 'operator review required' not in page.locator('#notice').inner_text().lower()
+    payload['status']['risk'].update(halted=True, halt_reason='5% equity high-water drawdown limit')
+    page.wait_for_function("document.getElementById('engine').textContent === 'HALTED'",timeout=15000)
+    assert 'Operator review required' in page.locator('#notice').inner_text()
+    payload['status']['risk'].update(halted=False, execution_paused=False)
+    page.wait_for_function("document.getElementById('engine').textContent === 'RUNNING'",timeout=15000)
     page.unroute('**/api/terminal')
     payload['research']['status']='stale'
     page.route('**/api/terminal',lambda route:route.fulfill(status=200,content_type='application/json',body=json.dumps(payload)))

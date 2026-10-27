@@ -70,7 +70,7 @@ class PositionReconciler:
                     "size_mismatch" if not size_ok else "price_mismatch")
                 log.warning("TP/SL %s — replacing all orders", reason)
                 for o in coin_orders:
-                    self.client.cancel_order(self.coin, o["oid"])
+                    self._cancel_for_recovery(o["oid"])
                 self._place_recovery_tpsl(coin_pos[0], reduce_only)
                 return {"status": f"recovered_{reason}", "position": pos["szi"],
                         "entry": pos["entryPx"]}
@@ -80,7 +80,7 @@ class PositionReconciler:
             if entry_orders:
                 log.info("Cancelling %d stale entry orders", len(entry_orders))
                 for o in entry_orders:
-                    self.client.cancel_order(self.coin, o["oid"])
+                    self._cancel_for_recovery(o["oid"])
             return {"status": "healthy", "position": pos["szi"],
                     "entry": pos["entryPx"], "orders": len(reduce_only)}
 
@@ -90,7 +90,7 @@ class PositionReconciler:
             if entry_orders:
                 log.info("Cancelling %d orphaned entry orders", len(entry_orders))
                 for o in entry_orders:
-                    self.client.cancel_order(self.coin, o["oid"])
+                    self._cancel_for_recovery(o["oid"])
             self._place_recovery_tpsl(coin_pos[0], reduce_only)
             return {"status": "recovered", "position": pos["szi"],
                     "entry": pos["entryPx"]}
@@ -159,7 +159,7 @@ class PositionReconciler:
                     log.info("Periodic: skipping recovery — within grace period after entry fill")
                 else:
                     for o in [o for o in orders if o["coin"] == self.coin]:
-                        self.client.cancel_order(self.coin, o["oid"])
+                        self._cancel_for_recovery(o["oid"])
                     self._place_recovery_tpsl(coin_pos[0], reduce_only)
 
         elif actual == 0 and expected > 0:
@@ -171,6 +171,13 @@ class PositionReconciler:
                 self.client.cancel_all_orders(self.coin)
 
         return True
+
+    def _cancel_for_recovery(self, oid):
+        try:
+            return self.client.cancel_order(self.coin, oid)
+        except Exception:
+            self.risk.pause_execution('Protection cancellation could not be confirmed')
+            raise
 
     def _get_unrecorded_closing_fills(self, coin_fills: list) -> list:
         """Return fills that closed a position but weren't processed this session."""
@@ -241,6 +248,19 @@ class PositionReconciler:
         return bool(stops and targets)
 
     def _place_recovery_tpsl(self, position_data: dict, existing_orders=None):
+        # Cancellation and fills can change exposure after the original snapshot.
+        try:
+            live = [p for p in self.client.get_positions() if p['position']['coin'] == self.coin]
+            self.position_count = len(live)
+            if live:
+                self._submit_recovery_tpsl(live[0], existing_orders)
+        except Exception as exc:
+            self.risk.pause_execution('Protection recovery could not be verified: ' + type(exc).__name__)
+            log.exception('Recovery failed; cancel/flatten circuit breaker activated')
+
+    def _submit_recovery_tpsl(self, position_data: dict, existing_orders=None):
+        if self.risk.should_kill():
+            return
         pos = position_data["position"]
         entry = float(pos["entryPx"])
         szi = float(pos["szi"])
@@ -270,8 +290,8 @@ class PositionReconciler:
                 self.coin, exit_is_buy, size, tp, sl)
             statuses = result.get("response", {}).get("data", {}).get("statuses", [])
             log.info("Recovery TP/SL result: %s", statuses)
-            if result.get('status') != 'ok' or len(statuses) != 2 or any(isinstance(s, dict) and 'error' in s for s in statuses):
-                self.risk.halt('Protective order recovery failed')
+            if result.get('status') != 'ok' or len(statuses) != 2 or any(not isinstance(s, dict) or not isinstance(s.get('resting'), dict) or not s['resting'].get('oid') for s in statuses):
+                self.risk.pause_execution('Protective order recovery rejected: ' + str(statuses))
         except Exception as e:
-            self.risk.halt("Protective order recovery exception")
+            self.risk.pause_execution("Protective order recovery exception: " + type(e).__name__)
             log.error("Failed to place recovery TP/SL: %s", e, exc_info=True)

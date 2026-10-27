@@ -207,6 +207,7 @@ class TradingBot:
                                 len(unrecorded), rec.coin)
                     self._on_fill(unrecorded)
             except Exception as e:
+                self.risk_manager.pause_execution("Startup reconciliation failed: " + type(e).__name__)
                 log.error("Startup reconciliation failed for %s: %s", rec.coin, e, exc_info=True)
 
         total_positions = sum(r.position_count for r in self._reconcilers)
@@ -318,7 +319,28 @@ class TradingBot:
             self.account_snapshot = self.client.get_account_snapshot()
             self.risk_manager.update_equity(self.account_snapshot['equity'])
             self.ledger.sample_equity(self.risk_manager.state.current_equity, self.risk_manager.state.peak_equity)
+            # Three independent successful checks, at least 15s apart, while flat.
+            healthy = (flat and clear and all(0 <= self.client.bbo_age(c) <= 10 for c in self.coins)
+                       and self.account_snapshot['equity'] > 0)
+            now = time.time()
+            if not healthy:
+                self._recovery_checks = 0
+                self._recovery_check_at = 0
+            elif now - getattr(self, '_recovery_check_at', 0) >= 15:
+                self._recovery_checks = getattr(self, '_recovery_checks', 0) + 1
+                self._recovery_check_at = now
+            state = self.risk_manager.state
+            if (getattr(state, 'execution_paused', False) and not state.halted
+                    and getattr(self, '_recovery_checks', 0) >= 3):
+                if self.risk_manager.resume_execution():
+                    self._recovery_checks = 0
+                    for rec in self._reconcilers:
+                        rec.position_count = 0
+                    self.risk_manager.state.open_order_count = 0
+                    self.halt_cleanup_status = 'Operational recovery verified; execution resumed'
         except Exception:
+            self._recovery_checks = 0
+            self._recovery_check_at = 0
             self.halt_cleanup_status = 'Unable to confirm flat; retrying'
             log.exception('Emergency confirmation failed')
 

@@ -3,6 +3,7 @@ import logging
 import time
 import threading
 import math
+from decimal import Decimal, ROUND_DOWN
 from collections import defaultdict
 
 import eth_account
@@ -91,7 +92,10 @@ class HyperliquidClient:
 
     def round_size(self, coin: str, size: float) -> float:
         decimals = self.get_sz_decimals(coin)
-        return math.floor(size * 10**decimals) / 10**decimals
+        value = Decimal(str(size))
+        if not value.is_finite() or value < 0:
+            raise ValueError("Invalid order size")
+        return float(value.quantize(Decimal(1).scaleb(-decimals), rounding=ROUND_DOWN))
 
     def round_price(self, coin: str, price: float) -> float:
         tick = self.get_tick_size(coin)

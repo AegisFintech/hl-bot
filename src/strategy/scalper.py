@@ -374,11 +374,15 @@ class Scalper:
                  signal.side, signal.coin, size, signal.entry_price,
                  signal.tp_price, signal.sl_price, signal.signal_score, signal.sr_strength)
 
-        result = self.client.place_order_with_tpsl(
-            coin=signal.coin, is_buy=is_buy, size=size,
-            entry_price=signal.entry_price,
-            tp_price=signal.tp_price, sl_price=signal.sl_price, tif="Alo",
-        )
+        try:
+            result = self.client.place_order_with_tpsl(
+                coin=signal.coin, is_buy=is_buy, size=size,
+                entry_price=signal.entry_price,
+                tp_price=signal.tp_price, sl_price=signal.sl_price, tif="Alo",
+            )
+        except Exception:
+            self.risk.pause_execution("Order submission outcome unknown; verifying exposure")
+            raise
 
         log.info("Order result: %s", result)
         statuses = result.get("response", {}).get("data", {}).get("statuses", [])
@@ -387,7 +391,7 @@ class Scalper:
             log.warning("Order rejected: %s", statuses)
             entry_rejected = bool(statuses and isinstance(statuses[0], dict) and 'error' in statuses[0])
             if not entry_rejected:
-                self.risk.halt("Order bracket rejected or incomplete; operator review required")
+                self.risk.pause_execution("Order bracket rejected or incomplete; verifying exposure")
             self.diagnostics['reason'] = 'Post-only entry rejected' if entry_rejected else 'Incomplete protective bracket'
             self._recent_entries[signal.sr_level] = time.time()
             return None

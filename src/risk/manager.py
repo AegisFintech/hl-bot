@@ -23,6 +23,10 @@ class RiskState:
     equity_updated_at: float = 0.0
     halted: bool = False
     halt_reason: str = ''
+    execution_paused: bool = False
+    pause_reason: str = ''
+    pause_until: float = 0.0
+    recovery_count: int = 0
 
     @property
     def drawdown_pct(self):
@@ -66,6 +70,45 @@ class RiskManager:
             self.state.halt_reason = reason
             self._save()
 
+    def pause_execution(self, reason):
+        """Operational circuit breaker; never clears a durable risk halt."""
+        with self._lock:
+            self.state.execution_paused = True
+            self.state.pause_reason = reason
+            self.state.recovery_count += 1
+            self.state.pause_until = time.time() + min(1800, 60 * 2 ** min(self.state.recovery_count - 1, 5))
+            self._save()
+            log.error("Execution paused: %s; recovery delay %.0fs", reason, self.state.pause_until - time.time())
+
+    def resume_execution(self):
+        """Caller must verify flat/no orders and sustained fresh account/feed reads."""
+        with self._lock:
+            if (self.state.halted or not self.state.execution_paused
+                    or time.time() < self.state.pause_until
+                    or time.time() - self.state.equity_updated_at > 10
+                    or self.state.current_equity <= 0
+                    or self.state.drawdown_pct >= self.max_drawdown_pct):
+                return False
+            self.state.execution_paused = False
+            self.state.pause_reason = ''
+            self._save()
+            log.warning("Operational recovery verified; execution resumed; peak and risk halt preserved")
+            return True
+
+    def review_legacy_protection_halt(self):
+        """Explicit operator-reviewed migration, never called at startup or midnight."""
+        with self._lock:
+            if (not self.state.halted or self.state.halt_reason != 'Protective order recovery failed'
+                    or self.state.drawdown_pct >= self.max_drawdown_pct
+                    or time.time() - self.state.equity_updated_at > 10
+                    or self.state.current_equity <= 0):
+                raise ValueError('Legacy halt is not eligible for reviewed operational recovery')
+            self.pause_execution('Reviewed testnet upgrade rejection; verifying recovery')
+            self.state.halted = False
+            self.state.halt_reason = ''
+            self._save()
+            log.warning('Operator reviewed legacy protective-order halt; migrated to operational pause')
+
     def update_equity(self, equity):
         with self._lock:
             if not math.isfinite(equity) or equity < 0:
@@ -94,7 +137,7 @@ class RiskManager:
 
     def can_trade(self, signal):
         s = self.state
-        if s.halted or s.current_equity <= 0 or time.time() - s.equity_updated_at > 30:
+        if s.halted or s.execution_paused or s.current_equity <= 0 or time.time() - s.equity_updated_at > 30:
             return False
         if s.open_positions >= self.max_open_positions or s.open_order_count > 0:
             return False
@@ -134,7 +177,7 @@ class RiskManager:
             self._save()
 
     def should_kill(self):
-        return self.state.halted
+        return self.state.halted or self.state.execution_paused
 
     def get_state_dict(self):
         with self._lock:

@@ -9,6 +9,7 @@ class EmergencyTests(unittest.TestCase):
         b.client=Mock();b.client.cancel_all_orders.side_effect=[RuntimeError('network'),[]]
         b.client.get_positions.return_value=[];b.client.get_open_orders.return_value=[]
         b.client.get_account_snapshot.return_value={'equity':950}
+        b.client.bbo_age.return_value=1
         b.risk_manager=Mock();b.risk_manager.state=SimpleNamespace(current_equity=950,peak_equity=1000)
         b.ledger=Mock()
         with self.assertLogs('src.bot',level='ERROR'):
