@@ -14,6 +14,7 @@ from src.learning.quality import QualityAudit, candle_context
 from src.learning.funding import FundingSync
 from src.research.service import ResearchService
 from src.reconciler import PositionReconciler
+from src.operations import Operations
 from src.dashboard.app import set_bot_reference, run_dashboard
 
 log = logging.getLogger(__name__)
@@ -48,6 +49,9 @@ class TradingBot:
         self.ledger = FillLedger(Path(__file__).resolve().parents[1] / "data/ledger.sqlite")
         self.research = ResearchService(Path(__file__).resolve().parents[1] / "data/research.sqlite")
         self.quality = QualityAudit(Path(__file__).resolve().parents[1] / "data/quality.sqlite")
+        self.operations = Operations(Path(__file__).resolve().parents[1] / "data/operations.sqlite")
+        self._data_repair_requested = threading.Event()
+        self._data_thread = None
         self.funding_sync = None
         self._audit_thread = None
         self._audit_stop = threading.Event()
@@ -99,6 +103,8 @@ class TradingBot:
             raise RuntimeError("Only testnet trading is authorized")
         self._init_exchange()
         self._subscribe_feeds()
+        self._data_thread = threading.Thread(target=self._data_loop, name="candle-repair", daemon=True)
+        self._data_thread.start()
         self.research.start()
         first = self.ledger.performance().get('first_time') or int(time.time()*1000)
         self.funding_sync = FundingSync(self.quality.path, self.client.address, first)
@@ -239,13 +245,47 @@ class TradingBot:
                 log.exception('Observation-only quality audit failed')
             self._audit_stop.wait(1)
 
+    def _data_loop(self):
+        next_attempt = {}
+        failures = {}
+        while not self._audit_stop.is_set():
+            forced = self._data_repair_requested.is_set()
+            self._data_repair_requested.clear()
+            for coin in self.coins:
+                now = time.time()
+                health = self.client.candle_health(coin)
+                if now < next_attempt.get(coin, 0):
+                    continue
+                if not forced and health['eligible'] and now - health.get('last_repair_at', 0) < 300:
+                    continue
+                try:
+                    bars = self.client.get_candles(coin, '1m', 130 * 60000)
+                    if not bars:
+                        raise ValueError('Empty candle repair response')
+                    self.client.merge_candles(coin, bars, source='rest', requested_at=now)
+                    if not self.client.candle_health(coin)['eligible']:
+                        raise ValueError('Repair response still has incomplete closed history')
+                    failures[coin] = 0
+                    next_attempt[coin] = now + 30
+                except Exception as exc:
+                    failures[coin] = failures.get(coin, 0) + 1
+                    next_attempt[coin] = time.time() + min(300, 30 * 2 ** min(failures[coin] - 1, 4))
+                    with self.client._lock:
+                        self.client._candle_health.setdefault(f'{coin}_1m', {}).update(
+                            repair_error=type(exc).__name__, next_repair_at=next_attempt[coin])
+                    log.warning('Closed candle repair deferred [%s]: %s', coin, type(exc).__name__)
+            self._audit_stop.wait(5)
+
     def _subscribe_feeds(self):
         for c in self.coins:
             self.client.subscribe_bbo(c)
             self.client.subscribe_l2(c)
-            history = self.client.get_candles(c, '1m', 2000*60000)
-            with self.client._lock:
-                self.client._candles[f'{c}_1m'] = sorted(history, key=lambda b: int(b['t']))[-2000:]
+            requested_at = time.time()
+            try:
+                history = self.client.get_candles(c, '1m', 2000*60000)
+                self.client.merge_candles(c, history, source='rest', requested_at=requested_at)
+            except Exception:
+                log.warning('Initial candle history unavailable; background repair will retry')
             self.client.subscribe_candles(c, "1m")
             self.client.subscribe_trades(c)
         self.client.subscribe_fills(callback=self._on_fill)
@@ -283,10 +323,20 @@ class TradingBot:
         log.info("Entering main loop.")
 
         while self.running:
+            failure = ''
             try:
                 self._tick()
             except Exception as e:
+                failure = type(e).__name__
                 log.error("Tick error: %s", e, exc_info=True)
+            finally:
+                state = self.risk_manager.state
+                phase = 'halted' if state.halted else 'recovering' if state.execution_paused else 'error' if failure else 'running'
+                reason = state.halt_reason if state.halted else state.pause_reason if state.execution_paused else failure
+                try:
+                    self.operations.record(phase, reason)
+                except Exception:
+                    log.exception('Operational heartbeat could not be persisted')
             time.sleep(1)
 
     def _emergency_flatten(self):
@@ -569,7 +619,8 @@ class TradingBot:
                         break
 
     def _on_ws_reconnect(self):
-        log.info("WebSocket reconnected — backfilling missed fills")
+        self._data_repair_requested.set()
+        log.info("WebSocket reconnected — backfilling missed fills and scheduling candle repair")
         for rec in self._reconcilers:
             try:
                 missed = rec.backfill_missed_fills()

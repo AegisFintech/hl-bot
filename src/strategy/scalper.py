@@ -184,6 +184,10 @@ class Scalper:
 
     def scan_for_signals(self) -> list[TradeSignal]:
         now = time.time()
+        health = self.client.candle_health(self.coin)
+        if not health['eligible']:
+            self.diagnostics = {'reason': health['reason'], 'candidates': 0}
+            return []
         if now - self._last_sr_update > self._sr_update_interval:
             self.update_sr_levels()
 

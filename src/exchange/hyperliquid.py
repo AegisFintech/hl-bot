@@ -5,6 +5,7 @@ import threading
 import math
 from decimal import Decimal, ROUND_DOWN
 from collections import defaultdict
+from src.market.candles import merge_bars, coverage
 
 import eth_account
 from hyperliquid.info import Info
@@ -41,6 +42,7 @@ class HyperliquidClient:
         self._mid_cache: dict[str, tuple[float, float]] = {}
         self._abstraction = None
         self._bbo_times = {}
+        self._candle_health = {}
 
     def audit_urls(self) -> dict:
         info_url = self.info.base_url
@@ -314,6 +316,8 @@ class HyperliquidClient:
                     self._ws_info.ws_manager.stop()
                 except Exception:
                     pass
+            with self._lock:
+                self._bbo_times.clear()  # Old connection quotes cannot remain eligible.
             self._ws_info = Info(self.base_url, skip_ws=False)
             for sub, handler in self._ws_subscriptions:
                 self._ws_info.subscribe(dict(sub), handler)
@@ -366,16 +370,38 @@ class HyperliquidClient:
         self._ws_subscriptions.append((sub, handler))
         self._get_ws_info().subscribe(sub, handler)
 
+    def merge_candles(self, coin, incoming, interval='1m', source='ws', requested_at=None):
+        key = f'{coin}_{interval}'
+        if source == 'rest':
+            # A REST request must not overwrite a newer websocket forming bar.
+            cutoff = time.time() if requested_at is None else requested_at
+            incoming = [b for b in incoming if int(b.get('t', 0)) + 60000 <= cutoff * 1000]
+        with self._lock:
+            bars, rejected = merge_bars(self._candles.get(key, []), incoming)
+            self._candles[key] = bars
+            meta = self._candle_health.setdefault(key, {})
+            meta['rejected_updates'] = meta.get('rejected_updates', 0) + rejected
+            if rejected:
+                meta['integrity_error'] = 'Malformed candle update; waiting for repair'
+            elif source == 'rest':
+                meta['integrity_error'] = None
+                meta['last_repair_at'] = time.time()
+                meta['repair_error'] = None
+            meta['last_source'] = source
+
+    def candle_health(self, coin, interval='1m'):
+        key = f'{coin}_{interval}'
+        with self._lock:
+            result = coverage(self._candles.get(key, []), time.time())
+            result.update(self._candle_health.get(key, {}))
+        if result.get('integrity_error'):
+            result.update(eligible=False, reason=result['integrity_error'])
+        return result
+
     def subscribe_candles(self, coin: str, interval: str = "1m", callback=None):
         def handler(msg):
-            with self._lock:
-                key = f"{coin}_{interval}"
-                candle = msg["data"]
-                if self._candles[key] and self._candles[key][-1]["t"] == candle["t"]:
-                    self._candles[key][-1] = candle
-                else:
-                    self._candles[key].append(candle)
-                    self._candles[key] = self._candles[key][-1000:]
+            candle = msg['data']
+            self.merge_candles(coin, [candle], interval)
             if callback:
                 callback(candle)
         sub = {"type": "candle", "coin": coin, "interval": interval}

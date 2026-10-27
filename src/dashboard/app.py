@@ -209,6 +209,8 @@ def api_terminal():
         except Exception:
             log.exception('Quality audit unavailable')
             out['quality'] = {'status': 'unavailable'}
+        out['operations'] = bot.operations.summary()
+        out['market_data'] = bot.client.candle_health(bot.coin)
         out['equity'] = bot.ledger.equity()
         out['fills'] = bot.ledger.fills(200)
         candles = bot.client.get_cached_candles(bot.coin)

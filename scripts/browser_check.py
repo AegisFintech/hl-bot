@@ -24,6 +24,8 @@ with sync_playwright() as p:
     page.goto('http://127.0.0.1:8080',wait_until='networkidle')
     page.wait_for_function("document.getElementById('equity').textContent !== '—'",timeout=20000)
     page.wait_for_function("document.getElementById('research-health').textContent.includes('MAINNET')",timeout=20000)
+    assert page.locator('#operations').is_visible()
+    page.wait_for_function("document.getElementById('ops-coverage').textContent.includes('60 / 60')",timeout=20000)
     assert page.locator('#research').is_visible()
     assert 'OBSERVATION ONLY' in page.locator('#research').inner_text()
     assert 'Mainnet public BTC data' in page.locator('#research').inner_text()
@@ -87,7 +89,10 @@ with sync_playwright() as p:
     page.wait_for_function("document.getElementById('engine').textContent === 'HALTED'",timeout=15000)
     assert 'Operator review required' in page.locator('#notice').inner_text()
     payload['status']['risk'].update(halted=False, execution_paused=False)
+    payload['operations']['responsive']=False
+    payload['market_data']['eligible']=False
     page.wait_for_function("document.getElementById('engine').textContent === 'RUNNING'",timeout=15000)
+    assert 'DEGRADED' in page.locator('#ops-status').inner_text()
     page.unroute('**/api/terminal')
     payload['research']['status']='stale'
     page.route('**/api/terminal',lambda route:route.fulfill(status=200,content_type='application/json',body=json.dumps(payload)))
@@ -99,6 +104,7 @@ with sync_playwright() as p:
     page.route('**/api/terminal',lambda route:route.fulfill(status=503,body='offline'))
     page.wait_for_function("document.getElementById('connection').textContent.includes('Disconnected')",timeout=20000)
     assert 'stale' in page.locator('#notice').inner_text()
+    assert 'DISCONNECTED' in page.locator('#ops-status').inner_text()
     page.wait_for_function("document.getElementById('quality-status').textContent.includes('STALE')",timeout=10000)
     assert not errors,errors
     print(json.dumps({'browser':'Chromium','desktop':'1512x1100','mobile':'390x844','checks':['live data','candlestick and equity canvases','account tabs','search','timeframe','level toggle','fit view','CSV download','no horizontal page overflow','offline stale notice','mainnet research separation','depth band controls','outcome horizon controls','liquidity canvas','experiment catalog and prerequisites','4h horizon','complete trade accounting','testnet quality attribution and horizon controls','quality outcome fixtures and missing funding','safe text rendering','quality stale handling','stale research suppresses directional score and divergence'],'page_errors':errors},indent=2))
