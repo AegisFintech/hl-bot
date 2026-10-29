@@ -1,4 +1,5 @@
 import logging
+import time
 from pathlib import Path
 from src.logging_setup import file_handler
 
@@ -15,30 +16,35 @@ logging.basicConfig(
 log = logging.getLogger("hl-bot")
 
 
+def connect(delay=5):
+    """The exchange being briefly unreachable must not crash-loop the service."""
+    while True:
+        try:
+            return HyperliquidClient(
+                master_account=config.HL_MASTER_ACCOUNT,
+                api_private_key=config.HL_API_PRIVATE_KEY,
+                testnet=config.HL_TESTNET,
+            )
+        except ValueError:
+            raise  # Malformed key or address: retrying cannot help.
+        except Exception as exc:
+            log.error("Exchange client unavailable (%s); retrying in %ds", exc, delay)
+            time.sleep(delay)
+            delay = min(delay * 2, 300)
+
+
 def main():
-    log.info("HL-Bot starting — %s on %s", config.SYMBOLS,
-             "testnet" if config.HL_TESTNET else "MAINNET")
-
-    client = HyperliquidClient(
-        master_account=config.HL_MASTER_ACCOUNT,
-        api_private_key=config.HL_API_PRIVATE_KEY,
-        testnet=config.HL_TESTNET,
-    )
-
+    settings = config.SETTINGS.validate()
+    log.info("HL-Bot starting: %s %s on %s bars for %s (%s)", settings.strategy, settings.strategy_params or "",
+             settings.interval, settings.coins, "testnet" if config.HL_TESTNET else "MAINNET")
+    if not config.HL_TESTNET:
+        raise SystemExit("Only testnet trading is authorized; set HL_TESTNET=true")
     bot = TradingBot(
-        client=client,
-        coins=config.SYMBOLS,
-        tp_pips=config.TP_PIPS,
-        sl_pips=config.SL_PIPS,
-        sr_lookback=config.SR_LOOKBACK,
-        order_size_usd=config.ORDER_SIZE_USD,
-        dashboard_port=config.DASHBOARD_PORT,
+        client=connect(),
+        settings=settings,
         trades_file=config.TRADES_FILE,
         performance_file=config.PERFORMANCE_FILE,
-        auto_transfer_spot=config.AUTO_TRANSFER_SPOT,
-        proximity_pct=config.PROXIMITY_PCT,
     )
-
     bot.start()
 
 

@@ -1,0 +1,18 @@
+# Reference unit; adjust paths to the host checkout and virtualenv, then:
+#   cp deploy/hl-bot.service /etc/systemd/system/ && systemctl daemon-reload && systemctl enable --now hl-bot
+[Unit]
+Description=Aegis HL-Bot (Hyperliquid testnet)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+WorkingDirectory=/root/hl-bot
+ExecStart=/root/hl-bot/.venv/bin/python3 main.py
+# Exchange-side stop orders keep positions protected while the process restarts.
+Restart=always
+RestartSec=10
+KillSignal=SIGINT
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target

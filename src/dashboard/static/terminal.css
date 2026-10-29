@@ -13,3 +13,4 @@
 .quality-panel .panel-heading { flex-wrap: wrap; gap: 12px; }
 .quality-panel select { background: #101720; color: #c9d4e2; border: 1px solid #263243; padding: 8px; border-radius: 6px; }
 .quality-panel .scope { overflow-wrap: anywhere; }
+.market-states .detail-row b{max-width:62%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right}

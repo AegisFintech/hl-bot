@@ -268,9 +268,9 @@ class QualityAudit:
 
     @staticmethod
     def order_ids(result):
-        statuses = (
-            (result or {}).get("response", {}).get("data", {}).get("statuses", [])
-        )
+        response = result.get("response") if isinstance(result, dict) else None
+        data = response.get("data") if isinstance(response, dict) else None
+        statuses = data.get("statuses", []) if isinstance(data, dict) else []
         ids = []
         for status in statuses:
             value = (
@@ -283,9 +283,21 @@ class QualityAudit:
 
     def summary(self, ledger_fills, order_links=()):
         with self.connect() as db:
+            # Only decisions holding exchange order IDs can join fills; the rest are
+            # counted, and the latest few shown, without loading the whole history.
             decisions = [
-                dict(r) for r in db.execute("SELECT * FROM decisions ORDER BY time")
+                dict(r)
+                for r in db.execute(
+                    "SELECT * FROM decisions WHERE result LIKE '%\"oid\"%' ORDER BY time"
+                )
             ]
+            decision_count = db.execute("SELECT COUNT(*) FROM decisions").fetchone()[0]
+            latest = [
+                dict(r)
+                for r in db.execute(
+                    "SELECT * FROM decisions ORDER BY time DESC LIMIT 10"
+                )
+            ][::-1]
             marks = [dict(r) for r in db.execute("SELECT * FROM fill_marks")]
             fill_rows = {
                 r["id"]: dict(r) for r in db.execute("SELECT * FROM audit_fills")
@@ -503,7 +515,7 @@ class QualityAudit:
             version=VERSION,
             network="testnet",
             started_at=started,
-            decisions=len(decisions),
+            decisions=decision_count,
             admitted=admitted,
             parents_with_any_fill=filled_parents,
             groups=list(grouped.values()),
@@ -517,11 +529,11 @@ class QualityAudit:
             recent_decisions=[
                 dict(
                     time=d["time"],
-                    reason=d["result"].get("reason", "Result unavailable"),
-                    regime=(d["raw"].get("context") or {}).get("regime", "unknown"),
-                    side=d["raw"]["signal"]["side"],
+                    reason=(json.loads(d["result"]) if d["result"] else {}).get("reason", "Result unavailable"),
+                    regime=(json.loads(d["raw"]).get("context") or {}).get("regime", "unknown"),
+                    side=json.loads(d["raw"]).get("signal", {}).get("side", "unknown"),
                 )
-                for d in decisions[-10:]
+                for d in latest
             ],
             scope="Prospective testnet audit. Historical setup/regime/exit attribution remains unknown. Order-ID joins only. Fill markouts are signed mid vs fill price, not P&L; entry and exit fills separated. Partial fills are correlated. Episode net excludes funding; separate net-after-funding requires complete synchronized coverage. Funding uses [open,close) timestamps; same-millisecond fill/funding ordering is unresolved. Decision-mid cost includes price movement during queue wait; it is not pure slippage. Challenger quotes assume 13bps round-trip fees/slippage plus quoted spread, funding omitted; not passive fills. Timestamps use local websocket receipt, not guaranteed exchange event ordering. No promotion or fitting.",
         )

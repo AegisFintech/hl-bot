@@ -54,7 +54,7 @@ def print_header():
     status = bot_status()
     status_icon = "RUNNING" if status == "active" else f"DOWN ({status})"
     print(f"{'='*60}")
-    print(f"  HL-Bot Performance Monitor")
+    print("  HL-Bot Performance Monitor")
     print(f"  Status: {status_icon}  |  {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}")
     print(f"{'='*60}")
 
@@ -139,7 +139,7 @@ def print_signal_stats():
         if "Fill:" in line or "fill" in line.lower() and "filled" in line.lower():
             fills += 1
 
-    print(f"\n  SIGNAL ANALYSIS (last ~2000 log lines)")
+    print("\n  SIGNAL ANALYSIS (last ~2000 log lines)")
     print(f"  {'─'*40}")
     print(f"  Trend readings: up={trends['up']}  down={trends['down']}  neutral={trends['neutral']}")
     print(f"  Orders placed: {signals_placed}")

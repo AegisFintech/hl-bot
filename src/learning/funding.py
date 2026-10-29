@@ -2,10 +2,13 @@
 
 import json
 import math
+import logging
 import threading
 import time
 import requests
 from src.storage import transaction
+
+log = logging.getLogger(__name__)
 
 
 class FundingSync:
@@ -93,12 +96,18 @@ class FundingSync:
                         through = db.execute(
                             "SELECT through_ms FROM funding_state WHERE id=1"
                         ).fetchone()[0]
-                    delay = 1 if through < time.time() * 1000 - 60000 else 300
+                    # Catch-up pages are spaced so userFunding (weight 20+) stays well
+                    # under the shared 1200/minute request budget.
+                    delay = 5 if through < time.time() * 1000 - 60000 else 300
                 except Exception as exc:
-                    with transaction(self.path) as db:
-                        db.execute(
-                            "UPDATE funding_state SET error=? WHERE id=1",
-                            (type(exc).__name__,),
-                        )
+                    log.warning("Funding audit step failed: %s", exc)
+                    try:
+                        with transaction(self.path) as db:
+                            db.execute(
+                                "UPDATE funding_state SET error=? WHERE id=1",
+                                (type(exc).__name__,),
+                            )
+                    except Exception:
+                        log.exception("Funding audit error state not persisted")
                     delay = 60
                 self.stop_event.wait(delay)

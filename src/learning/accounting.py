@@ -2,12 +2,15 @@
 
 import hashlib
 import json
+import logging
 import math
 import threading
 import time
 from pathlib import Path
 import requests
 from src.storage import transaction
+
+log = logging.getLogger(__name__)
 
 
 class AccountAudit:
@@ -253,11 +256,13 @@ class AccountAudit:
             while not self.stop_event.is_set():
                 try:
                     self.step(post, time.time())
-                    delay = 60
                 except Exception as exc:
-                    with transaction(self.path) as db:
-                        db.execute(
-                            "UPDATE account_coverage SET error=?", (type(exc).__name__,)
-                        )
-                    delay = 60
-                self.stop_event.wait(delay)
+                    log.warning("Account audit step failed: %s", exc)
+                    try:
+                        with transaction(self.path) as db:
+                            db.execute(
+                                "UPDATE account_coverage SET error=?", (type(exc).__name__,)
+                            )
+                    except Exception:
+                        log.exception("Account audit error state not persisted")
+                self.stop_event.wait(60)

@@ -31,13 +31,20 @@ class ExecutionJournal:
         return ident
 
     def finish(self, ident, coin, result, roles):
-        statuses = (
-            (result or {}).get("response", {}).get("data", {}).get("statuses", [])
-        )
+        # Account-level rejections arrive as {"status": "err", "response": "<message>"}.
+        response = result.get("response") if isinstance(result, dict) else None
+        data = response.get("data") if isinstance(response, dict) else None
+        statuses = data.get("statuses", []) if isinstance(data, dict) else []
         with transaction(self.path) as db:
             db.execute(
-                "UPDATE submissions SET result=? WHERE id=?",
-                (json.dumps(result), ident),
+                "UPDATE submissions SET result=?,error=? WHERE id=?",
+                (
+                    json.dumps(result),
+                    str(response)[:500]
+                    if isinstance(result, dict) and result.get("status") == "err"
+                    else None,
+                    ident,
+                ),
             )
             for role, status in zip(roles, statuses):
                 if not isinstance(status, dict):

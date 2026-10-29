@@ -1,6 +1,8 @@
 # Systematic trading development plan
 
-Approved 2026-10-27. Execution is testnet only; mainnet research is public and observation-only. No real-fund deployment is included. The 10% daily aspiration is not a sizing input or acceptance criterion. Preserve the persistent 5% equity high-water halt, private evidence, frozen quality-v1 definitions and negative replay diagnostics.
+Approved 2026-10-27. Execution is testnet only; mainnet research is public and observation-only. No real-fund deployment is included. The 10% daily aspiration is not a sizing input or acceptance criterion. Preserve private evidence, frozen quality-v1 definitions and negative replay diagnostics.
+
+**Operator decision 2026-10-29:** the 1m scalper is replaced by a closed-bar strategy engine selected by out-of-sample backtests (docs/STRATEGY.md); execution may span several coins at up to ~1% risk per trade; the permanent 5% halt becomes a drawdown breaker that flattens, cools down (12h default), re-bases the peak and resumes. This supersedes the M8 evidence gate and M10 BTC-only constraint for the testnet demo account. Research output is printed for review and never applied automatically.
 
 ## Delivery sequence and acceptance
 
