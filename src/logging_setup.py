@@ -1,6 +1,5 @@
 """File logs reopen after external rotation; operational stdout stays in journald."""
 
-import logging
 from logging.handlers import WatchedFileHandler
 from pathlib import Path
 

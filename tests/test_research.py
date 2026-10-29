@@ -190,3 +190,26 @@ class FailureSuppressionTests(unittest.TestCase):
             with patch('time.time', return_value=1001):
                 result = service.snapshot()
             self.assertNotIn('divergence', result)
+
+
+class JournalScanTests(unittest.TestCase):
+    def test_first_mark_sweeps_history_then_scans_only_open_horizons(self):
+        import tempfile
+        from pathlib import Path
+        from src.research.journal import ResearchJournal, HORIZONS
+        with tempfile.TemporaryDirectory() as d:
+            journal = ResearchJournal(Path(d) / 'research.sqlite')
+            snap = dict(sampled_at=1_000_000.0, bid=99.0, ask=101.0, mid=100.0)
+            journal.signal('old', 1, dict(snap, sampled_at=1_000.0), 'stale signal')
+            journal.mark(snap)
+            with journal.connect() as db:
+                statuses = {r[0] for r in db.execute("SELECT status FROM outcomes")}
+            self.assertEqual(statuses, {'missed'})
+            journal.signal('fresh', 1, dict(snap, sampled_at=snap['sampled_at'] - 5), 'fresh signal')
+            later = dict(snap, sampled_at=snap['sampled_at'] + 10)
+            journal.mark(later)
+            with journal.connect() as db:
+                fresh = db.execute("SELECT COUNT(*) FROM outcomes o JOIN signals s ON s.id=o.signal_id "
+                                   "WHERE s.kind='fresh' AND o.status='complete'").fetchone()[0]
+            self.assertEqual(fresh, 1)
+            self.assertGreater(max(HORIZONS), 10)

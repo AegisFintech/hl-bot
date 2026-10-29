@@ -8,9 +8,10 @@ This is an actively running Hyperliquid **testnet** bot. User authorizes review,
 
 - Never expose or commit .env credentials. Runtime account/research data and screenshots remain ignored under data/ and artifacts/.
 - Preserve unrelated user changes, including the existing CLAUDE.md deletion.
-- Enforce persistent 5% account equity high-water drawdown halt, including unrealized losses. Never reset peak or unlock a halt at midnight/restart. Cancel orders, attempt closes even when cancellation fails, and verify/retry. Gaps/outages can exceed a trigger threshold.
-- Risk baseline is the first trustworthy upgrade snapshot, not an invented historical peak. Do not delete risk state to resume trading.
-- Target 10% daily is unverified. Prior replay is negative; do not size from this target, claim profitability or introduce real capital.
+- Enforce the equity drawdown breaker (default 5% from the peak, including unrealized losses). On a trip cancel orders, attempt closes even when cancellation fails, and verify/retry. Operator decision 2026-10-29: after the cooldown (default 12h) and exchange-confirmed flat exposure with fresh equity, the peak is re-based and trading resumes automatically; every trip/reset is recorded in risk-state `events`. Restart or midnight never shortens a cooldown. Gaps/outages can exceed a trigger threshold.
+- Do not delete risk state to resume trading; an unreadable file is preserved as `risk_state.corrupt-*` and starts a cooldown.
+- Operational pauses block new entries but keep protected positions; every open position must carry an exchange stop, and a position that cannot be protected is closed.
+- Target 10% daily is unverified. Do not size from this target, claim profitability or introduce real capital. Strategy settings come from out-of-sample research output that a person reviews; research never applies settings itself.
 - Keep unvalidated runtime parameter fitting disabled. Preserve docs/replay-initial-diagnostic.json and docs/replay-results.json.
 - `src/research` must never receive keys, import the trading client or submit orders. Promotion requires separate evidence and implementation; it is never automatic.
 - Never conflate mainnet research with testnet charts/account metrics, large prints with known whale identity, sampled depth with the complete book, or watched-wallet liquidation events with a global feed.
@@ -18,7 +19,7 @@ This is an actively running Hyperliquid **testnet** bot. User authorizes review,
 
 ## Verification
 
-- `python3 -m unittest discover -s tests -v` — current baseline **117** regression tests.
+- `python3 -m unittest discover -s tests -v` — current baseline **177** regression tests.
 - `python3 -m compileall -q src scripts main.py config.py`.
 - `python3 scripts/healthcheck.py` — local execution health; nonzero on halt/stale/unavailable state.
 - Browser: install requirements-dev.txt and Chromium (`python3 -m playwright install --with-deps chromium`), run demo service, then `python3 scripts/browser_check.py`. It validates desktop/mobile, existing terminal controls, research band/horizon controls, and stale/disconnected handling. Screenshots are private under artifacts/.
@@ -70,3 +71,7 @@ Baseline **99 regressions**. Preserve `data/execution.sqlite` intent/results/eve
 ## Offline research and readiness milestone — 2026-10-27
 
 Baseline **117 regressions**. Offline validation has no network/signing/trading pathway. Never describe docs/examples synthetic outputs as market results. Passive-horizon-v1 is not a full TP/SL strategy simulator; queue/latency/participation/funding are supplied assumptions, and missing paths suppress profit results. Sparse markouts cannot substitute for real execution traces. Protocol changes require new hashes/versions and untouched future cohorts. Day bootstrap, declared trial adjustment and planning sample thresholds are limited review aids, not proof of independence/edge. Mixed actual/quote/simulated cohorts must be rejected. All review and portfolio outputs prohibit automatic promotion/allocation; M8/M10 remain evidence-gated. README/plan/registry/dashboard statuses must distinguish foundations from completion. Preserve final pre-submission candle and quote rechecks after slow account reads.
+
+## Strategy engine overhaul — 2026-10-29
+
+Baseline **177 regressions**. The 1m scalper is retired from live trading (kept for preserved replays); `src/strategy/engine.py` runs a closed-bar strategy from `src/strategy/library.py` across `TRADE_COINS`, and `src/executor.py` enters with bounded IOC orders and keeps exactly one reduce-only stop per position. Backtester and live share `decide()` and `position_size()`; keep them shared. Strategy research (`scripts/strategy_research.py`) selects on in-sample data only, reports all out-of-sample results and prints settings for human review. Mainnet orders remain unauthorized. The dashboard must never call the exchange directly; use the bot's cached snapshots. Info reads go through the client's weight budget; never retry order submissions blindly.

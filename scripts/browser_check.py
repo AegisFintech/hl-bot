@@ -96,9 +96,11 @@ with sync_playwright() as p:
     assert 'Automatic checks active' in page.locator('#notice').inner_text()
     assert 'Confirmed flat; no orders' in page.locator('#notice').inner_text()
     assert 'operator review required' not in page.locator('#notice').inner_text().lower()
-    payload['status']['risk'].update(halted=True, halt_reason='5% equity high-water drawdown limit')
+    payload['status']['risk'].update(halted=True, halt_reason='5% equity drawdown from peak 1000.00',
+                                     cooldown_until=time.time()+3600)
     page.wait_for_function("document.getElementById('engine').textContent === 'HALTED'",timeout=15000)
-    assert 'Operator review required' in page.locator('#notice').inner_text()
+    assert 'DRAWDOWN BREAKER' in page.locator('#notice').inner_text()
+    assert 'resumes automatically' in page.locator('#notice').inner_text()
     payload['status']['risk'].update(halted=False, execution_paused=False)
     payload['operations']['responsive']=False
     payload['market_data']['eligible']=False

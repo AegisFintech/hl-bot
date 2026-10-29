@@ -186,3 +186,20 @@ class AccountAuditTests(unittest.TestCase):
         self.assertEqual(report["recent"][0]["exit_reason"], "emergency_close_order")
         self.assertEqual(report["recent"][0]["regime"], "unknown")
         self.assertEqual(report["execution"]["n"], 0)
+
+
+class AccountLevelRejectionTests(unittest.TestCase):
+    def test_string_error_response_is_recorded_not_raised(self):
+        import tempfile
+        from pathlib import Path
+        from src.learning.execution import ExecutionJournal
+        from src.learning.quality import QualityAudit
+        with tempfile.TemporaryDirectory() as d:
+            journal = ExecutionJournal(Path(d) / 'execution.sqlite')
+            ident = journal.begin('ioc_entry', 'BTC', {})
+            journal.finish(ident, 'BTC', {'status': 'err', 'response': 'User or API Wallet does not exist.'}, ('entry',))
+            summary = journal.summary()
+            self.assertEqual(summary['unresolved_submissions'], 0)
+            self.assertIn('API Wallet', summary['recent'][0]['outcome'])
+        self.assertEqual(QualityAudit.order_ids({'status': 'err', 'response': 'rejected'}), [])
+        self.assertEqual(QualityAudit.order_ids(None), [])

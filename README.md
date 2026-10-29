@@ -1,15 +1,15 @@
 # Aegis / HL-Bot
 
-Hyperliquid testnet trading engine and professional monitoring terminal. Runs on existing demo funds only. The trading strategy is **experimental and not proven profitable**; the requested 10% daily return remains an unverified research target.
+Hyperliquid **testnet** trading engine and monitoring terminal. Runs on demo funds only; no mainnet orders. Strategies are selected by fee-inclusive out-of-sample backtests, which are simulations, not a profit guarantee. The 10% daily figure remains an unverified aspiration and is not a sizing input.
 
-## What changed
+## What it does (2026-10-29 overhaul)
 
-- Persistent **5% account-equity high-water drawdown halt**, including unrealized P&L. Cancel, flatten and verify in a retry loop; keep the dashboard alive. Midnight and restart never reset the peak or release the halt. Market gaps/outages can exceed a trigger threshold.
-- Account-mode-aware equity: confirmed unified-account USDC total plus unrealized P&L, with available margin kept separate. Peak tracking starts from the upgrade baseline because the previous bot did not persist a reliable account peak.
-- Closed-candle S/R trend pullbacks, rejection confirmation, ATR-based stops and targets that explicitly budget fees, spread and slippage. Post-only entries, reduce-only stop-market exits, five-minute resting-entry expiration, and stale-data admission checks.
-- Position size capped at $100 notional and 20% of equity, with estimated risk at most 0.25% of equity per trade and a reservation against remaining drawdown budget. Daily loss gate 2%, one position, 30 entry submissions per UTC day. No martingale or unvalidated runtime parameter fitting.
-- Durable SQLite exchange-fill ledger with actual entry/exit fees and persistent equity samples. Legacy trade records remain available as **gross**, separate from net fill accounting. Funding is excluded from realized ledger analytics and clearly labeled; account equity reflects funding effects.
-- Responsive Aegis terminal: candlestick/volume chart, 1m/5m/15m views, S/R overlays, order book, recent trades, account/risk summary, positions/orders/searchable fill journal, equity/drawdown charts, cost analytics, strategy diagnostics and CSV export. Explicit stale/disconnected states; local frontend assets.
+- **Closed-bar strategy engine** (`STRATEGY`, default Donchian 20/10 breakout on 1h bars across BTC, ETH and SOL). Four pre-declared strategy families share one decision path between live trading and the backtester. See [docs/STRATEGY.md](docs/STRATEGY.md).
+- **Always protected execution:** marketable IOC entries; one reduce-only stop-market order per position sized to the actual fill; stops move place-then-cancel and only tighten; exits close before cancelling stops. A position whose stop cannot be placed is closed.
+- **Risk:** stop-out loses `RISK_PER_TRADE_PCT` of equity (default 0.5%, max 2%), per-position and gross leverage caps, `MAX_POSITIONS`, optional daily loss gate. A **drawdown breaker** flattens at `DRAWDOWN_LIMIT_PCT` (5%) from the peak, waits `BREAKER_COOLDOWN_HOURS` (12h), re-bases the peak and resumes automatically (operator decision 2026-10-29).
+- **Operational resilience:** startup retries instead of exiting; operational pauses keep protected positions and resume after three healthy checks with decaying backoff; websocket watchdog reconnects silent streams; rate-limited, retrying info reads; the dashboard serves cached snapshots and never calls the exchange.
+- **Visibility:** every bar-close decision records a per-coin reason (signal, blocking admission reason, unfilled entry, protection result) in the terminal, `/api/strategy` and the healthcheck.
+- Durable fill ledger, execution journal, quality audit, equity bridge and the isolated mainnet research observer are retained.
 
 ## Run
 
@@ -27,54 +27,70 @@ python3 main.py
 | `HL_MASTER_ACCOUNT` | Master wallet address holding demo funds |
 | `HL_API_PRIVATE_KEY` | Authorized API wallet signing key; never commit |
 | `HL_TESTNET` | Must be `true`; application refuses mainnet startup |
-| `AUTO_TRANSFER_SPOT` | Defaults false; transfers are not required for unified accounts |
+| `STRATEGY`, `STRATEGY_PARAMS`, `STRATEGY_INTERVAL`, `TRADE_COINS` | Strategy family, JSON parameters, bar interval, markets |
+| `RISK_PER_TRADE_PCT`, `MAX_POSITIONS`, `MAX_LEVERAGE_PER_POSITION`, `MAX_GROSS_LEVERAGE` | Sizing and exposure caps |
+| `DRAWDOWN_LIMIT_PCT`, `BREAKER_COOLDOWN_HOURS`, `BREAKER_AUTO_RESET` | Drawdown breaker |
+| `DAILY_LOSS_LIMIT_PCT`, `MAX_DAILY_ENTRIES`, `ENTRY_SLIPPAGE_PCT`, `STOP_SLIPPAGE_PCT` | Optional gates and execution bounds |
 
-Dashboard: `http://localhost:8080`. On this host the existing service is managed with `systemctl status/restart/stop hl-bot`. The terminal is read-only. Put authentication at the deployment boundary if exposing account information publicly.
+All settings and defaults are in `.env.example`. Dashboard: `http://localhost:8080`. The service is managed with `systemctl status/restart/stop hl-bot`; `deploy/hl-bot.service` is a reference unit with `Restart=always`. The terminal is read-only. Put authentication at the deployment boundary if exposing account information publicly.
 
-## Verification and research
+## Strategy research
+
+```bash
+python3 scripts/fetch_history.py --source binance --coins BTC,ETH,SOL --interval 1h --since 2021-01 --funding
+python3 scripts/fetch_history.py --source binance --coins BTC,ETH,SOL --interval 4h --since 2021-01
+python3 scripts/strategy_research.py --source binance --coins BTC,ETH,SOL --intervals 1h,4h
+python3 scripts/account_history.py 0xYourMasterWallet --network testnet
+```
+
+The research script ranks pre-declared candidates on in-sample data only, sizes risk against the breaker, reports every candidate out of sample with a deflated Sharpe, writes `docs/strategy-research.json` and prints suggested `.env` lines. Nothing is applied automatically. **Status:** not yet run on real history (the development sandbox had no network access); the shipped default is a conventional starting point, not a selected result.
+
+## Verification
 
 ```bash
 python3 -m unittest discover -s tests -v
+python3 -m compileall -q src scripts main.py config.py
 python3 scripts/healthcheck.py
-pip install -r requirements-dev.txt
-python3 -m playwright install --with-deps chromium
+pip install -r requirements-dev.txt && python3 -m playwright install --with-deps chromium
 python3 scripts/browser_check.py
-python3 scripts/replay.py --fetch
-python3 scripts/monitor.py
-python3 scripts/snapshot_perf.py
 ```
 
-Twenty-one regressions cover risk persistence/exact thresholds, stale/invalid equity, cost accounting, sizing, stop payloads, recovery, dashboard responses/CSV and conservative replay behavior. Real Chromium checks cover desktop/mobile, charts, tabs, filters, chart controls, CSV and offline handling. Browser screenshots are private under `artifacts/`.
-
-[Review and overhaul plan](docs/OVERHAUL.md) contains findings and primary research sources. [Replay results](docs/replay-results.json) use 5,000 BTC 1m testnet bars, fixed parameters, actual fee rates, modeled adverse slippage and funding stress. Results do **not** establish profitability. The initial no-trade diagnostic is preserved; after fixing cost geometry this is not a pristine holdout. No real funds are authorized. Proposed promotion requires 30 days and at least 100 forward complete trades across regimes, positive net expectancy including actual funding, profit factor above 1.2 and drawdown below 5%.
+177 regressions cover strategy decisions and causal indicators, the live engine (bar validation, persistence, adoption, catch-up), backtester execution conventions, sizing parity, protected entries/exits/stop moves, breaker trip/cooldown/re-base, operational recovery, startup retries, exchange price/lot rules, request retries, websocket replay/watchdog, dashboard snapshot isolation and the earlier accounting/research/quality suites.
 
 ## Risk operations
 
-`data/risk_state.json` contains the persistent peak, daily counters and latched halt. Never delete it or reset the peak to restart trading. A halt requires operator investigation; there is deliberately no automatic or dashboard reset. Check `/api/terminal`, exchange positions/orders and logs to confirm flattening. Keep backups of private `data/ledger.sqlite`, risk state and existing trade history. Healthcheck returns nonzero for halted, disconnected or stale operation.
+`data/risk_state.json` holds the peak, daily counters, breaker/pause state and a bounded `events` audit (trips, resets, migrations). Do not delete it; the breaker resumes on its own after the cooldown once flat. `data/strategy_state.json` holds per-coin position metadata (stop, best price, bars held); exchange positions always win over it. Healthcheck returns nonzero while the breaker is cooling down, during operational recovery, at startup or with stale data, and prints the resume time. See [docs/OPERATIONS.md](docs/OPERATIONS.md).
 
 ## Architecture and Graphify
 
 | Module | Responsibility |
 | --- | --- |
-| `src/bot.py` | Lifecycle, exchange reconciliation, risk enforcement, fill processing |
-| `src/exchange/hyperliquid.py` | SDK transport, precision, subscriptions, protected orders, account equity |
-| `src/strategy/{sr_detector,scalper,economics}.py` | Closed-candle signals and cost-aware bracket geometry |
-| `src/risk/manager.py` | Persistent risk limits, sizing and latched halt |
-| `src/reconciler.py` | Protective stop/target validation and recovery |
-| `src/learning/ledger.py` | Idempotent exchange-fill accounting and equity history |
-| `src/dashboard/` | Read-only Flask/Waitress API and responsive terminal |
-| `scripts/replay.py` | Chronological diagnostic replay of live signal rules |
+| `src/bot.py` | Lifecycle, resilient startup, breaker/recovery cycles, bar-close strategy cycle, fills |
+| `src/settings.py` | Environment-driven settings and validation |
+| `src/strategy/{indicators,library,engine}.py` | Causal indicators, strategy decisions, live bar validation and position metadata |
+| `src/executor.py` | IOC entries, stop protection and reconciliation, exits |
+| `src/exchange/hyperliquid.py` | SDK transport, request budget/retries, price/lot rules, subscriptions, account equity |
+| `src/risk/manager.py` | Breaker, operational pause, admission reasons and shared position sizing |
+| `src/validation/backtest.py` | Event-driven backtester on the live decision path |
+| `src/learning/*` | Fill ledger, execution journal, quality audit, funding and equity bridge |
+| `src/dashboard/` | Read-only Flask/Waitress API and terminal |
+| `src/strategy/{scalper,sr_detector,economics}.py`, `scripts/replay.py` | Retired scalper kept for the preserved replay diagnostics and the research observer |
 
-[Graphify](https://github.com/Graphify-Labs/graphify) is installed and its [interactive graph](graphify-out/graph.html) and [machine-readable graph](graphify-out/graph.json) are versioned. Rebuild at each major milestone:
+[Graphify](https://github.com/Graphify-Labs/graphify) output is versioned in `graphify-out/`. Rebuild at each major milestone:
 
 ```bash
 graphify extract . --code-only --no-cluster
+graphify cluster-only . --no-label --no-viz
 graphify export html
 ```
 
-`.graphifyignore` excludes secrets, account runtime data and vendored scripts. Extraction is local AST only; documentation relationships are not represented by this mode. See [AGENTS.md](AGENTS.md) for operating rules and [agents.md](agents.md) for module ownership and milestone history. Each major milestone updates documentation and graph, commits and pushes to the existing remote using credentials without printing them.
+`.graphifyignore` excludes secrets, account runtime data and vendored scripts. See [AGENTS.md](AGENTS.md) for operating rules and [agents.md](agents.md) for module ownership and milestone history.
 
-## Market research (2026-10-23)
+## History
+
+The sections below describe earlier milestones. The scalper, permanent 5% halt and flatten-on-every-incident recovery they mention were replaced on 2026-10-29; earlier trade records remain gross/legacy as described.
+
+### Market research (2026-10-23)
 
 A separate read-only observer now studies public **mainnet BTC** data while execution stays on testnet. It tracks sampled walls, symmetric depth, streamed aggressive flow, absorption hypotheses, closed-candle block confluence, large prints/public wallets, wallet-specific liquidations, funding, sentiment and indicative Kraken spot/perp divergence. A persistent journal measures prospective cost-adjusted 10s/1m/5m/15m markouts with unconditional controls. No research signal automatically places orders. See [research definitions and limitations](docs/RESEARCH.md). Dashboard integration follows this backend milestone.
 
@@ -82,7 +98,7 @@ The research workspace is now live in the dashboard: liquidity heatmap, directio
 
 Research milestone validation: 41 Python regression tests, JavaScript syntax validation, desktop/mobile Chromium checks, live public-source smoke checks and testnet healthcheck pass. The research journal is collecting real forward observations; initial samples do not establish an edge.
 
-## Experiment overhaul (2026-10-24)
+### Experiment overhaul (2026-10-24)
 
 The [prioritized experiment backlog](docs/EXPERIMENTS.md) records nine hypotheses, exact initial rules and unavailable-data prerequisites. Three observation state machines evaluate failed aggression, replenishing wall defense and funding/OI crowding failures; no research orders are authorized. New events measure 30m/1h/4h alongside existing horizons; legacy history is preserved without invented backfills. Cost drag, non-overlapping windows and unconditional drift comparisons distinguish tiny directional moves from net expectancy. Execution accounting now reconstructs only position-continuous complete trades with all USDC entry/exit fees; funding remains excluded. SQLite connections close deterministically. Backend verification: 53 regressions pass. Dashboard integration follows this milestone.
 

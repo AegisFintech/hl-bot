@@ -139,8 +139,8 @@
     {
       "id": "M8",
       "name": "Controlled demo promotion",
-      "state": "Evidence-gated",
-      "next": "Manual independent review; no automatic promotion"
+      "state": "Operator-directed strategy replacement (2026-10-29)",
+      "next": "Run scripts/strategy_research.py on downloaded history; apply printed settings only after reviewing out-of-sample results"
     },
     {
       "id": "M9",
@@ -151,8 +151,8 @@
     {
       "id": "M10",
       "name": "Portfolio/capacity research",
-      "state": "Offline diagnostics; evidence-gated",
-      "next": "Multiple reviewed strategies and aligned net returns required"
+      "state": "Multi-market execution enabled (BTC/ETH/SOL default)",
+      "next": "Review per-coin out-of-sample results and live testnet fills before adding markets"
     }
   ]
 }

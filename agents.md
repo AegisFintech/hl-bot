@@ -1,20 +1,23 @@
 # Modules and milestone history
 
-## Execution and risk
+## Execution and risk (2026-10-29)
 
 | Module | Current responsibility |
 | --- | --- |
-| `src/exchange/hyperliquid.py` | Testnet SDK transport, precision, account-mode-aware equity, BBO/L2/candle/trade subscriptions, protected orders |
-| `src/strategy/sr_detector.py` | S/R clustering and candle-pattern order blocks; patterns do not identify institutional orders |
-| `src/strategy/scalper.py` | Closed-candle trend pullback/rejection candidates; post-only entry admission, freshness and exposure checks |
-| `src/strategy/economics.py` | ATR/noise-floor brackets and fee/spread/slippage reward/risk geometry |
-| `src/risk/manager.py` | Persistent account high-water peak, exact 5% latched halt, daily loss/entry limits and conservative sizing |
-| `src/reconciler.py` | Validate protective stop-market/target side and size; preserve protective prices during partial-fill recovery |
-| `src/bot.py` | Lifecycle, fill handling, stale-entry expiration, cancel/flatten/verify retries and observer startup |
+| `src/bot.py` | Lifecycle; dashboard-first resilient startup; breaker flatten/cooldown/re-base cycle; operational recovery with protected positions; bar-close strategy cycle; fills/order events |
+| `src/settings.py` | Environment settings (strategy, coins, sizing, breaker, execution bounds) and validation |
+| `src/strategy/indicators.py` | Causal EMA, Wilder ATR/RSI, Donchian prior/trailing channels, rate of change |
+| `src/strategy/library.py` | `donchian`, `ema_trend`, `tsmom`, `rsi_reversion`; pure closed-bar decisions; stops only tighten |
+| `src/strategy/engine.py` | Live bar validation (gaps, malformed, unpublished), per-coin position metadata persistence, adoption, catch-up, per-coin reasons |
+| `src/executor.py` | IOC entries sized by risk, one reduce-only stop per position, place-then-cancel stop moves, close-then-cancel exits, orphan/resting-order cleanup |
+| `src/exchange/hyperliquid.py` | Testnet SDK transport, info request budget and retries, 5-significant-figure price rules, Decimal lot truncation, deduplicated subscriptions with replay, websocket watchdog, account-mode-aware equity, API-wallet expiry |
+| `src/risk/manager.py` | Drawdown breaker with audited auto-reset after cooldown, operational pause with decaying escalation, explicit admission reasons, shared `position_size` |
+| `src/validation/backtest.py` | Event-driven multi-market backtest of the live decision path with fees, slippage, funding and breaker |
 | `src/learning/ledger.py` | Durable idempotent actual-fee fill accounting and equity history |
 | `src/learning/evaluator.py` | Preserved legacy gross journal; live parameter fitting is disabled |
+| `src/strategy/{scalper,sr_detector,economics}.py` | Retired 1m scalper; kept for preserved replay diagnostics and the research observer's S/R blocks |
 
-Execution uses demo funds only. Drawdown peak/halt survives midnight and restart. The threshold triggers recovery but cannot guarantee an exact realized ceiling through gaps/outages. No risk-state deletion or automated halt reset. The requested 10% daily return remains unproven.
+Execution uses demo funds only. The breaker threshold triggers a flatten but cannot guarantee an exact realised ceiling through gaps/outages. `src/reconciler.py` and the unused, non-functional `src/agent/` LLM tuner were removed on 2026-10-29.
 
 ## Public market observer
 
@@ -68,3 +71,7 @@ Trade-quality validation: **73 regression tests**, Python compilation, desktop/m
 ## Delivery workflow — 2026-10-27
 
 User requires local builds, compilation and tests instead of GitHub CI. Removed the automatic GitHub Actions regression workflow. Commit each completed change set, integrate it into main and push; direct main commits already satisfy integration. Verify remote HEAD without triggering CI. Preserve the unrelated CLAUDE.md deletion.
+
+## Strategy engine overhaul — 2026-10-29
+
+Operator decisions: replace the scalper freely with the best out-of-sample fee-inclusive strategy, allow up to ~1% risk per trade across several coins, and make the drawdown halt auto-reset after a cooldown. Implemented the closed-bar engine, IOC/stop executor, auto-reset breaker, protected operational pauses, resilient startup, request budget/retries, websocket watchdog, cached dashboard snapshots and bounded summary queries. Research tooling: `scripts/fetch_history.py`, `scripts/strategy_research.py` (pre-declared candidates, in-sample selection, deflated Sharpe, printed settings) and `scripts/account_history.py`. Research could not run in the sandbox (no egress); the default Donchian 20/10 1h is provisional. 177 regressions; see docs/STRATEGY.md and docs/OPERATIONS.md.

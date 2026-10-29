@@ -1,5 +1,6 @@
 import json
 import logging
+import random
 import time
 import threading
 import math
@@ -14,6 +15,83 @@ from hyperliquid.utils import constants
 
 log = logging.getLogger(__name__)
 
+# Hyperliquid allows 1200 request weight per minute per IP; leave headroom for the
+# observer threads and dashboard sharing this host.
+INFO_WEIGHT_PER_MINUTE = 800
+LIGHT_INFO = {"l2Book", "allMids", "clearinghouseState", "orderStatus", "spotClearinghouseState", "exchangeStatus"}
+INTERVAL_MS = {"1m": 60_000, "5m": 300_000, "15m": 900_000, "1h": 3_600_000, "4h": 14_400_000, "1d": 86_400_000}
+
+
+class WeightBudget:
+    """Thread-safe token bucket for info request weight."""
+
+    def __init__(self, per_minute=INFO_WEIGHT_PER_MINUTE):
+        self.capacity = float(per_minute)
+        self.tokens = float(per_minute)
+        self.rate = per_minute / 60.0
+        self.updated = time.monotonic()
+        self._lock = threading.Lock()
+
+    def acquire(self, weight):
+        weight = min(float(weight), self.capacity)
+        while True:
+            with self._lock:
+                now = time.monotonic()
+                self.tokens = min(self.capacity, self.tokens + (now - self.updated) * self.rate)
+                self.updated = now
+                if self.tokens >= weight:
+                    self.tokens -= weight
+                    return
+                wait = (weight - self.tokens) / self.rate
+            time.sleep(min(wait, 5.0))
+
+
+def info_weight(payload):
+    kind = (payload or {}).get("type", "")
+    if kind in LIGHT_INFO:
+        return 2
+    if kind == "userRole":
+        return 60
+    return 20
+
+
+def retrying_post(post, budget, attempts=4, base_delay=0.5):
+    """Info reads are idempotent: rate-limit, retry transient failures with jittered backoff."""
+
+    def wrapped(url_path, payload=None):
+        last = None
+        for attempt in range(attempts):
+            budget.acquire(info_weight(payload))
+            try:
+                return post(url_path, payload)
+            except Exception as exc:  # SDK raises ClientError/ServerError/requests errors.
+                last = exc
+                status = getattr(exc, "status_code", None)
+                if status is not None and 400 <= status < 500 and status != 429:
+                    raise  # A malformed request will not succeed on retry.
+                if attempt < attempts - 1:
+                    time.sleep(base_delay * 2 ** attempt + random.uniform(0, base_delay))
+        raise last
+
+    return wrapped
+
+
+def order_status(result):
+    """Normalise a single-order exchange response to (state, detail)."""
+    if not isinstance(result, dict) or result.get("status") != "ok":
+        return "error", str(result.get("response") if isinstance(result, dict) else result)
+    statuses = result.get("response", {}).get("data", {}).get("statuses", [])
+    if not statuses or not isinstance(statuses[0], dict):
+        return "error", "Missing order status"
+    first = statuses[0]
+    if "filled" in first:
+        return "filled", first["filled"]
+    if "resting" in first:
+        return "resting", first["resting"]
+    if "error" in first:
+        return "error", first["error"]
+    return "unknown", first
+
 
 class HyperliquidClient:
 
@@ -23,7 +101,9 @@ class HyperliquidClient:
         self.wallet = eth_account.Account.from_key(api_private_key)
         self.master_account = master_account
         self.address = self.master_account
+        self.budget = WeightBudget()
         self.info = Info(self.base_url, skip_ws=True, timeout=10)
+        self.info.post = retrying_post(self.info.post, self.budget)
         self.exchange = Exchange(self.wallet, self.base_url, account_address=self.master_account, timeout=10)
         self._ws_info = None
         self._ws_subscriptions = []
@@ -68,16 +148,15 @@ class HyperliquidClient:
         extra_agents = self.info.extra_agents(self.master_account)
         sub_accounts = self.info.query_sub_accounts(self.master_account)
         agent_addr = self.wallet.address.lower()
-        agent_found = False
-        for agent in extra_agents:
-            if agent.get("address", "").lower() == agent_addr:
-                agent_found = True
-                break
+        match = next((a for a in extra_agents or [] if a.get("address", "").lower() == agent_addr), None)
+        valid_until = int(match.get("validUntil") or 0) if match else 0
+        expired = bool(valid_until) and valid_until <= time.time() * 1000
         return {
             "extra_agents_raw": extra_agents,
             "sub_accounts_raw": sub_accounts,
             "agent_address": self.wallet.address,
-            "agent_registered": agent_found,
+            "agent_registered": bool(match) and not expired,
+            "valid_until": valid_until or None,
         }
 
     def get_meta(self) -> dict:
@@ -101,8 +180,23 @@ class HyperliquidClient:
         return float(value.quantize(Decimal(1).scaleb(-decimals), rounding=ROUND_DOWN))
 
     def round_price(self, coin: str, price: float) -> float:
-        tick = self.get_tick_size(coin)
-        return round(round(price / tick) * tick, 8)
+        """Perp prices: at most 5 significant figures and 6 - szDecimals decimals;
+        integer prices are always valid."""
+        if not math.isfinite(price) or price <= 0:
+            raise ValueError("Invalid order price")
+        if price >= 100_000:
+            return float(round(price))
+        decimals = max(0, 6 - self.get_sz_decimals(coin))
+        return round(float(f"{price:.5g}"), decimals)
+
+    def max_leverage(self, coin: str) -> int:
+        for asset in self.get_meta()["universe"]:
+            if asset["name"] == coin:
+                return int(asset.get("maxLeverage", 1))
+        raise ValueError(f"Unknown coin: {coin}")
+
+    def tradable(self, coin: str) -> bool:
+        return any(a["name"] == coin and not a.get("isDelisted") for a in self.get_meta()["universe"])
 
     def get_tick_size(self, coin: str) -> float:
         mid = self.get_mid_price(coin)
@@ -133,6 +227,14 @@ class HyperliquidClient:
         now = int(time.time() * 1000)
         start = now - lookback_ms
         return self.info.candles_snapshot(coin, interval, start, now)
+
+    def get_closed_bars(self, coin: str, interval: str, count: int) -> list:
+        """Sorted, de-duplicated closed bars (at most the 5000 the API serves)."""
+        step = INTERVAL_MS[interval]
+        now = int(time.time() * 1000)
+        raw = self.info.candles_snapshot(coin, interval, now - (min(count, 5000) + 1) * step, now)
+        unique = {int(b["t"]): b for b in raw if int(b["t"]) + step <= now}
+        return [unique[t] for t in sorted(unique)]
 
     def get_user_state(self) -> dict:
         return self.info.user_state(self.address)
@@ -247,6 +349,27 @@ class HyperliquidClient:
         return self._submit_audited('market_entry', coin, dict(is_buy=is_buy,size=size,slippage=slippage),
                                     lambda: self.exchange.market_open(coin,is_buy,size,None,slippage), ('entry',), entry=True)
 
+    def place_ioc(self, coin: str, is_buy: bool, size: float, limit_px: float, reduce_only: bool = False) -> dict:
+        """Marketable limit order: fills immediately up to ``limit_px`` or cancels."""
+        size = self.round_size(coin, size)
+        price = self.round_price(coin, limit_px)
+        kind, role = ('ioc_exit', 'exit_order') if reduce_only else ('ioc_entry', 'entry')
+        return self._submit_audited(kind, coin, dict(is_buy=is_buy, size=size, price=price, reduce_only=reduce_only),
+                                    lambda: self.exchange.order(coin, is_buy, size, price, {'limit': {'tif': 'Ioc'}},
+                                                                reduce_only=reduce_only),
+                                    (role,), entry=not reduce_only)
+
+    def place_stop(self, coin: str, is_buy: bool, size: float, trigger_px: float, slippage: float = 0.03) -> dict:
+        """Reduce-only stop-market protection; ``slippage`` bounds the triggered fill."""
+        size = self.round_size(coin, size)
+        trigger = self.round_price(coin, trigger_px)
+        limit = self.round_price(coin, trigger * (1 + slippage) if is_buy else trigger * (1 - slippage))
+        order_type = {'trigger': {'triggerPx': trigger, 'isMarket': True, 'tpsl': 'sl'}}
+        return self._submit_audited('protective_stop', coin,
+                                    dict(is_buy=is_buy, size=size, trigger=trigger, limit=limit),
+                                    lambda: self.exchange.order(coin, is_buy, size, limit, order_type, reduce_only=True),
+                                    ('stop_loss_order',))
+
     def place_order_with_tpsl(self, coin: str, is_buy: bool, size: float, entry_price: float,
                                tp_price: float, sl_price: float, tif: str = "Gtc") -> dict:
         size = self.round_size(coin, size)
@@ -321,11 +444,25 @@ class HyperliquidClient:
 
     # -- WebSocket subscriptions --
 
-    def _get_ws_info(self):
+    def _subscribe(self, sub, handler):
+        """Record a subscription once; (re)connecting replays every recorded one."""
+        key = json.dumps(sub, sort_keys=True)
+        known = any(json.dumps(s, sort_keys=True) == key for s, _ in self._ws_subscriptions)
+        self._ws_subscriptions = [(s, h) for s, h in self._ws_subscriptions
+                                  if json.dumps(s, sort_keys=True) != key] + [(sub, handler)]
         if self._ws_info is None:
-            self._ws_info = Info(self.base_url, skip_ws=False)
-            self._start_ws_monitor()
-        return self._ws_info
+            self._connect_ws()
+        elif not known:
+            self._ws_info.subscribe(sub, handler)
+
+    def _connect_ws(self):
+        info = Info(self.base_url, skip_ws=False)
+        for sub, handler in self._ws_subscriptions:
+            info.subscribe(dict(sub), handler)
+        self._ws_info = info
+        self._ws_started_at = time.time()
+        self._start_ws_monitor()
+        return info
 
     def _start_ws_monitor(self):
         if self._ws_monitor and self._ws_monitor.is_alive():
@@ -335,15 +472,30 @@ class HyperliquidClient:
 
     def _ws_monitor_loop(self):
         while True:
-            time.sleep(30)
+            time.sleep(15)
             try:
-                if self._ws_info and self._ws_info.ws_manager:
-                    ws = self._ws_info.ws_manager.ws
-                    if not ws.keep_running:
-                        log.warning("WebSocket disconnected — reconnecting...")
-                        self._reconnect_ws()
+                reason = self._ws_problem()
+                if reason:
+                    log.warning("WebSocket %s — reconnecting...", reason)
+                    self._reconnect_ws()
             except Exception as e:
                 log.error("WS monitor error: %s", e)
+
+    def _ws_problem(self, stale_after=90.0):
+        """Dead socket thread, or a silent primary-market quote stream (liquid enough
+        that a long quiet period means the subscription stalled)."""
+        manager = self._ws_info.ws_manager if self._ws_info else None
+        if manager is None:
+            return ''
+        if not manager.ws.keep_running or not manager.is_alive():
+            return 'disconnected'
+        primary = next((sub.get('coin') for sub, _ in self._ws_subscriptions if sub.get('type') == 'bbo'), None)
+        with self._lock:
+            started = getattr(self, '_ws_started_at', 0.0)
+            last = self._bbo_times.get(primary, started)
+        if primary and time.time() - max(last, started) > stale_after:
+            return f'{primary} quotes silent for {time.time() - max(last, started):.0f}s'
+        return ''
 
     def _reconnect_ws(self):
         try:
@@ -354,9 +506,7 @@ class HyperliquidClient:
                     pass
             with self._lock:
                 self._bbo_times.clear()  # Old connection quotes cannot remain eligible.
-            self._ws_info = Info(self.base_url, skip_ws=False)
-            for sub, handler in self._ws_subscriptions:
-                self._ws_info.subscribe(dict(sub), handler)
+            self._connect_ws()
             log.info("WebSocket reconnected, %d subscriptions restored", len(self._ws_subscriptions))
             if self._reconnect_callback:
                 try:
@@ -383,8 +533,7 @@ class HyperliquidClient:
             if callback:
                 callback(normalized)
         sub = {"type": "bbo", "coin": coin}
-        self._ws_subscriptions.append((sub, handler))
-        self._get_ws_info().subscribe(sub, handler)
+        self._subscribe(sub, handler)
 
     def subscribe_l2(self, coin: str, callback=None):
         def handler(msg):
@@ -393,8 +542,7 @@ class HyperliquidClient:
             if callback:
                 callback(msg["data"])
         sub = {"type": "l2Book", "coin": coin}
-        self._ws_subscriptions.append((sub, handler))
-        self._get_ws_info().subscribe(sub, handler)
+        self._subscribe(sub, handler)
 
     def subscribe_trades(self, coin: str, callback=None):
         def handler(msg):
@@ -403,8 +551,7 @@ class HyperliquidClient:
             if callback:
                 callback(msg["data"])
         sub = {"type": "trades", "coin": coin}
-        self._ws_subscriptions.append((sub, handler))
-        self._get_ws_info().subscribe(sub, handler)
+        self._subscribe(sub, handler)
 
     def merge_candles(self, coin, incoming, interval='1m', source='ws', requested_at=None):
         key = f'{coin}_{interval}'
@@ -441,8 +588,7 @@ class HyperliquidClient:
             if callback:
                 callback(candle)
         sub = {"type": "candle", "coin": coin, "interval": interval}
-        self._ws_subscriptions.append((sub, handler))
-        self._get_ws_info().subscribe(sub, handler)
+        self._subscribe(sub, handler)
 
     def subscribe_fills(self, callback=None):
         def handler(msg):
@@ -457,16 +603,14 @@ class HyperliquidClient:
             if callback and not is_snapshot:
                 callback(fills)
         sub = {"type": "userFills", "user": self.address}
-        self._ws_subscriptions.append((sub, handler))
-        self._get_ws_info().subscribe(sub, handler)
+        self._subscribe(sub, handler)
 
     def subscribe_order_updates(self, callback=None):
         def handler(msg):
             if callback:
                 callback(msg["data"])
         sub = {"type": "orderUpdates", "user": self.address}
-        self._ws_subscriptions.append((sub, handler))
-        self._get_ws_info().subscribe(sub, handler)
+        self._subscribe(sub, handler)
 
     # -- Cached data access --
 

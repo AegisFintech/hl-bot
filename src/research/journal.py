@@ -106,12 +106,17 @@ class ResearchJournal:
 
     def mark(self, snapshot):
         now = snapshot["sampled_at"]
+        # The first pass sweeps all history so overdue horizons are recorded as missed;
+        # afterwards only signals young enough to still have an open horizon are scanned.
+        since = now - max(HORIZONS) - 3600 if getattr(self, "_swept", False) else 0
         with self.connect() as db:
             pending = db.execute(
                 """SELECT s.*, GROUP_CONCAT(o.horizon) measured FROM signals s
-                LEFT JOIN outcomes o ON s.id=o.signal_id GROUP BY s.id
-                HAVING COUNT(o.horizon)<json_array_length(s.horizons)"""
+                LEFT JOIN outcomes o ON s.id=o.signal_id WHERE s.time>=? GROUP BY s.id
+                HAVING COUNT(o.horizon)<json_array_length(s.horizons)""",
+                (since,),
             ).fetchall()
+            self._swept = True
             for signal in pending:
                 elapsed = now - signal["time"]
                 if elapsed < 0:

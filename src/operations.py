@@ -1,6 +1,5 @@
 """Durable incident boundaries and bounded heartbeat state; no exchange actions."""
 
-import json
 import time
 from pathlib import Path
 from src.storage import transaction
